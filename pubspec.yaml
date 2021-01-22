@@ -1,0 +1,12 @@
+name: katikati_ui_lib
+version: 0.0.1
+description: Shared Katikati UI components
+environment:
+  sdk: ^2.7.0
+
+dependencies:
+  http: ^0.12.0
+
+dev_dependencies:
+  build_runner: ^1.7.0
+  build_web_compilers: ^2.6.0
