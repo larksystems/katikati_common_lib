@@ -1,0 +1,11 @@
+:root {
+  --black-30: rgba(0, 0, 0, 0.3);
+
+  --info: #b3b3b3;
+  --error: #ff6238;
+  --success: #10c443;
+  --warning: #ffd238;
+  --text-snackbar: #3e3e3e;
+
+  --shadow-standard: var(--black-30) 0px 0px 3px 0px;
+}
