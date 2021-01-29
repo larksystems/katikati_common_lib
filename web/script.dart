@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'package:katikati_ui_lib/snackbar.dart';
+import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
 
 DivElement snackbarContainer = querySelector('#snackbar-container');
 ButtonElement snackbarTrigger = querySelector('#show-snackbar');
