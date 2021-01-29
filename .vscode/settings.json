@@ -1,0 +1,17 @@
+{
+    "editor.tabSize": 2,
+    "files.exclude": {
+        "**/.dart_tool": true,
+        "**/Icon?": true
+    },
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "html.format.endWithNewline": true,
+    "dart.lineLength": 120,
+    "[dart]": {
+        "editor.rulers": [
+            120
+        ],
+    }
+}

@@ -1,12 +1,14 @@
 import 'dart:html';
-import 'package:katikati_ui_lib/snack_bar.dart';
+import 'package:katikati_ui_lib/snackbar.dart';
 
-DivElement snack_bar = querySelector('#snack_bar');
+DivElement snackbarContainer = querySelector('#snackbar-container');
+ButtonElement snackbarTrigger = querySelector('#show-snackbar');
 
 void main() {
-  // snack bar
+  // snackbar
   SnackbarView snackbarView = SnackbarView();
-  snack_bar.append(snackbarView.snackbarElement);
-  snackbarView.showSnackbar(
-      "Welcome to KatiKati UI library!", SnackbarNotificationType.success);
+  snackbarContainer.append(snackbarView.snackbarElement);
+  snackbarTrigger.onClick.listen((_) {
+    snackbarView.showSnackbar("Welcome to KatiKati UI library!", SnackbarNotificationType.success);
+  });
 }
