@@ -9,6 +9,6 @@ void main() {
   SnackbarView snackbarView = SnackbarView();
   snackbarContainer.append(snackbarView.snackbarElement);
   snackbarTrigger.onClick.listen((_) {
-    snackbarView.showSnackbar("Welcome to KatiKati UI library!", SnackbarNotificationType.success);
+    snackbarView.showSnackbar("Welcome to the Katikati UI library!", SnackbarNotificationType.success);
   });
 }
