@@ -5,8 +5,11 @@
   --error: #ff6238;
   --success: #10c443;
   --warning: #ffd238;
-
   --text-snackbar: #3e3e3e;
 
+  --grey-dark: #424242;
+
   --shadow-standard: var(--black-30) 0px 0px 3px 0px;
+
+  --banner-height: 50px;
 }

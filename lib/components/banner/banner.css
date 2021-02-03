@@ -1,0 +1,35 @@
+@charset "utf-8";
+
+#banner {
+  flex: 0 0 auto;
+  width: 100%;
+  height: var(--banner-height);
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+  justify-content: center;
+
+  text-align: center;
+  color: #e0e0e0;
+  background: var(--grey-dark);
+
+  /* A little animation on hide and show */
+  visibility: visible;
+  transition: all 0.2s;
+}
+
+#banner.hidden {
+  height: 0;
+  visibility: hidden;
+}
+
+#banner .contents {
+  line-height: var(--banner-height);
+  height: var(--banner-height);
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+#banner.hidden .contents {
+  height: 0;
+}
