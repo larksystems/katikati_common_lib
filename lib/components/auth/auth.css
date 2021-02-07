@@ -1,0 +1,24 @@
+.auth-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: flex-start;
+  width: var(--container-width);
+  margin: var(--spacer-6) auto;
+}
+
+img.partner-logo {
+  height: var(--login-img-height);
+  margin: var(--spacer);
+}
+
+.project-title h1 {
+  font-size: var(--h1-font-size);
+  text-align: center;
+}
+
+.project-description p {
+  margin: var(--spacer) 0;
+  text-align: center;
+}

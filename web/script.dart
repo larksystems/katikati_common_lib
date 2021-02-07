@@ -1,12 +1,14 @@
 import 'dart:html';
 import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
 import 'package:katikati_ui_lib/components/banner/banner.dart';
+import 'package:katikati_ui_lib/components/auth/auth.dart';
 
 DivElement snackbarContainer = querySelector('#snackbar-container');
 ButtonElement snackbarTrigger = querySelector('#show-snackbar');
 DivElement bannerContainer = querySelector('#banner-container');
 ButtonElement showBannerTrigger = querySelector('#show-banner');
 ButtonElement hideBannerTrigger = querySelector('#hide-banner');
+DivElement authViewContainer = querySelector('#auth-view');
 
 void main() {
   // snackbar
@@ -25,4 +27,10 @@ void main() {
   hideBannerTrigger.onClick.listen((_) {
     bannerView.hideBanner();
   });
+
+  // auth view
+  AuthMainView authMainView = AuthMainView("assets/logo.png", "Title", "Description appear here", [SignInDomain.gmail, SignInDomain.lark], (domain) {
+    window.alert("Trying to login with domain: $domain");
+  });
+  authViewContainer.append(authMainView.authElement);
 }
