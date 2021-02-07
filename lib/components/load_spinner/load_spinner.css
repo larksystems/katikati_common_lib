@@ -1,0 +1,55 @@
+@charset "utf-8";
+
+.load-spinner {
+  margin-top: var(--spacer);
+  margin-left: auto;
+  margin-right: auto;
+  border: var(--spacer) solid var(--grey-light--extra);
+  border-radius: 50%;
+  border-top: var(--spacer) solid var(--highlight);
+  width: var(--spacer-6);
+  height: var(--spacer-6);
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/**
+ * Adapted from Tobias Ahlin's SpinKit https://github.com/tobiasahlin/SpinKit (MIT License)
+ */
+ .bar-ware-spinner {
+  width: var(--spacer);
+  height: var(--spacer);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bar-ware-spinner__part {
+  background-color: var(--grey-dark);
+  height: 100%;
+  width: 15%;
+  animation: stretchdelay-up 2s infinite ease-in-out;
+}
+
+.bar-ware-spinner__part:nth-child(1) { animation-delay: -2s; }
+.bar-ware-spinner__part:nth-child(2) { animation-delay: -1.8s; }
+.bar-ware-spinner__part:nth-child(3) { animation-delay: -1.6s; }
+.bar-ware-spinner__part:nth-child(4) { animation-delay: -1.4s; }
+.bar-ware-spinner__part:nth-child(5) { animation-delay: -1.2s; }
+
+@keyframes stretchdelay-up {
+  0%, 40%, 100% { transform: translate(0, 30%) scaleY(0.4) }
+  20% { transform: scaleY(1.0) }
+}
