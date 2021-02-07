@@ -37,7 +37,7 @@ firebase.Auth get firebaseAuth => firebase.auth();
 firestore.Firestore get firestoreInstance => _firestoreInstance;
 
 /// Signs the user in.
-signIn({domain: String}) {
+signIn({String domain}) {
   var provider = new firebase.GoogleAuthProvider();
   if (domain != null) {
     provider.setCustomParameters({'hd': domain});
