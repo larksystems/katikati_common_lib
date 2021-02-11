@@ -26,4 +26,4 @@
 
 .clickable { cursor: pointer; }
 
-.hidden { display: none; }
+.hidden { display: none !important; }
