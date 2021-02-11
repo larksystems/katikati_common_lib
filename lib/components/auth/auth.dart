@@ -1,9 +1,10 @@
 import 'dart:html';
 
-enum SignInDomain { avf, lark, ucam, gmail }
+enum SignInDomain { lark, katikati, avf, ucam, gmail }
 const signInDomainsInfo = {
-  SignInDomain.avf: {"displayName": "Africa's Voices", "domain": "africasvoices.org"},
   SignInDomain.lark: {"displayName": "Lark Systems", "domain": "lark.systems"},
+  SignInDomain.katikati: {"displayName": "Katikati", "domain": "katikati.world"},
+  SignInDomain.avf: {"displayName": "Africa's Voices", "domain": "africasvoices.org"},
   SignInDomain.ucam: {"displayName": "University of Cambridge", "domain": "cam.ac.uk"},
   SignInDomain.gmail: {"displayName": "Gmail", "domain": "gmail.com"},
 };
