@@ -18,9 +18,10 @@ class AuthHeaderView {
     _userName = new DivElement()..classes.add('user-name');
     authElement.append(_userName);
 
-    _signOutButton = new ButtonElement()
+    _signInButton = new ButtonElement()
       ..text = 'Sign in'
       ..onClick.listen((_) => this.onSignin());
+    authElement.append(_signInButton);
 
     _signOutButton = new ButtonElement()
       ..text = 'Sign out'
@@ -33,17 +34,17 @@ class AuthHeaderView {
     _userPic.style.backgroundImage = 'url($userPicUrl)';
     _userName.text = userName;
 
-    // Show user's profile pic, name and sign-out button.
-    _userName.attributes.remove('hidden');
-    _userPic.attributes.remove('hidden');
+    // Show sign-out button
     _signInButton.attributes['hidden'] = 'true';
     _signOutButton.attributes.remove('hidden');
   }
 
   void signOut() {
-    // Hide user's profile pic, name and sign-out button.
-    _userName.attributes['hidden'] = 'true';
-    _userPic.attributes['hidden'] = 'true';
+    // Remove user's profile pic and name
+    _userPic.style.backgroundImage = 'none';
+    _userName.text = null;
+
+    // Show sign-in button
     _signInButton.attributes.remove('hidden');
     _signOutButton.attributes['hidden'] = 'true';
   }
