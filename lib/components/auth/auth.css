@@ -1,3 +1,4 @@
+/* Auth login page */
 .auth-main {
   display: flex;
   flex-direction: column;
@@ -21,4 +22,26 @@ img.partner-logo {
 .project-description p {
   margin: var(--spacer) 0;
   text-align: center;
+}
+
+/* Auth header */
+.auth-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  float: right;
+  margin: 0 var(--spacer-small);
+}
+
+.auth-header__user-pic {
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+  background-size: contain;
+  margin: var(--spacer-small);
+}
+
+.auth-header__user-name {
+  margin: var(--spacer-small);
+  white-space: nowrap;
 }
