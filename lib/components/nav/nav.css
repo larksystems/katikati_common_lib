@@ -1,0 +1,41 @@
+.nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: var(--spacer-small);
+  background-color: white;
+  border-bottom: 1px solid var(--divider);
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  top: 0;
+}
+
+.nav__app_logos {
+  height: var(--header-logo-height);
+}
+
+.nav__app_logos img {
+  height: var(--header-logo-height);
+  margin-right: var(--spacer-small);
+}
+
+.nav__project_title {
+  padding-right: var(--spacer-small);
+}
+
+.nav__project_subtitle {
+  padding-right: var(--spacer-small);
+  color: var(--grey-dark);
+}
+
+.nav__contents {
+  flex-grow: 1;
+  padding-left: var(--spacer-mid);
+  padding-right: var(--spacer-mid);
+  text-align: center;
+}
+
+.nav__auth_header {
+  padding-left: var(--spacer-small);
+}
