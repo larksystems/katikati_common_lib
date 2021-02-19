@@ -14,8 +14,11 @@
   --shadow-standard: var(--black-30) 0px 0px 3px 0px;
 
   --banner-height: 50px;
+
   --spacer: 16px;
+  --spacer-small: 6px;
   --spacer-6: calc(6 * var(--spacer));
+
   --login-img-height: 60px;
 
   --h1-font-size: 24px;
