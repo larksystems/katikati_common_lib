@@ -7,6 +7,7 @@
   --warning: #ffd238;
   --highlight: #3498db;
   --text-snackbar: #3e3e3e;
+  --divider: lightgray;
 
   --grey-dark: #424242;
   --grey-light--extra: #e0e0e0;
@@ -16,10 +17,12 @@
   --banner-height: 50px;
 
   --spacer: 16px;
+  --spacer-mid: 12px;
   --spacer-small: 6px;
   --spacer-6: calc(6 * var(--spacer));
 
   --login-img-height: 60px;
+  --header-logo-height: 30px;
 
   --h1-font-size: 24px;
 

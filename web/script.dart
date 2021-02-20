@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'package:katikati_ui_lib/components/nav/navHeader.dart';
 import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
 import 'package:katikati_ui_lib/components/banner/banner.dart';
 import 'package:katikati_ui_lib/components/auth/auth.dart';
@@ -13,6 +14,7 @@ DivElement authViewContainer = querySelector('#auth-view');
 DivElement authHeaderViewContainer = querySelector('#auth-header');
 ButtonElement authHeaderSimulateSignInTrigger = querySelector('#auth-header-simulate-signin');
 ButtonElement authHeaderSimulateSignOutTrigger = querySelector('#auth-header-simulate-signout');
+DivElement navHeaderViewContainer = querySelector('#nav-header');
 
 void main() {
   // snackbar
@@ -51,4 +53,13 @@ void main() {
   authHeaderSimulateSignOutTrigger.onClick.listen((_) {
     authHeaderView.signOut();
   });
+
+  // nav header
+  NavHeaderView navHeaderView = NavHeaderView();
+  navHeaderViewContainer.append(navHeaderView.navViewElement);
+  navHeaderView.projectLogos = ["assets/logo.png"];
+  navHeaderView.projectTitle = "Project name";
+  navHeaderView.projectSubtitle = "Subtitle";
+  navHeaderView.navContent = DivElement()..appendText("Some content like links, dropdown");
+  navHeaderView.authHeader = authHeaderView;
 }
