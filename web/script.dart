@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'package:katikati_ui_lib/components/nav/navHeader.dart';
+import 'package:katikati_ui_lib/components/nav/nav_header.dart';
 import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
 import 'package:katikati_ui_lib/components/banner/banner.dart';
 import 'package:katikati_ui_lib/components/auth/auth.dart';
