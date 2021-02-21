@@ -70,6 +70,6 @@ void main() {
   brandAssetsContainer.append(avfLogo);
   var katikatiLogo = logo(Brand.katikati, height: 64)..style.marginRight = "32px";
   brandAssetsContainer.append(katikatiLogo);
-  var ifrcLogo = logo(Brand.ifrc, height: 64);
+  var ifrcLogo = logo(Brand.ifrc, height: 64, className: "logo");
   brandAssetsContainer.append(ifrcLogo);
 }

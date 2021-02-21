@@ -4,7 +4,7 @@ enum Brand { katikati, avf, ifrc }
 
 const basePath = "packages/katikati_ui_lib/components/brand_asset/logos";
 
-ImageElement logo(Brand brand, {int height, int width}) {
+ImageElement logo(Brand brand, {int height, int width, String className}) {
   var assetPath = "$basePath/missing.svg";
   switch (brand) {
     case Brand.katikati:
@@ -17,5 +17,9 @@ ImageElement logo(Brand brand, {int height, int width}) {
       assetPath = "$basePath/ifrc.svg";
       break;
   }
-  return ImageElement(src: assetPath, height: height, width: width);
+  var image = ImageElement(src: assetPath, height: height, width: width);
+  if(className !=null) {
+    image.className = className;
+  }
+  return image;
 }
