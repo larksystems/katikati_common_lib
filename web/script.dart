@@ -4,6 +4,7 @@ import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
 import 'package:katikati_ui_lib/components/banner/banner.dart';
 import 'package:katikati_ui_lib/components/auth/auth.dart';
 import 'package:katikati_ui_lib/components/auth/auth_header.dart';
+import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart';
 
 DivElement snackbarContainer = querySelector('#snackbar-container');
 ButtonElement snackbarTrigger = querySelector('#show-snackbar');
@@ -15,6 +16,7 @@ DivElement authHeaderViewContainer = querySelector('#auth-header');
 ButtonElement authHeaderSimulateSignInTrigger = querySelector('#auth-header-simulate-signin');
 ButtonElement authHeaderSimulateSignOutTrigger = querySelector('#auth-header-simulate-signout');
 DivElement navHeaderViewContainer = querySelector('#nav-header');
+DivElement brandAssetsContainer = querySelector('#brand-assets');
 
 void main() {
   // snackbar
@@ -62,4 +64,12 @@ void main() {
   navHeaderView.projectSubtitle = "Subtitle";
   navHeaderView.navContent = DivElement()..appendText("Some content like links, dropdown");
   navHeaderView.authHeader = authHeaderView;
+
+  // logos
+  var avfLogo = logo(Brand.avf, height: 64)..style.marginRight = "32px";
+  brandAssetsContainer.append(avfLogo);
+  var katikatiLogo = logo(Brand.katikati, height: 64)..style.marginRight = "32px";
+  brandAssetsContainer.append(katikatiLogo);
+  var ifrcLogo = logo(Brand.ifrc, height: 64, className: "logo");
+  brandAssetsContainer.append(ifrcLogo);
 }
