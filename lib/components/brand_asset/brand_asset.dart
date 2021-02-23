@@ -18,7 +18,7 @@ ImageElement logo(Brand brand, {int height, int width, String className}) {
       break;
   }
   var image = ImageElement(src: assetPath, height: height, width: width);
-  if(className !=null) {
+  if (className != null) {
     image.className = className;
   }
   return image;
