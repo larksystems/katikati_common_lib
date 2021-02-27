@@ -37,7 +37,7 @@ void main() {
   });
 
   // auth view
-  AuthMainView authMainView = AuthMainView("assets/logo.png", "Title", "Description appear here", [SignInDomain.gmail, SignInDomain.lark], (domain) {
+  AuthMainView authMainView = AuthMainView(Brand.avf, "Title", "Description appear here", [SignInDomain.gmail, SignInDomain.lark], (domain) {
     window.alert("Trying to login with domain: $domain");
   });
   authViewContainer.append(authMainView.authElement);
