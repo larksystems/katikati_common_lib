@@ -5,10 +5,7 @@
   padding: var(--spacer-small);
   background-color: white;
   border-bottom: 1px solid var(--divider);
-  position: fixed;
-  z-index: 10;
   width: 100%;
-  top: 0;
 }
 
 .nav__app_logos {
