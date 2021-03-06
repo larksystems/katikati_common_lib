@@ -12,7 +12,7 @@ class UrlView {
   String getQueryTagFilterKey(TagFilterType type) {
     switch (type) {
       case TagFilterType.include:
-        return 'filter'; // TODO(mariana): this should be updated to 'include-filter' but we keep it 'filter for backwards compatibility
+        return 'include-filter';
       case TagFilterType.exclude:
         return 'exclude-filter';
       case TagFilterType.lastInboundTurn:
@@ -40,6 +40,17 @@ class UrlView {
       filterTags.removeWhere((tag) => tag == "");
       return filterTags.toSet();
     }
+
+    // backward compatible read for 'filter' which is now 'include-filter'
+    if (type == TagFilterType.include) {
+      queryFilterKey = 'filter';
+      if (uri.queryParameters.containsKey(queryFilterKey)) {
+        List<String> filterTags = uri.queryParameters[queryFilterKey].split(' ');
+        filterTags.removeWhere((tag) => tag == "");
+        return filterTags.toSet();
+      }
+    }
+
     return Set();
   }
 
