@@ -3,7 +3,7 @@
 A library for shared UI components between Katikati UIs
 
 ### Generating model
-katikati_ui_lib & Infrastrucure should be in the same folder
+katikati_ui_lib & Infrastructure should be in the same folder
 ```
 /lark (or any other name)
   /katikati_ui_lib
