@@ -40,17 +40,6 @@ class UrlView {
       filterTags.removeWhere((tag) => tag == "");
       return filterTags.toSet();
     }
-
-    // backward compatible read for 'filter' which is now 'include-filter'
-    if (type == TagFilterType.include) {
-      queryFilterKey = 'filter';
-      if (uri.queryParameters.containsKey(queryFilterKey)) {
-        List<String> filterTags = uri.queryParameters[queryFilterKey].split(' ');
-        filterTags.removeWhere((tag) => tag == "");
-        return filterTags.toSet();
-      }
-    }
-
     return Set();
   }
 
