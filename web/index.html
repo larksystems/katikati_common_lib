@@ -53,5 +53,34 @@
     <hr />
     <h2>Brand assets (logo)</h2>
     <div id="brand-assets"></div>
+    <hr />
+    <h2>URL params</h2>
+    <p>Output in console</p>
+    <div>
+        <p>Prereq: paste the following in the browser address bar</p>
+        <div>
+            <code>
+                ?include-filter=hello+world&exclude-filter=welcome+home&include-after-date=2021.01.01 03:05&exclude-after-date=2021.02.03 16:20&conversation-list=conv-list-id&conversation-id=conv-id&conversation-id-filter=filter-a
+            </code>
+        </div>
+        <div>
+            <button id="get-url-params">Get URL params</button>
+        </div>
+        <div>
+            <div>
+                <p>Set URL Params</p>
+                <button id="set-url-params--conversation-id">Conversation ID (conv-id)</button>
+                <button id="set-url-params--conversation-list-id">Conversation List ID (conv-list-id)</button>
+                <button id="set-url-params--conversation-id-filter">Conversation ID filter (filter-a)</button>
+                <button id="set-url-params--include-filter">Include filter (hello, world)</button>
+                <button id="set-url-params--exclude-filter">Exclude filter (welcome, home)</button>
+                <button id="set-url-params--include-after-date">Include after date (2021.01.01 03:05)</button>
+                <button id="set-url-params--exclude-after-date">Exclude after date (2021.02.03 16:20)</button>
+            </div>
+            <code>
+                Expected: ?include-filter=hello%20world&exclude-filter=welcome%20home&include-after-date=2020-01-01&exclude-after-date=2020-02-01&conversation-list=conv-list-id&conversation-id=conv-id&conversation-id-filter=filter-a
+            </code>
+        </div>
+    </div>
 </body>
 </html>
