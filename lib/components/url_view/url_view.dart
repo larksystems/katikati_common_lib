@@ -97,7 +97,7 @@ class UrlView {
   }
 
   // TODO: More specific Function parameter
-  DateTime getPageUrlFilterAfterDate(TagFilterType type, {onError: Function}) {
+  DateTime getPageUrlFilterAfterDate(TagFilterType type, {void Function(Exception) onError}) {
     var queryFilterKey = getQueryAfterDateFilterKey(type);
     var uri = Uri.parse(window.location.href);
     if (uri.queryParameters.containsKey(queryFilterKey)) {
