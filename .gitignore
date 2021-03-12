@@ -21,4 +21,4 @@ doc/api/
 *.js.map
 
 .DS_Store
-.iml
+*.iml
