@@ -6,6 +6,7 @@ import 'package:katikati_ui_lib/components/auth/auth.dart';
 import 'package:katikati_ui_lib/components/auth/auth_header.dart';
 import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart';
 import 'package:katikati_ui_lib/components/url_view/url_view.dart';
+import 'package:katikati_ui_lib/components/editable/editable_text.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 DivElement snackbarContainer = querySelector('#snackbar-container');
@@ -20,6 +21,7 @@ ButtonElement authHeaderSimulateSignOutTrigger = querySelector('#auth-header-sim
 DivElement navHeaderViewContainer = querySelector('#nav-header');
 DivElement brandAssetsContainer = querySelector('#brand-assets');
 ButtonElement getURLParamsButton = querySelector('#get-url-params');
+DivElement editableTextContainer = querySelector('#editable-text-wrapper');
 
 Map<String, ButtonElement> setURLParamsButton = {
   "conversation-id": querySelector('#set-url-params--conversation-id') as ButtonElement,
@@ -114,6 +116,16 @@ void main() {
   setURLParamsButton["exclude-after-date"].onClick.listen((_) {
     urlView.setPageUrlFilterAfterDate(TagFilterType.exclude, DateTime(2020, 2, 3, 16, 20));
   });
+
+  // editable text
+  var textEditable = TextEditableView("text")
+    ..onChange.listen((value) {
+      window.alert("New text: ${value}");
+    })
+    ..onDelete.listen((_) {
+      window.alert("Requesting delete...");
+    });
+  editableTextContainer.append(textEditable.renderElement);
 }
 
 void printURLViewParams(UrlView urlView) {

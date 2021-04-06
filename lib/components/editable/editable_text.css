@@ -1,0 +1,14 @@
+span.editable-text {
+  min-width: 40px;
+  display: inline-block;
+}
+
+span.editable-text:empty::before {
+  content: '[Empty]';
+  color: gray;
+}
+
+span.editable-text[contenteditable]:empty:focus::before {
+  content: 'Text…';
+  color: gray;
+}
