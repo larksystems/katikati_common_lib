@@ -31,16 +31,16 @@ class TextEditableView {
   TextEditableView(this._text) {
     _renderElement = DivElement()
       ..onMouseEnter.listen((_) {
-        // if(!_editing) {
-        //   _editButton.show();
-        //   _removeButton.show();
-        // }
+        if(!_editing) {
+          _editButton.show();
+          _removeButton.show();
+        }
       })
       ..onMouseLeave.listen((_) {
-        // if(!_editing) {
-        //   _editButton.hide();
-        //   _removeButton.hide();
-        // }
+        if(!_editing) {
+          _editButton.hide();
+          _removeButton.hide();
+        }
       });
 
     _textSpan = SpanElement()
@@ -64,6 +64,8 @@ class TextEditableView {
       _discardEdit();
     });
 
+    _editButton.hide();
+    _removeButton.hide();
     _confirmButton.hide();
     _discardButton.hide();
 
