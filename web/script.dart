@@ -2,7 +2,7 @@ import 'dart:html';
 import 'package:katikati_ui_lib/components/nav/nav_header.dart';
 import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
 import 'package:katikati_ui_lib/components/banner/banner.dart';
-import 'package:katikati_ui_lib/components/auth/auth.dart';
+import 'package:katikati_ui_lib/components/auth/auth.dart' as auth;
 import 'package:katikati_ui_lib/components/auth/auth_header.dart';
 import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart';
 import 'package:katikati_ui_lib/components/url_view/url_view.dart';
@@ -54,7 +54,8 @@ void main() {
   });
 
   // auth view
-  AuthMainView authMainView = AuthMainView(Brand.avf, "Title", "Description appear here", [SignInDomain.gmail, SignInDomain.lark], (domain) {
+  var authMainView = auth.AuthMainView(Brand.avf, "Title", "Description appear here",
+    [auth.GMAIL_DOMAIN_INFO, auth.LARK_DOMAIN_INFO], (domain) {
     window.alert("Trying to login with domain: $domain");
   });
   authViewContainer.append(authMainView.authElement);
