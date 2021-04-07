@@ -1,0 +1,10 @@
+.back-page-link {
+  color: #999;
+  margin: 8px 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.back-page-link:hover {
+  color: #666;
+}

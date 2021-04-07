@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart';
 
 enum KnownSignInDomain { lark, katikati, avf, ucam, gmail }
 const knownSignInDomainInfo = {
@@ -18,19 +19,19 @@ class SignInDomainInfo {
 class AuthMainView {
   DivElement authElement;
 
-  String logoPath;
+  Brand brand;
   String title;
   String description;
   List<SignInDomainInfo> domainsInfo;
   void Function(SignInDomainInfo) onSigninClick;
 
-  AuthMainView(this.logoPath, this.title, this.description, this.domainsInfo, this.onSigninClick) {
+  AuthMainView(this.brand, this.title, this.description, this.domains, this.onSigninClick) {
     authElement = new DivElement()..classes.add('auth-main');
 
     var logosContainer = new DivElement()..classes.add('auth-main__logos');
     authElement.append(logosContainer);
 
-    var avfLogo = new ImageElement(src: logoPath)..classes.add('partner-logo');
+    var avfLogo = logo(this.brand, className: 'partner-logo');
     logosContainer.append(avfLogo);
 
     var projectTitle = new DivElement()
