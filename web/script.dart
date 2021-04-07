@@ -4,7 +4,7 @@ import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
 import 'package:katikati_ui_lib/components/banner/banner.dart';
 import 'package:katikati_ui_lib/components/auth/auth.dart' as auth;
 import 'package:katikati_ui_lib/components/auth/auth_header.dart';
-import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart';
+import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart' as brand;
 import 'package:katikati_ui_lib/components/url_view/url_view.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
@@ -54,7 +54,7 @@ void main() {
   });
 
   // auth view
-  var authMainView = auth.AuthMainView(Brand.avf, "Title", "Description appear here",
+  var authMainView = auth.AuthMainView(brand.AVF, "Title", "Description appear here",
     [auth.GMAIL_DOMAIN_INFO, auth.LARK_DOMAIN_INFO], (domain) {
     window.alert("Trying to login with domain: $domain");
   });
@@ -84,11 +84,11 @@ void main() {
   navHeaderView.authHeader = authHeaderView;
 
   // logos
-  var avfLogo = logo(Brand.avf, height: 64)..style.marginRight = "32px";
+  var avfLogo = brand.AVF.logo(height: 64)..style.marginRight = "32px";
   brandAssetsContainer.append(avfLogo);
-  var katikatiLogo = logo(Brand.katikati, height: 64)..style.marginRight = "32px";
+  var katikatiLogo = brand.KATIKATI.logo(height: 64)..style.marginRight = "32px";
   brandAssetsContainer.append(katikatiLogo);
-  var ifrcLogo = logo(Brand.ifrc, height: 64, className: "logo");
+  var ifrcLogo = brand.IFRC.logo(height: 64, className: "logo");
   brandAssetsContainer.append(ifrcLogo);
 
   // url view
