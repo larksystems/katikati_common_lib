@@ -25,7 +25,7 @@ class AuthMainView {
   List<SignInDomainInfo> domainsInfo;
   void Function(SignInDomainInfo) onSigninClick;
 
-  AuthMainView(this.brand, this.title, this.description, this.domains, this.onSigninClick) {
+  AuthMainView(this.brand, this.title, this.description, this.domainsInfo, this.onSigninClick) {
     authElement = new DivElement()..classes.add('auth-main');
 
     var logosContainer = new DivElement()..classes.add('auth-main__logos');
