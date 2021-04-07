@@ -16,7 +16,7 @@ class SignInDomainInfo {
 class AuthMainView {
   DivElement authElement;
 
-  Brand brand;
+  BrandInfo brand;
   String title;
   String description;
   List<SignInDomainInfo> domainsInfo;
@@ -28,7 +28,7 @@ class AuthMainView {
     var logosContainer = new DivElement()..classes.add('auth-main__logos');
     authElement.append(logosContainer);
 
-    var avfLogo = logo(this.brand, className: 'partner-logo');
+    var avfLogo = brand.logo(className: 'partner-logo');
     logosContainer.append(avfLogo);
 
     var projectTitle = new DivElement()
