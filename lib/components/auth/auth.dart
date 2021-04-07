@@ -1,13 +1,19 @@
 import 'dart:html';
 
-enum SignInDomain { lark, katikati, avf, ucam, gmail }
-const signInDomainsInfo = {
-  SignInDomain.lark: {"displayName": "Lark Systems", "domain": "lark.systems"},
-  SignInDomain.katikati: {"displayName": "Katikati", "domain": "katikati.world"},
-  SignInDomain.avf: {"displayName": "Africa's Voices", "domain": "africasvoices.org"},
-  SignInDomain.ucam: {"displayName": "University of Cambridge", "domain": "cam.ac.uk"},
-  SignInDomain.gmail: {"displayName": "Gmail", "domain": "gmail.com"},
+enum KnownSignInDomain { lark, katikati, avf, ucam, gmail }
+const knownSignInDomainInfo = {
+  KnownSignInDomain.lark: SignInDomainInfo("Lark Systems", "lark.systems"),
+  KnownSignInDomain.katikati: SignInDomainInfo("Katikati", "katikati.world"),
+  KnownSignInDomain.avf: SignInDomainInfo("Africa's Voices", "africasvoices.org"),
+  KnownSignInDomain.ucam: SignInDomainInfo("University of Cambridge", "cam.ac.uk"),
+  KnownSignInDomain.gmail: SignInDomainInfo("Gmail", "gmail.com")
 };
+
+class SignInDomainInfo {
+  final String displayName;
+  final String domain;
+  const SignInDomainInfo(this.displayName, this.domain);
+}
 
 class AuthMainView {
   DivElement authElement;
@@ -15,10 +21,10 @@ class AuthMainView {
   String logoPath;
   String title;
   String description;
-  List<SignInDomain> domains;
-  void Function(SignInDomain) onSigninClick;
+  List<SignInDomainInfo> domainsInfo;
+  void Function(SignInDomainInfo) onSigninClick;
 
-  AuthMainView(this.logoPath, this.title, this.description, this.domains, this.onSigninClick) {
+  AuthMainView(this.logoPath, this.title, this.description, this.domainsInfo, this.onSigninClick) {
     authElement = new DivElement()..classes.add('auth-main');
 
     var logosContainer = new DivElement()..classes.add('auth-main__logos');
@@ -37,9 +43,9 @@ class AuthMainView {
       ..append(new ParagraphElement()..text = description);
     authElement.append(projectDescription);
 
-    for (var domain in domains) {
+    for (var domain in domainsInfo) {
       var signInButton = new ButtonElement()
-        ..text = "Sign in with ${signInDomainsInfo[domain]['displayName']}"
+        ..text = "Sign in with ${domain.displayName}"
         ..onClick.listen((_) => onSigninClick(domain));
       authElement.append(signInButton);
     }
