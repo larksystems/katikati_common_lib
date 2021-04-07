@@ -1,14 +1,11 @@
 import 'dart:html';
 import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart';
 
-enum KnownSignInDomain { lark, katikati, avf, ucam, gmail }
-const knownSignInDomainInfo = {
-  KnownSignInDomain.lark: SignInDomainInfo("Lark Systems", "lark.systems"),
-  KnownSignInDomain.katikati: SignInDomainInfo("Katikati", "katikati.world"),
-  KnownSignInDomain.avf: SignInDomainInfo("Africa's Voices", "africasvoices.org"),
-  KnownSignInDomain.ucam: SignInDomainInfo("University of Cambridge", "cam.ac.uk"),
-  KnownSignInDomain.gmail: SignInDomainInfo("Gmail", "gmail.com")
-};
+const LARK_DOMAIN_INFO = SignInDomainInfo("Lark Systems", "lark.systems");
+const KATIKATI_DOMAIN_INFO = SignInDomainInfo("Katikati", "katikati.world");
+const AVF_DOMAIN_INFO = SignInDomainInfo("Africa's Voices", "africasvoices.org");
+const UCAM_DOMAIN_INFO = SignInDomainInfo("University of Cambridge", "cam.ac.uk");
+const GMAIL_DOMAIN_INFO = SignInDomainInfo("Gmail", "gmail.com");
 
 class SignInDomainInfo {
   final String displayName;
