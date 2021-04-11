@@ -127,6 +127,14 @@ void main() {
       window.alert("Requesting delete...");
     });
   editableTextContainer.append(textEditable.renderElement);
+  var textEditableDefault = TextEditableView("", editableOnAdd: true)
+    ..onChange.listen((value) {
+      window.alert("New text: ${value}");
+    })
+    ..onDelete.listen((_) {
+      window.alert("Requesting delete...");
+    });
+  editableTextContainer.append(textEditableDefault.renderElement);
 }
 
 void printURLViewParams(UrlView urlView) {

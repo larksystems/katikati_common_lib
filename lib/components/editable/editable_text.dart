@@ -28,16 +28,17 @@ class TextEditableView {
   StreamController<void> _onDeleteController;
   Stream<void> get onDelete => _onDelete;
 
-  TextEditableView(this._text) {
+  TextEditableView(this._text, {bool editableOnAdd = false}) {
+    this._editing = editableOnAdd;
     _renderElement = DivElement()
       ..onMouseEnter.listen((_) {
-        if(!_editing) {
+        if (!_editing) {
           _editButton.show();
           _removeButton.show();
         }
       })
       ..onMouseLeave.listen((_) {
-        if(!_editing) {
+        if (!_editing) {
           _editButton.hide();
           _removeButton.hide();
         }
@@ -64,11 +65,6 @@ class TextEditableView {
       _discardEdit();
     });
 
-    _editButton.hide();
-    _removeButton.hide();
-    _confirmButton.hide();
-    _discardButton.hide();
-
     _renderElement
       ..append(_textSpan)
       ..append(_editButton.renderElement)
@@ -81,6 +77,16 @@ class TextEditableView {
 
     this._onDeleteController = StreamController();
     this._onDelete = _onDeleteController.stream;
+
+    if (!_editing) {
+      _editButton.hide();
+      _removeButton.hide();
+      _confirmButton.hide();
+      _discardButton.hide();
+    } else {
+      _enableEdit();
+      _textSpan.setAttribute('autofocus', 'true');
+    }
   }
 
   void _enableEdit() {
