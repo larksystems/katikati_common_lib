@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'package:katikati_ui_lib/components/conversation/conversation_item.dart';
 import 'package:katikati_ui_lib/components/nav/nav_header.dart';
 import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
 import 'package:katikati_ui_lib/components/banner/banner.dart';
@@ -7,6 +8,8 @@ import 'package:katikati_ui_lib/components/auth/auth_header.dart';
 import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart' as brand;
 import 'package:katikati_ui_lib/components/url_view/url_view.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
+import 'package:katikati_ui_lib/components/nav/button_links.dart';
+import 'package:katikati_ui_lib/components/tabs/tabs.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 DivElement snackbarContainer = querySelector('#snackbar-container');
@@ -22,6 +25,19 @@ DivElement navHeaderViewContainer = querySelector('#nav-header');
 DivElement brandAssetsContainer = querySelector('#brand-assets');
 ButtonElement getURLParamsButton = querySelector('#get-url-params');
 DivElement editableTextContainer = querySelector('#editable-text-wrapper');
+DivElement buttonLinksContainer = querySelector('#button-links-wrapper');
+DivElement tabsContainer = querySelector('#tabs-wrapper');
+DivElement conversationItemsContainer = querySelector('#conversation-items-wrapper');
+DivElement conversationItemSimulateContainer = querySelector('#conversation-items-wrapper-simulate');
+
+ButtonElement conversationSimulateChoose = querySelector('#conversation-item-simulate-choose');
+ButtonElement conversationSimulateUnchoose = querySelector('#conversation-item-simulate-unchoose');
+ButtonElement conversationSimulateSelect = querySelector('#conversation-item-simulate-select');
+ButtonElement conversationSimulateUnselect = querySelector('#conversation-item-simulate-unselect');
+ButtonElement conversationSimulateNormal = querySelector('#conversation-item-simulate-normal');
+ButtonElement conversationSimulateFailed = querySelector('#conversation-item-simulate-failed');
+ButtonElement conversationSimulatePending = querySelector('#conversation-item-simulate-pending');
+ButtonElement conversationSimulateDraft = querySelector('#conversation-item-simulate-draft');
 
 Map<String, ButtonElement> setURLParamsButton = {
   "conversation-id": querySelector('#set-url-params--conversation-id') as ButtonElement,
@@ -54,8 +70,8 @@ void main() {
   });
 
   // auth view
-  var authMainView = auth.AuthMainView(brand.AVF, "Title", "Description appear here",
-    [auth.GMAIL_DOMAIN_INFO, auth.LARK_DOMAIN_INFO], (domain) {
+  var authMainView = auth.AuthMainView(
+      brand.AVF, "Title", "Description appear here", [auth.GMAIL_DOMAIN_INFO, auth.LARK_DOMAIN_INFO], (domain) {
     window.alert("Trying to login with domain: $domain");
   });
   authViewContainer.append(authMainView.authElement);
@@ -135,6 +151,78 @@ void main() {
       window.alert("Requesting delete...");
     });
   editableTextContainer.append(textEditableDefault.renderElement);
+
+  // button links
+  var links = [Link("Dashboard", "#dashboard"), Link("Configure", "#configure")];
+  var buttonLinks = ButtonLinksView(links, "#dashboard", openInNewTab: true);
+  buttonLinksContainer.append(buttonLinks.renderElement);
+
+  // tabs
+  var tabLabels = ["Tab A", "Tab B", "Tab C", "Tab D"];
+  var tabContents = [
+    DivElement()..innerText = "Content A",
+    DivElement()..innerText = "Content B",
+    DivElement()..innerText = "Content C",
+    DivElement()..innerText = "Content D"
+  ];
+  var tabs = TabsView(tabLabels, tabContents, defaultSelectedIndex: 2);
+  tabsContainer.append(tabs.renderElement);
+
+  // Conversation items
+  var conversationItem = ConversationItemView(
+      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.normal,
+      defaultChosen: true)
+    ..onChoose.listen((id) {
+      logger.debug("Choosing conversation $id");
+    })
+    ..onSelect.listen((id) {
+      logger.debug("Selecting conversation $id");
+    })
+    ..onDeselect.listen((id) {
+      logger.debug("Deselecting conversation $id");
+    });
+  conversationItemsContainer.append(conversationItem.renderElement);
+
+  var conversationDraft = ConversationItemView(
+      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.draft);
+  conversationItemsContainer.append(conversationDraft.renderElement);
+
+  var conversationPending = ConversationItemView(
+      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.pending);
+  conversationItemsContainer.append(conversationPending.renderElement);
+
+  var conversationFailed = ConversationItemView(
+      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.failed);
+  conversationItemsContainer.append(conversationFailed.renderElement);
+
+  var conversationSimulateItem = ConversationItemView(
+      "simulate_id", "Hello, this is an example preview message that is long", ConversationItemStatus.normal);
+  conversationItemSimulateContainer.append(conversationSimulateItem.renderElement);
+
+  conversationSimulateChoose.onClick.listen((_) {
+    conversationSimulateItem.choose();
+  });
+  conversationSimulateUnchoose.onClick.listen((_) {
+    conversationSimulateItem.unChoose();
+  });
+  conversationSimulateSelect.onClick.listen((_) {
+    conversationSimulateItem.select();
+  });
+  conversationSimulateUnselect.onClick.listen((_) {
+    conversationSimulateItem.unSelect();
+  });
+  conversationSimulateNormal.onClick.listen((_) {
+    conversationSimulateItem.updateStatus(ConversationItemStatus.normal);
+  });
+  conversationSimulateFailed.onClick.listen((_) {
+    conversationSimulateItem.updateStatus(ConversationItemStatus.failed);
+  });
+  conversationSimulatePending.onClick.listen((_) {
+    conversationSimulateItem.updateStatus(ConversationItemStatus.pending);
+  });
+  conversationSimulateDraft.onClick.listen((_) {
+    conversationSimulateItem.updateStatus(ConversationItemStatus.draft);
+  });
 }
 
 void printURLViewParams(UrlView urlView) {
