@@ -99,10 +99,7 @@ class ConversationItemView {
   }
 
   void _updateStatus(ConversationItemStatus status) {
-    var messageStatusClasses = _messageStatusElement.classes
-      ..removeWhere((classname) {
-        return classname.indexOf("converversation-item-status--") == 0;
-      });
+    _messageStatusElement.classes.removeWhere((className) => className.startsWith("converversation-item-status--"));
     var renderElementClasses = renderElement.classes
       ..removeWhere((classname) {
         return classname.indexOf("conversation-item--selected") != 0 && classname.indexOf("conversation-item--") == 0;
