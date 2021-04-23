@@ -29,7 +29,7 @@ class ButtonLinksView {
       if (_openInNewTab) {
         linkElement.setAttribute('target', '_blank');
 
-        if(link.url != _selected) {
+        if (link.url != _selected) {
           var linkIcon = ImageElement(src: "assets/icons/link.svg");
           linkContent.append(linkIcon);
         }
