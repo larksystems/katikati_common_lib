@@ -7,6 +7,7 @@ import 'package:katikati_ui_lib/components/auth/auth_header.dart';
 import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart' as brand;
 import 'package:katikati_ui_lib/components/url_view/url_view.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
+import 'package:katikati_ui_lib/components/tabs/tabs.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 DivElement snackbarContainer = querySelector('#snackbar-container');
@@ -22,6 +23,7 @@ DivElement navHeaderViewContainer = querySelector('#nav-header');
 DivElement brandAssetsContainer = querySelector('#brand-assets');
 ButtonElement getURLParamsButton = querySelector('#get-url-params');
 DivElement editableTextContainer = querySelector('#editable-text-wrapper');
+DivElement tabsContainer = querySelector('#tabs-wrapper');
 
 Map<String, ButtonElement> setURLParamsButton = {
   "conversation-id": querySelector('#set-url-params--conversation-id') as ButtonElement,
@@ -135,6 +137,16 @@ void main() {
       window.alert("Requesting delete...");
     });
   editableTextContainer.append(textEditableDefault.renderElement);
+
+  // tabs
+  var allTabs = [
+    TabView("a", "Tab A", DivElement()..innerText = "Content A"),
+    TabView("b", "Tab B", DivElement()..innerText = "Content B"),
+    TabView("c", "Tab C", DivElement()..innerText = "Content C"),
+    TabView("d", "Tab D", DivElement()..innerText = "Content D"),
+  ];
+  var tabsView = TabsView(allTabs, defaultSelectedID: "b");
+  tabsContainer.append(tabsView.renderElement);
 }
 
 void printURLViewParams(UrlView urlView) {

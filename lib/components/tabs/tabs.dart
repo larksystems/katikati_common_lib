@@ -1,44 +1,47 @@
-import 'dart:developer';
 import 'dart:html';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 var logger = Logger('Tabs');
 
+class TabView {
+  String id;
+  String label;
+  DivElement content;
+
+  TabView(this.id, this.label, this.content);
+}
+
 class TabsView {
   DivElement renderElement;
+  List<TabView> _tabs;
 
-  List<String> _tabLabels;
-  List<DivElement> _tabContents;
-  int _selectedIndex;
+  String _selectedTabID;
   String _tabContentClassname;
 
   List<SpanElement> _tabChoosers = [];
   DivElement _tabContent;
 
-  TabsView(this._tabLabels, this._tabContents, {int defaultSelectedIndex = 0, String tabContentClassname}) {
-    if (_tabLabels.length != _tabContents.length) {
-      logger.error("Mismatch in tab labels and contents");
-      renderElement = DivElement()..innerText = "Error rendering tabs";
-      return;
+  TabsView(this._tabs, {String defaultSelectedID, String tabContentClassname}) {
+    if (defaultSelectedID != null) {
+      _selectedTabID = defaultSelectedID;
+    } else {
+      _selectedTabID = _tabs.first.id;
     }
 
-    if (defaultSelectedIndex >= _tabLabels.length || defaultSelectedIndex < 0) {
-      logger.error("Selected index greater than avaiable tabs, defaulting to 0");
-      defaultSelectedIndex = 0;
-    }
+    var selectedIndex = _getSelectedIndex(_selectedTabID);
 
-    _selectedIndex = defaultSelectedIndex;
     _tabContentClassname = tabContentClassname;
 
     var tabsHeader = DivElement();
-    _tabLabels.asMap().forEach((index, label) {
+    _tabs.asMap().forEach((index, tab) {
       var tabChooser = SpanElement()
-        ..innerText = label
+        ..innerText = tab.label
         ..className = "tab-chooser"
+        ..id = "tab-chooser-${tab.id}"
         ..onClick.listen((_) {
-          _selectTab(index);
+          _selectTab(tab.id);
         });
-      if (index == _selectedIndex) {
+      if (tab.id == _selectedTabID) {
         tabChooser.classes.add("tab-chooser--selected");
       }
       _tabChoosers.add(tabChooser);
@@ -47,7 +50,7 @@ class TabsView {
 
     _tabContent = DivElement()
       ..className = "tab-content"
-      ..append(_tabContents[_selectedIndex]);
+      ..append(_tabs[selectedIndex].content);
     if (_tabContentClassname != null) {
       _tabContent.classes.add(_tabContentClassname);
     }
@@ -55,22 +58,28 @@ class TabsView {
     renderElement = DivElement()..append(tabsHeader)..append(_tabContent);
   }
 
-  void _selectTab(int index) {
-    _tabContent.children.clear();
-    _tabContent.append(_tabContents[index]);
-
-    _tabChoosers[_selectedIndex].classes.toggle("tab-chooser--selected", false);
-    _tabChoosers[index].classes.toggle("tab-chooser--selected", true);
-
-    _selectedIndex = index;
+  int _getSelectedIndex(String id) {
+    var index = _tabs.indexWhere((tab) => tab.id == id);
+    if (index < 0) {
+      throw IndexError(index, "Tab ID $id not found");
+    }
+    return index;
   }
 
-  void selectTab(int index) {
-    if (index < 0 || index >= _tabLabels.length) {
-      logger.error("Selected index greater than avaiable tabs, defaulting to 0");
-      index = 0;
-    }
+  void _selectTab(String id) {
+    var oldSelectedIndex = _getSelectedIndex(_selectedTabID);
+    var newSelectedIndex = _getSelectedIndex(id);
 
-    _selectTab(index);
+    _tabContent.children.clear();
+    _tabContent.append(_tabs[newSelectedIndex].content);
+
+    _tabChoosers[oldSelectedIndex].classes.toggle("tab-chooser--selected", false);
+    _tabChoosers[newSelectedIndex].classes.toggle("tab-chooser--selected", true);
+
+    _selectedTabID = id;
+  }
+
+  void selectTab(String id) {
+    _selectTab(id);
   }
 }
