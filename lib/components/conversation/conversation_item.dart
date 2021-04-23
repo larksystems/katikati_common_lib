@@ -106,8 +106,7 @@ class ConversationItemView {
       });
     switch (status) {
       case ConversationItemStatus.draft:
-        renderElementClasses.add("conversation-item--draft");
-        renderElement.className = renderElementClasses.join(" ");
+        renderElement.classes.add("conversation-item--draft");
         messageStatusClasses.add("converversation-item-status--draft");
         _messageStatusElement
           ..innerText = "[draft]"
