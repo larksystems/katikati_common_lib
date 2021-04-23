@@ -12,31 +12,31 @@ class ConversationItemView {
   ConversationItemStatus _status;
   String _id;
   String _message;
-  bool _choosen;
   bool _selected;
+  bool _checked;
 
   CheckboxInputElement _checkboxElement;
   SpanElement _messageStatusElement;
-
-  Stream<String> _onChoose;
-  StreamController<String> _onChooseController;
-  Stream<String> get onChoose => _onChoose;
 
   Stream<String> _onSelect;
   StreamController<String> _onSelectController;
   Stream<String> get onSelect => _onSelect;
 
-  Stream<String> _onDeselect;
-  StreamController<String> _onDeselectController;
-  Stream<String> get onDeselect => _onDeselect;
+  Stream<String> _onCheck;
+  StreamController<String> _onCheckController;
+  Stream<String> get onCheck => _onCheck;
+
+  Stream<String> _onUncheck;
+  StreamController<String> _onUncheckController;
+  Stream<String> get onUncheck => _onUncheck;
 
   ConversationItemView(this._id, this._message, this._status,
-      {bool defaultChosen = false, bool defaultSelected = false}) {
-    _choosen = defaultChosen;
+      {bool defaultSelected = false, bool defaultChecked = false}) {
     _selected = defaultSelected;
+    _checked = defaultChecked;
 
     renderElement = DivElement()..className = "conversation-item";
-    if (_choosen) {
+    if (_selected) {
       renderElement.classes.add("conversation-item--selected");
     }
 
@@ -47,20 +47,20 @@ class ConversationItemView {
         event.preventDefault();
         var checked = (event.currentTarget as CheckboxInputElement).checked;
         if (checked) {
-          if (_onSelectController.hasListener) {
-            _onSelectController.sink.add(_id);
+          if (_onCheckController.hasListener) {
+            _onCheckController.sink.add(_id);
           } else {
             logger.warning("No listener for ConversationItemView.onSelect");
           }
         } else {
-          if (_onDeselectController.hasListener) {
-            _onDeselectController.sink.add(_id);
+          if (_onUncheckController.hasListener) {
+            _onUncheckController.sink.add(_id);
           } else {
             logger.warning("No listener for ConversationItemView.onSelect");
           }
         }
       });
-    if (_selected) {
+    if (_checked) {
       _checkboxElement.checked = true;
     }
     checkboxWrapper.append(_checkboxElement);
@@ -68,10 +68,10 @@ class ConversationItemView {
     var contentWrapper = DivElement()
       ..className = "conversation-item-content--wrapper"
       ..onClick.listen((event) {
-        if (_onChooseController.hasListener) {
-          _onChooseController.sink.add(_id);
+        if (_onSelectController.hasListener) {
+          _onSelectController.sink.add(_id);
         } else {
-          logger.warning("No listener for ConversationItemView.onCHoose");
+          logger.warning("No listener for ConversationItemView.onSelect");
         }
       });
 
@@ -90,20 +90,19 @@ class ConversationItemView {
     contentWrapper..append(idElement)..append(messageElement);
     renderElement..append(checkboxWrapper)..append(contentWrapper);
 
-    this._onChooseController = StreamController();
-    this._onChoose = _onChooseController.stream;
     this._onSelectController = StreamController();
     this._onSelect = _onSelectController.stream;
-    this._onDeselectController = StreamController();
-    this._onDeselect = _onDeselectController.stream;
+    this._onCheckController = StreamController();
+    this._onCheck = _onCheckController.stream;
+    this._onUncheckController = StreamController();
+    this._onUncheck = _onUncheckController.stream;
   }
 
   void _updateStatus(ConversationItemStatus status) {
-    _messageStatusElement.classes.removeWhere((className) => className.startsWith("converversation-item-status--"));
+    var messageStatusClasses = _messageStatusElement.classes
+      ..removeWhere((className) => className.startsWith("converversation-item-status--"));
     var renderElementClasses = renderElement.classes
-      ..removeWhere((classname) {
-        return classname.indexOf("conversation-item--selected") != 0 && classname.indexOf("conversation-item--") == 0;
-      });
+      ..removeWhere((classname) => !classname.startsWith("conversation-item--selected") && classname.startsWith("conversation-item--"));
     switch (status) {
       case ConversationItemStatus.draft:
         renderElement.classes.add("conversation-item--draft");
@@ -138,23 +137,23 @@ class ConversationItemView {
     }
   }
 
-  void select() {
-    _selected = true;
+  void check() {
+    _checked = true;
     _checkboxElement.checked = true;
   }
 
-  void unSelect() {
-    _selected = false;
+  void uncheck() {
+    _checked = false;
     _checkboxElement.checked = false;
   }
 
-  void choose() {
-    _choosen = true;
+  void select() {
+    _selected = true;
     renderElement.classes.toggle('conversation-item--selected', true);
   }
 
-  void unChoose() {
-    _choosen = false;
+  void unselect() {
+    _selected = false;
     renderElement.classes.toggle('conversation-item--selected', false);
   }
 
