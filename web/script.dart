@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'package:katikati_ui_lib/components/nav/nav_header.dart';
+import 'package:katikati_ui_lib/components/nav/sidebar_icons.dart';
 import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
 import 'package:katikati_ui_lib/components/banner/banner.dart';
 import 'package:katikati_ui_lib/components/auth/auth.dart' as auth;
@@ -22,6 +23,7 @@ DivElement navHeaderViewContainer = querySelector('#nav-header');
 DivElement brandAssetsContainer = querySelector('#brand-assets');
 ButtonElement getURLParamsButton = querySelector('#get-url-params');
 DivElement editableTextContainer = querySelector('#editable-text-wrapper');
+DivElement toggleIconButtonsContainer = querySelector("#toggle-icon-buttons-wrapper");
 
 Map<String, ButtonElement> setURLParamsButton = {
   "conversation-id": querySelector('#set-url-params--conversation-id') as ButtonElement,
@@ -135,6 +137,23 @@ void main() {
       window.alert("Requesting delete...");
     });
   editableTextContainer.append(textEditableDefault.renderElement);
+
+  // Toggle icon buttons
+  var toggleUserPresenceButton = IconButtonView("user_presence", "assets/icons/user-presence.svg", false)
+    ..onToggle.listen((inView) {
+      window.alert("Command for user_presence - view $inView");
+    });
+  toggleIconButtonsContainer.append(toggleUserPresenceButton.renderElement);
+  var toggleNotesButton = IconButtonView("notes", "assets/icons/notes.svg", true)
+    ..onToggle.listen((inView) {
+      window.alert("Command for notes - view $inView");
+    });
+  toggleIconButtonsContainer.append(toggleNotesButton.renderElement);
+  var toggleTagsButton = IconButtonView("tags", "assets/icons/tags.svg", false)
+    ..onToggle.listen((inView) {
+      window.alert("Command for tags - view $inView");
+    });
+  toggleIconButtonsContainer.append(toggleTagsButton.renderElement);
 }
 
 void printURLViewParams(UrlView urlView) {
