@@ -61,6 +61,7 @@ class Conversation {
   String docId;
   Map<String, String> demographicsInfo;
   Set<String> tagIds;
+  Set<String> suggestedTagIds;
   Set<String> lastInboundTurnTagIds;
   List<Message> messages;
   String notes;
@@ -74,6 +75,7 @@ class Conversation {
     return (modelObj ?? Conversation())
       ..demographicsInfo = Map_fromData<String>(data['demographicsInfo'], String_fromData)
       ..tagIds = Set_fromData<String>(data['tags'], String_fromData)
+      ..suggestedTagIds = Set_fromData<String>(data['suggested_tags'], String_fromData) ?? {}
       ..lastInboundTurnTagIds = Set_fromData<String>(data['lastInboundTurnTags'], String_fromData) ?? {}
       ..messages = List_fromData<Message>(data['messages'], Message.fromData)
       ..notes = String_fromData(data['notes'])
@@ -102,6 +104,7 @@ class Conversation {
     return {
       if (demographicsInfo != null) 'demographicsInfo': demographicsInfo,
       if (tagIds != null) 'tags': tagIds.toList(),
+      if (suggestedTagIds != null) 'suggested_tags': suggestedTagIds.toList(),
       if (lastInboundTurnTagIds != null) 'lastInboundTurnTags': lastInboundTurnTagIds.toList(),
       if (messages != null) 'messages': messages.map((elem) => elem?.toData()).toList(),
       if (notes != null) 'notes': notes,
@@ -195,6 +198,7 @@ class Message {
   DateTime datetime;
   MessageStatus status;
   List<String> tagIds;
+  List<String> suggestedTagIds;
   String text;
   String translation;
   String id;
@@ -206,6 +210,7 @@ class Message {
       ..datetime = DateTime_fromData(data['datetime'])
       ..status = MessageStatus.fromData(data['status'])
       ..tagIds = List_fromData<String>(data['tags'], String_fromData)
+      ..suggestedTagIds = List_fromData<String>(data['suggested_tags'], String_fromData) ?? []
       ..text = String_fromData(data['text'])
       ..translation = String_fromData(data['translation'])
       ..id = String_fromData(data['id']);
@@ -231,6 +236,7 @@ class Message {
       if (datetime != null) 'datetime': datetime.toIso8601String(),
       if (status != null) 'status': status.toData(),
       if (tagIds != null) 'tags': tagIds,
+      if (suggestedTagIds != null) 'suggested_tags': suggestedTagIds,
       if (text != null) 'text': text,
       if (translation != null) 'translation': translation,
       if (id != null) 'id': id,
