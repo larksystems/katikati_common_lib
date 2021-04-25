@@ -1,0 +1,54 @@
+.freetext-message-send--container {
+  display: flex;
+}
+
+.freetext-message--container {
+  flex-grow: 1;
+  align-self: center;
+  position: relative;
+}
+
+.freetext-send--container {
+  margin-left: 32px;
+  align-self: center;
+}
+
+.freetext-message--container textarea {
+  width: 100%;
+  height: 64px;
+  padding: 12px;
+  border: 1px dashed #aaa;
+  border-radius: 3px;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.freetext-message--container .clear-button img {
+  width: 8px;
+  height: 8px;
+}
+
+.freetext-message--container .clear-button {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 0;
+  right: 0;
+  padding: 4px;
+  background-color: transparent;
+  border: none;
+}
+
+.freetext-send--container button {
+  text-transform: uppercase;
+  background-color: white;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  font-size: 12px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.freetext-send--container button:disabled, .freetext-message--container button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
