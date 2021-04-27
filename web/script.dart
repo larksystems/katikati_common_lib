@@ -7,6 +7,7 @@ import 'package:katikati_ui_lib/components/auth/auth_header.dart';
 import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart' as brand;
 import 'package:katikati_ui_lib/components/url_view/url_view.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
+import 'package:katikati_ui_lib/components/messages/freetext_message_send.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 DivElement snackbarContainer = querySelector('#snackbar-container');
@@ -22,6 +23,7 @@ DivElement navHeaderViewContainer = querySelector('#nav-header');
 DivElement brandAssetsContainer = querySelector('#brand-assets');
 ButtonElement getURLParamsButton = querySelector('#get-url-params');
 DivElement editableTextContainer = querySelector('#editable-text-wrapper');
+DivElement freetextMessageSendContainer = querySelector('#freetext-message-send--wrapper');
 
 Map<String, ButtonElement> setURLParamsButton = {
   "conversation-id": querySelector('#set-url-params--conversation-id') as ButtonElement,
@@ -135,6 +137,14 @@ void main() {
       window.alert("Requesting delete...");
     });
   editableTextContainer.append(textEditableDefault.renderElement);
+
+  // Freetext message send
+  var freetextMessageSend = FreetextMessageSendView("Default text");
+  freetextMessageSend.onSend.listen((value) {
+    window.alert("Sending: $value");
+    freetextMessageSend.clear();
+  });
+  freetextMessageSendContainer.append(freetextMessageSend.renderElement);
 }
 
 void printURLViewParams(UrlView urlView) {
