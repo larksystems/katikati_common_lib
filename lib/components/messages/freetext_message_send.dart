@@ -24,8 +24,8 @@ class FreetextMessageSendView {
       ..defaultValue = _text
       ..placeholder = "Type your message..."
       ..onInput.listen((e) {
-        _text = (e.target as TextAreaElement).value;
-        _enableDisableButtons();
+        _text = _textArea.value;
+        _enableOrDisableButtons();
       });
     _sendButton = ButtonElement()
       ..innerText = "Send"
@@ -39,26 +39,26 @@ class FreetextMessageSendView {
     var clearIcon = ImageElement(src: "assets/icons/clear.svg");
     _clearButton = ButtonElement()
       ..append(clearIcon)
-      ..className = "clear-button"
+      ..className = "message-editor-with-send__clear-button"
       ..onClick.listen((_) {
         clear();
       });
 
     var textareaWrapper = DivElement()
-      ..className = "freetext-message--container"
+      ..className = "message-editor-with-send__message"
       ..append(_textArea)
       ..append(_clearButton);
     var sendButtonWrapper = DivElement()
-      ..className = "freetext-send--container"
+      ..className = "message-editor-with-send__send-button"
       ..append(_sendButton);
 
     renderElement = DivElement()
-      ..className = "freetext-message-send--container"
+      ..className = "message-editor-with-send"
       ..append(textareaWrapper)
       ..append(sendButtonWrapper);
   }
 
-  void _enableDisableButtons() {
+  void _enableOrDisableButtons() {
     if (_text.isEmpty) {
       _sendButton.setAttribute("disabled", "true");
       _clearButton.setAttribute("disabled", "true");
@@ -71,6 +71,6 @@ class FreetextMessageSendView {
   void clear() {
     _text = "";
     _textArea.value = "";
-    _enableDisableButtons();
+    _enableOrDisableButtons();
   }
 }
