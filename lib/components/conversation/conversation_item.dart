@@ -40,12 +40,10 @@ class ConversationItemView {
       renderElement.classes.add("conversation-item--selected");
     }
 
-    var checkboxWrapper = DivElement()..className = "conversation-item-checkbox--wrapper";
+    var checkboxWrapper = DivElement()..className = "conversation-item__checkbox";
     _checkboxElement = CheckboxInputElement()
-      ..onInput.listen((event) {
-        event.stopPropagation();
-        event.preventDefault();
-        var checked = (event.currentTarget as CheckboxInputElement).checked;
+      ..onInput.listen((_) {
+        var checked = _checkboxElement.checked;
         if (checked) {
           if (_onCheckController.hasListener) {
             _onCheckController.sink.add(_id);
@@ -66,7 +64,7 @@ class ConversationItemView {
     checkboxWrapper.append(_checkboxElement);
 
     var contentWrapper = DivElement()
-      ..className = "conversation-item-content--wrapper"
+      ..className = "conversation-item__content"
       ..onClick.listen((event) {
         if (_onSelectController.hasListener) {
           _onSelectController.sink.add(_id);
@@ -76,14 +74,14 @@ class ConversationItemView {
       });
 
     var idElement = DivElement()
-      ..className = "conversation-item-id"
+      ..className = "conversation-item__id"
       ..innerText = _id;
 
-    var messageElement = DivElement()..className = "conversation-item-message";
+    var messageElement = DivElement()..className = "conversation-item__message";
     var messageTextElement = SpanElement()
-      ..className = "conversation-item-message-text"
+      ..className = "conversation-item__message__text"
       ..innerText = _message;
-    _messageStatusElement = SpanElement()..className = "conversation-item-status";
+    _messageStatusElement = SpanElement()..className = "conversation-item__status";
     _updateStatus(_status);
 
     messageElement..append(messageTextElement)..append(_messageStatusElement);
@@ -99,41 +97,35 @@ class ConversationItemView {
   }
 
   void _updateStatus(ConversationItemStatus status) {
-    var messageStatusClasses = _messageStatusElement.classes
-      ..removeWhere((className) => className.startsWith("converversation-item-status--"));
-    var renderElementClasses = renderElement.classes
-      ..removeWhere((classname) => !classname.startsWith("conversation-item--selected") && classname.startsWith("conversation-item--"));
+    _messageStatusElement.classes..removeWhere((className) => className.startsWith("converversation-item__status--"));
+    renderElement.classes
+      ..removeWhere((classname) =>
+          !classname.startsWith("conversation-item--selected") && classname.startsWith("conversation-item--"));
     switch (status) {
       case ConversationItemStatus.draft:
         renderElement.classes.add("conversation-item--draft");
-        messageStatusClasses.add("converversation-item-status--draft");
         _messageStatusElement
-          ..innerText = "[draft]"
-          ..className = messageStatusClasses.join(" ");
+          ..classes.add("converversation-item__status--draft")
+          ..innerText = "[draft]";
         break;
       case ConversationItemStatus.failed:
-        renderElementClasses.add("conversation-item--failed");
-        renderElement.className = renderElementClasses.join(" ");
-        messageStatusClasses.add("converversation-item-status--failed");
+        renderElement.classes.add("conversation-item--failed");
         _messageStatusElement
-          ..innerText = "[delivery failure]"
-          ..className = messageStatusClasses.join(" ");
+          ..classes.add("converversation-item__status--failed")
+          ..innerText = "[delivery failure]";
         break;
       case ConversationItemStatus.pending:
-        renderElementClasses.add("conversation-item--pending");
-        renderElement.className = renderElementClasses.join(" ");
-        messageStatusClasses.add("converversation-item-status--pending");
+        renderElement.classes.add("conversation-item--pending");
         _messageStatusElement
-          ..innerText = "[pending]"
-          ..className = messageStatusClasses.join(" ");
+          ..classes.add("converversation-item__status--pending")
+          ..innerText = "[pending]";
         break;
       default:
-        renderElementClasses.add("conversation-item--normal");
-        renderElement.className = renderElementClasses.join(" ");
-        messageStatusClasses.add("converversation-item-status--normal");
+        renderElement.classes.add("conversation-item--normal");
         _messageStatusElement
-          ..innerText = ""
-          ..className = messageStatusClasses.join(" ");
+          ..classes.add("converversation-item__status--normal")
+          ..innerText = "";
+        break;
     }
   }
 
