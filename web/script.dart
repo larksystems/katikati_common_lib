@@ -8,6 +8,7 @@ import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart' as bran
 import 'package:katikati_ui_lib/components/url_view/url_view.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
 import 'package:katikati_ui_lib/components/conversation/conversation_item.dart';
+import 'package:katikati_ui_lib/components/messages/freetext_message_send.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 DivElement snackbarContainer = querySelector('#snackbar-container');
@@ -23,6 +24,7 @@ DivElement navHeaderViewContainer = querySelector('#nav-header');
 DivElement brandAssetsContainer = querySelector('#brand-assets');
 ButtonElement getURLParamsButton = querySelector('#get-url-params');
 DivElement editableTextContainer = querySelector('#editable-text-wrapper');
+DivElement freetextMessageSendContainer = querySelector('#freetext-message-send--wrapper');
 
 DivElement conversationItemsContainer = querySelector('#conversation-items-wrapper');
 DivElement conversationItemSimulateContainer = querySelector('#conversation-items-wrapper-simulate');
@@ -206,6 +208,14 @@ void main() {
   conversationSimulateDraft.onClick.listen((_) {
     conversationSimulateItem.updateStatus(ConversationItemStatus.draft);
   });
+
+  // Freetext message send
+  var freetextMessageSend = FreetextMessageSendView("Default text");
+  freetextMessageSend.onSend.listen((value) {
+    window.alert("Sending: $value");
+    freetextMessageSend.clear();
+  });
+  freetextMessageSendContainer.append(freetextMessageSend.renderElement);
 }
 
 void printURLViewParams(UrlView urlView) {
