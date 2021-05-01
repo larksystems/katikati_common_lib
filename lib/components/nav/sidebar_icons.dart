@@ -38,8 +38,6 @@ class IconButtonView {
 
     renderElement.append(iconElement);
 
-    if (_inView) {
-      renderElement.classes.add("icon-toggle-button--selected");
-    }
+    renderElement.classes.toggle("icon-toggle-button--selected", _inView);
   }
 }
