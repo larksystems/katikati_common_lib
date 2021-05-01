@@ -27,11 +27,7 @@ class IconButtonView {
       ..onClick.listen((_) {
         _inView = !_inView;
 
-        if (_inView) {
-          renderElement.classes.toggle("icon-toggle-button--selected", true);
-        } else {
-          renderElement.classes.toggle("icon-toggle-button--selected", false);
-        }
+        renderElement.classes.toggle("icon-toggle-button--selected", _inView);
 
         if (_onToggleController.hasListener) {
           _onToggleController.sink.add(_inView);
