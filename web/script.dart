@@ -8,6 +8,8 @@ import 'package:katikati_ui_lib/components/auth/auth_header.dart';
 import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart' as brand;
 import 'package:katikati_ui_lib/components/url_view/url_view.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
+import 'package:katikati_ui_lib/components/conversation/conversation_item.dart';
+import 'package:katikati_ui_lib/components/messages/freetext_message_send.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 DivElement snackbarContainer = querySelector('#snackbar-container');
@@ -24,6 +26,18 @@ DivElement brandAssetsContainer = querySelector('#brand-assets');
 ButtonElement getURLParamsButton = querySelector('#get-url-params');
 DivElement editableTextContainer = querySelector('#editable-text-wrapper');
 DivElement toggleIconButtonsContainer = querySelector("#toggle-icon-buttons-wrapper");
+DivElement freetextMessageSendContainer = querySelector('#freetext-message-send--wrapper');
+
+DivElement conversationItemsContainer = querySelector('#conversation-items-wrapper');
+DivElement conversationItemSimulateContainer = querySelector('#conversation-items-wrapper-simulate');
+ButtonElement conversationSimulateSelect = querySelector('#conversation-item-simulate-select');
+ButtonElement conversationSimulateUnselect = querySelector('#conversation-item-simulate-unselect');
+ButtonElement conversationSimulateCheck = querySelector('#conversation-item-simulate-check');
+ButtonElement conversationSimulateUncheck = querySelector('#conversation-item-simulate-uncheck');
+ButtonElement conversationSimulateNormal = querySelector('#conversation-item-simulate-normal');
+ButtonElement conversationSimulateFailed = querySelector('#conversation-item-simulate-failed');
+ButtonElement conversationSimulatePending = querySelector('#conversation-item-simulate-pending');
+ButtonElement conversationSimulateDraft = querySelector('#conversation-item-simulate-draft');
 
 Map<String, ButtonElement> setURLParamsButton = {
   "conversation-id": querySelector('#set-url-params--conversation-id') as ButtonElement,
@@ -56,8 +70,8 @@ void main() {
   });
 
   // auth view
-  var authMainView = auth.AuthMainView(brand.AVF, "Title", "Description appear here",
-    [auth.GMAIL_DOMAIN_INFO, auth.LARK_DOMAIN_INFO], (domain) {
+  var authMainView = auth.AuthMainView(
+      brand.AVF, "Title", "Description appear here", [auth.GMAIL_DOMAIN_INFO, auth.LARK_DOMAIN_INFO], (domain) {
     window.alert("Trying to login with domain: $domain");
   });
   authViewContainer.append(authMainView.authElement);
@@ -154,6 +168,73 @@ void main() {
       window.alert("Command for tags - view $inView");
     });
   toggleIconButtonsContainer.append(toggleTagsButton.renderElement);
+
+  // Conversation items
+  var conversationItem = ConversationItemView(
+      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.normal,
+      defaultSelected: true)
+    ..onSelect.listen((id) {
+      logger.debug("Choosing conversation $id");
+    })
+    ..onCheck.listen((id) {
+      logger.debug("Selecting conversation $id");
+    })
+    ..onUncheck.listen((id) {
+      logger.debug("Deselecting conversation $id");
+    });
+  conversationItemsContainer.append(conversationItem.renderElement);
+
+  var conversationDraft = ConversationItemView(
+      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.draft);
+  conversationItemsContainer.append(conversationDraft.renderElement);
+
+  var conversationPending = ConversationItemView(
+      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.pending);
+  conversationItemsContainer.append(conversationPending.renderElement);
+
+  var conversationFailed = ConversationItemView(
+      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.failed);
+  conversationItemsContainer.append(conversationFailed.renderElement);
+
+  var conversationSimulateItem = ConversationItemView(
+      "simulate_id", "Hello, this is an example preview message that is long", ConversationItemStatus.normal);
+  conversationSimulateItem.onSelect.listen((_) {
+    conversationSimulateItem.select();
+  });
+  conversationItemSimulateContainer.append(conversationSimulateItem.renderElement);
+
+  conversationSimulateSelect.onClick.listen((_) {
+    conversationSimulateItem.select();
+  });
+  conversationSimulateUnselect.onClick.listen((_) {
+    conversationSimulateItem.unselect();
+  });
+  conversationSimulateCheck.onClick.listen((_) {
+    conversationSimulateItem.check();
+  });
+  conversationSimulateUncheck.onClick.listen((_) {
+    conversationSimulateItem.uncheck();
+  });
+  conversationSimulateNormal.onClick.listen((_) {
+    conversationSimulateItem.updateStatus(ConversationItemStatus.normal);
+  });
+  conversationSimulateFailed.onClick.listen((_) {
+    conversationSimulateItem.updateStatus(ConversationItemStatus.failed);
+  });
+  conversationSimulatePending.onClick.listen((_) {
+    conversationSimulateItem.updateStatus(ConversationItemStatus.pending);
+  });
+  conversationSimulateDraft.onClick.listen((_) {
+    conversationSimulateItem.updateStatus(ConversationItemStatus.draft);
+  });
+
+  // Freetext message send
+  var freetextMessageSend = FreetextMessageSendView("Default text");
+  freetextMessageSend.onSend.listen((value) {
+    window.alert("Sending: $value");
+    freetextMessageSend.clear();
+  });
+  freetextMessageSendContainer.append(freetextMessageSend.renderElement);
 }
 
 void printURLViewParams(UrlView urlView) {
