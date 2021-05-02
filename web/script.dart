@@ -1,4 +1,7 @@
 import 'dart:html';
+import "dart:math";
+import 'package:uuid/uuid.dart';
+
 import 'package:katikati_ui_lib/components/nav/nav_header.dart';
 import 'package:katikati_ui_lib/components/nav/sidebar_icons.dart';
 import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
@@ -27,6 +30,10 @@ DivElement brandAssetsContainer = querySelector('#brand-assets');
 ButtonElement getURLParamsButton = querySelector('#get-url-params');
 DivElement editableTextContainer = querySelector('#editable-text-wrapper');
 DivElement tabsContainer = querySelector('#tabs-wrapper');
+ButtonElement removeTabButton = querySelector('#remove-tab');
+ButtonElement addTabButton = querySelector('#add-tab');
+ButtonElement selectTabButton = querySelector('#select-tab');
+ParagraphElement tabStatusMessage = querySelector('#tab-status');
 DivElement toggleIconButtonsContainer = querySelector("#toggle-icon-buttons-wrapper");
 DivElement freetextMessageSendContainer = querySelector('#freetext-message-send--wrapper');
 
@@ -52,6 +59,8 @@ Map<String, ButtonElement> setURLParamsButton = {
 };
 
 Logger logger = Logger('script.dart');
+final _random = Random();
+final uuid = Uuid();
 
 void main() {
   // snackbar
@@ -161,8 +170,29 @@ void main() {
     TabView("c", "Tab C", DivElement()..innerText = "Content C"),
     TabView("d", "Tab D", DivElement()..innerText = "Content D"),
   ];
-  var tabsView = TabsView(allTabs, defaultSelectedID: "b");
+  var tabsView = TabsView(allTabs, defaultSelectedID: "b")
+    ..onEmpty.listen((_) {
+      window.alert("All tabs removed!");
+    });
   tabsContainer.append(tabsView.renderElement);
+  var _tabIDs = ["a", "b", "c", "d"];
+  removeTabButton.onClick.listen((_) {
+    var randomID = _tabIDs[_random.nextInt(_tabIDs.length)];
+    tabStatusMessage.innerText = "Removing tab with id: $randomID";
+    tabsView.removeTab(randomID);
+    _tabIDs.remove(randomID);
+  });
+  addTabButton.onClick.listen((_) {
+    var randomID = uuid.v4().split("-").first;
+    var tabView = TabView(randomID, "Tab $randomID", DivElement()..innerText = "Content $randomID");
+    tabsView.addTab(tabView);
+    _tabIDs.add(randomID);
+  });
+  selectTabButton.onClick.listen((_) {
+    var randomID = _tabIDs[_random.nextInt(_tabIDs.length)];
+    tabStatusMessage.innerText = "Selecting tab with id: $randomID";
+    tabsView.selectTab(randomID);
+  });
 
   // Toggle icon buttons
   var toggleUserPresenceButton = IconButtonView("user_presence", "assets/icons/user-presence.svg", false)
