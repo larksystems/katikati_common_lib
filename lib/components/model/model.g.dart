@@ -75,7 +75,7 @@ class Conversation {
     return (modelObj ?? Conversation())
       ..demographicsInfo = Map_fromData<String>(data['demographicsInfo'], String_fromData)
       ..tagIds = Set_fromData<String>(data['tags'], String_fromData)
-      ..suggestedTagIds = Set_fromData<String>(data['suggested_tags'], String_fromData) ?? {}
+      ..suggestedTagIds = Set_fromData<String>(data['suggestedTags'], String_fromData) ?? {}
       ..lastInboundTurnTagIds = Set_fromData<String>(data['lastInboundTurnTags'], String_fromData) ?? {}
       ..messages = List_fromData<Message>(data['messages'], Message.fromData)
       ..notes = String_fromData(data['notes'])
@@ -104,7 +104,7 @@ class Conversation {
     return {
       if (demographicsInfo != null) 'demographicsInfo': demographicsInfo,
       if (tagIds != null) 'tags': tagIds.toList(),
-      if (suggestedTagIds != null) 'suggested_tags': suggestedTagIds.toList(),
+      if (suggestedTagIds != null) 'suggestedTags': suggestedTagIds.toList(),
       if (lastInboundTurnTagIds != null) 'lastInboundTurnTags': lastInboundTurnTagIds.toList(),
       if (messages != null) 'messages': messages.map((elem) => elem?.toData()).toList(),
       if (notes != null) 'notes': notes,
@@ -114,7 +114,7 @@ class Conversation {
 
   /// Add [newTagIds] to tagIds in this Conversation.
   /// Callers should catch and handle IOException.
-  Future<void> addTagIds(DocPubSubUpdate pubSubClient, Iterable<String> newTagIds) {
+  Future<void> addTagIds(DocPubSubUpdate pubSubClient, Iterable<String> newTagIds, {bool wasSuggested = false}) {
     var toBeAdded = Set<String>();
     for (var elem in newTagIds) {
       if (!tagIds.contains(elem)) {
@@ -126,12 +126,13 @@ class Conversation {
     return pubSubClient.publishAddOpinion('nook_conversations/add_tags', {
       'conversation_id': docId,
       'tags': toBeAdded.toList(),
+      "was_suggested": wasSuggested,
     });
   }
 
   /// Set tagIds in this Conversation.
   /// Callers should catch and handle IOException.
-  Future<void> setTagIds(DocPubSubUpdate pubSubClient, Set<String> newTagIds) {
+  Future<void> setTagIds(DocPubSubUpdate pubSubClient, Set<String> newTagIds, {bool wasSuggested = false}) {
     if (tagIds.length == newTagIds.length && tagIds.difference(newTagIds).isEmpty) {
       return Future.value(null);
     }
@@ -139,12 +140,13 @@ class Conversation {
     return pubSubClient.publishAddOpinion('nook_conversations/set_tags', {
       'conversation_id': docId,
       'tags': tagIds.toList(),
+      "was_suggested": wasSuggested,
     });
   }
 
   /// Remove [oldTagIds] from tagIds in this Conversation.
   /// Callers should catch and handle IOException.
-  Future<void> removeTagIds(DocPubSubUpdate pubSubClient, Iterable<String> oldTagIds) {
+  Future<void> removeTagIds(DocPubSubUpdate pubSubClient, Iterable<String> oldTagIds, {bool wasSuggested = false}) {
     var toBeRemoved = Set<String>();
     for (var elem in oldTagIds) {
       if (tagIds.remove(elem)) {
@@ -155,6 +157,7 @@ class Conversation {
     return pubSubClient.publishAddOpinion('nook_conversations/remove_tags', {
       'conversation_id': docId,
       'tags': toBeRemoved.toList(),
+      "was_suggested": wasSuggested,
     });
   }
 
@@ -210,7 +213,7 @@ class Message {
       ..datetime = DateTime_fromData(data['datetime'])
       ..status = MessageStatus.fromData(data['status'])
       ..tagIds = List_fromData<String>(data['tags'], String_fromData)
-      ..suggestedTagIds = List_fromData<String>(data['suggested_tags'], String_fromData) ?? []
+      ..suggestedTagIds = List_fromData<String>(data['suggestedTags'], String_fromData) ?? []
       ..text = String_fromData(data['text'])
       ..translation = String_fromData(data['translation'])
       ..id = String_fromData(data['id']);
@@ -236,7 +239,7 @@ class Message {
       if (datetime != null) 'datetime': datetime.toIso8601String(),
       if (status != null) 'status': status.toData(),
       if (tagIds != null) 'tags': tagIds,
-      if (suggestedTagIds != null) 'suggested_tags': suggestedTagIds,
+      if (suggestedTagIds != null) 'suggestedTags': suggestedTagIds,
       if (text != null) 'text': text,
       if (translation != null) 'translation': translation,
       if (id != null) 'id': id,
