@@ -72,6 +72,16 @@ extension ConversationUtil on g.Conversation {
     var result = m2.datetime.compareTo(m1.datetime);
     return result != 0 ? result : c2.hashCode.compareTo(c1.hashCode);
   }
+
+  /// Remove the suggested messages for this Conversation.
+  /// Callers should catch and handle IOException.
+  Future<void> removeSuggestedMessages(g.DocPubSubUpdate pubSubClient) async {
+    if (!suggestedMessages.isEmpty) return;
+    suggestedMessages.clear();
+    return pubSubClient.publishAddOpinion('nook_conversation/delete_suggested_messages', {
+      "conversation_id": docId,
+    });
+  }
 }
 
 extension MessageUtil on g.Message {
