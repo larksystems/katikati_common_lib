@@ -104,11 +104,12 @@ extension MessageUtil on g.Message {
   /// Remove [tagId] from tagIds in this Message.
   /// Callers should catch and handle IOException.
   Future<void> removeTagId(g.DocPubSubUpdate pubSubClient, g.Conversation conversation, String tagId, {bool wasSuggested = false}) async {
-    if (!tagIds.contains(tagId)) return;
+    if (!tagIds.contains(tagId) && !suggestedTagIds.contains(tagId)) return;
     if (this.id == null) {
       throw AssertionError('Cannot remove a tag from a pending message - please try again in a few seconds');
     }
     tagIds.remove(tagId);
+    suggestedTagIds.remove(tagId);
     return pubSubClient.publishAddOpinion('nook_messages/remove_tags', {
       "conversation_id": conversation.docId,
       "message_id": this.id,
