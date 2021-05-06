@@ -76,7 +76,7 @@ extension ConversationUtil on g.Conversation {
   /// Remove the suggested messages for this Conversation.
   /// Callers should catch and handle IOException.
   Future<void> removeSuggestedMessages(g.DocPubSubUpdate pubSubClient) async {
-    if (!suggestedMessages.isEmpty) return;
+    if (suggestedMessages.isEmpty) return;
     suggestedMessages.clear();
     return pubSubClient.publishAddOpinion('nook_conversation/delete_suggested_messages', {
       "conversation_id": docId,
