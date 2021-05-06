@@ -11,6 +11,7 @@ Conversation:
   lastInboundTurnTags: 'set string lastInboundTurnTagIds, default {}'
   messages: 'array Message'
   suggestedMessages: 'array SuggestedMessage, default []'
+  scheduledMessages: 'array ScheduledMessage, default []'
   notes: 'publishable string'
   unread: 'publishable bool, default true'
 
@@ -45,6 +46,13 @@ SuggestedMessage:
   firebaseDocId: 'none'
   text: 'string'
   translation: 'string'
+
+ScheduledMessage:
+  firebaseDocId: 'none'
+  text: 'string'
+  translation: 'string'
+  datetime: 'datetime'
+
 
 SuggestedReply:
   firebaseCollectionName: 'suggestedReplies'

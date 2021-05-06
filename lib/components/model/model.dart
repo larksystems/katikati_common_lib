@@ -82,6 +82,16 @@ extension ConversationUtil on g.Conversation {
       "conversation_id": docId,
     });
   }
+
+  /// Remove the suggested messages for this Conversation.
+  /// Callers should catch and handle IOException.
+  Future<void> cancelScheduledMessages(g.DocPubSubUpdate pubSubClient) async {
+    if (scheduledMessages.isEmpty) return;
+    scheduledMessages.clear();
+    return pubSubClient.publishAddOpinion('nook_conversation/cancel_scheduled_messages', {
+      "conversation_id": docId,
+    });
+  }
 }
 
 extension MessageUtil on g.Message {

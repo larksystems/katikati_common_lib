@@ -65,6 +65,7 @@ class Conversation {
   Set<String> lastInboundTurnTagIds;
   List<Message> messages;
   List<SuggestedMessage> suggestedMessages;
+  List<ScheduledMessage> scheduledMessages;
   String notes;
   bool unread;
 
@@ -80,6 +81,7 @@ class Conversation {
       ..lastInboundTurnTagIds = Set_fromData<String>(data['lastInboundTurnTags'], String_fromData) ?? {}
       ..messages = List_fromData<Message>(data['messages'], Message.fromData)
       ..suggestedMessages = List_fromData<SuggestedMessage>(data['suggestedMessages'], SuggestedMessage.fromData) ?? []
+      ..scheduledMessages = List_fromData<ScheduledMessage>(data['scheduledMessages'], ScheduledMessage.fromData) ?? []
       ..notes = String_fromData(data['notes'])
       ..unread = bool_fromData(data['unread']) ?? true;
   }
@@ -110,6 +112,7 @@ class Conversation {
       if (lastInboundTurnTagIds != null) 'lastInboundTurnTags': lastInboundTurnTagIds.toList(),
       if (messages != null) 'messages': messages.map((elem) => elem?.toData()).toList(),
       if (suggestedMessages != null) 'suggestedMessages': suggestedMessages.map((elem) => elem?.toData()).toList(),
+      if (scheduledMessages != null) 'scheduledMessages': scheduledMessages.map((elem) => elem?.toData()).toList(),
       if (notes != null) 'notes': notes,
       if (unread != null) 'unread': unread,
     };
@@ -392,6 +395,45 @@ class SuggestedMessage {
 
   @override
   String toString() => 'SuggestedMessage: ${toData().toString()}';
+}
+
+class ScheduledMessage {
+  String text;
+  String translation;
+  DateTime datetime;
+
+  static ScheduledMessage fromData(data, [ScheduledMessage modelObj]) {
+    if (data == null) return null;
+    return (modelObj ?? ScheduledMessage())
+      ..text = String_fromData(data['text'])
+      ..translation = String_fromData(data['translation'])
+      ..datetime = DateTime_fromData(data['datetime']);
+  }
+
+  static ScheduledMessage required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static ScheduledMessage notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  Map<String, dynamic> toData() {
+    return {
+      if (text != null) 'text': text,
+      if (translation != null) 'translation': translation,
+      if (datetime != null) 'datetime': datetime.toIso8601String(),
+    };
+  }
+
+  @override
+  String toString() => 'ScheduledMessage: ${toData().toString()}';
 }
 
 class SuggestedReply {
