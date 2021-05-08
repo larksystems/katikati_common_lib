@@ -17,7 +17,7 @@ class TabsView {
   List<TabView> _tabs;
   Map<String, TabView> get _tabsById => Map.fromEntries(_tabs.map((t) => MapEntry(t.id, t)));
 
-  String _selectedTabID;
+  String _selectedTabId;
   String _tabContentClassname;
 
   List<SpanElement> _tabChoosers = [];
@@ -29,7 +29,7 @@ class TabsView {
       throw NullThrownError();
     }
 
-    _selectedTabID = defaultSelectedID ?? _tabs.first.id;
+    _selectedTabId = defaultSelectedID ?? _tabs.first.id;
     _tabContentClassname = tabContentClassname;
 
     _tabsHeader = DivElement();
@@ -41,7 +41,7 @@ class TabsView {
 
     _tabContent = DivElement()
       ..className = "tab-content"
-      ..append(_tabsById[_selectedTabID].content);
+      ..append(_tabsById[_selectedTabId].content);
     if (_tabContentClassname != null) {
       _tabContent.classes.add(_tabContentClassname);
     }
@@ -57,7 +57,7 @@ class TabsView {
       ..onClick.listen((_) {
         _selectTab(tab.id);
       });
-    if (tab.id == _selectedTabID) {
+    if (tab.id == _selectedTabId) {
       tabChooser.classes.add("tab-chooser--selected");
     }
     return tabChooser;
@@ -65,13 +65,13 @@ class TabsView {
 
   void _updateTabContent() {
     _tabContent.children.clear();
-    if (_tabsById.containsKey(_selectedTabID)) {
-      _tabContent.append(_tabsById[_selectedTabID].content);
+    if (_tabsById.containsKey(_selectedTabId)) {
+      _tabContent.append(_tabsById[_selectedTabId].content);
     }
   }
 
   void _selectTab(String id) {
-    _selectedTabID = id;
+    _selectedTabId = id;
     _tabChoosers.forEach((tabChooser) {
       tabChooser.classes.toggle("tab-chooser--selected", false);
       if (tabChooser.dataset['id'] == id) {
@@ -100,7 +100,7 @@ class TabsView {
       return false;
     });
 
-    if (_selectedTabID == id) {
+    if (_selectedTabId == id) {
       // todo: be a little bit more smart
       _selectTab(_tabs.isNotEmpty ? _tabs.first.id : null);
       _updateTabContent();
