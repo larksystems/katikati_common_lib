@@ -170,10 +170,7 @@ void main() {
     TabView("c", "Tab C", DivElement()..innerText = "Content C"),
     TabView("d", "Tab D", DivElement()..innerText = "Content D"),
   ];
-  var tabsView = TabsView(allTabs, defaultSelectedID: "b")
-    ..onEmpty.listen((_) {
-      window.alert("All tabs removed!");
-    });
+  var tabsView = TabsView(allTabs, defaultSelectedID: "b");
   tabsContainer.append(tabsView.renderElement);
   var _tabIDs = ["a", "b", "c", "d"];
   removeTabButton.onClick.listen((_) {
