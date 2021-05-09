@@ -200,17 +200,17 @@ void main() {
 
   // Toggle icon buttons
   var toggleUserPresenceButton =
-      IconButtonView("user_presence", "/packages/katikati_ui_lib/globals/assets/icons/user-presence.svg", false)
+      IconButtonView("user_presence", "users", false)
         ..onToggle.listen((inView) {
           window.alert("Command for user_presence - view $inView");
         });
   toggleIconButtonsContainer.append(toggleUserPresenceButton.renderElement);
-  var toggleNotesButton = IconButtonView("notes", "/packages/katikati_ui_lib/globals/assets/icons/notes.svg", true)
+  var toggleNotesButton = IconButtonView("notes", "sticky-note", true)
     ..onToggle.listen((inView) {
       window.alert("Command for notes - view $inView");
     });
   toggleIconButtonsContainer.append(toggleNotesButton.renderElement);
-  var toggleTagsButton = IconButtonView("tags", "/packages/katikati_ui_lib/globals/assets/icons/tags.svg", false)
+  var toggleTagsButton = IconButtonView("tags", "tag", false)
     ..onToggle.listen((inView) {
       window.alert("Command for tags - view $inView");
     });

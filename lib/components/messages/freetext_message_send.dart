@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:async';
+import 'package:katikati_ui_lib/components/icons/icons.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 var logger = Logger('FreetextMessageSendView');
@@ -35,8 +36,8 @@ class FreetextMessageSendView {
         } else {
           logger.warning("No listener for FreetextMessageSendView.onSend");
         }
-    });
-    var clearIcon = ImageElement(src: "/packages/katikati_ui_lib/globals/assets/icons/clear.svg");
+      });
+    var clearIcon = Element.html('<i class="fas fa-times"></i>');
     _clearButton = ButtonElement()
       ..append(clearIcon)
       ..className = "message-editor-with-send__clear-button"
