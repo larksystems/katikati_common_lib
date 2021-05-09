@@ -268,7 +268,7 @@ void main() {
   });
 
   // Freetext message send
-  var freetextMessageSend = FreetextMessageSendView("Default text");
+  var freetextMessageSend = FreetextMessageSendView("Default text", maxLength: 30);
   freetextMessageSend.onSend.listen((value) {
     window.alert("Sending: $value");
     freetextMessageSend.clear();

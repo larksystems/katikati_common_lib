@@ -13,6 +13,14 @@
   align-self: center;
 }
 
+.message-editor-with-send__text-length {
+  position: absolute;
+  bottom: 4px;
+  right: 2px;
+  font-size: 0.7rem;
+  color: #888;
+}
+
 .message-editor-with-send__message textarea {
   width: 100%;
   height: 64px;
@@ -21,6 +29,16 @@
   border-radius: 3px;
   box-sizing: border-box;
   resize: none;
+}
+
+.message-editor-with-send--error textarea {
+  border: 1px solid #FA8072;
+  outline: 0;
+}
+
+.message-editor-with-send--error .message-editor-with-send__text-length {
+  color: #FA8072;
+  font-weight: bold;
 }
 
 .message-editor-with-send__message .message-editor-with-send__clear-button img {
