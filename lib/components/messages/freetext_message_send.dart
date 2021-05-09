@@ -36,7 +36,7 @@ class FreetextMessageSendView {
           logger.warning("No listener for FreetextMessageSendView.onSend");
         }
     });
-    var clearIcon = ImageElement(src: "assets/icons/clear.svg");
+    var clearIcon = ImageElement(src: "/packages/katikati_ui_lib/globals/assets/icons/clear.svg");
     _clearButton = ButtonElement()
       ..append(clearIcon)
       ..className = "message-editor-with-send__clear-button"

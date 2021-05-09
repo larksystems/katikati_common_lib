@@ -1,5 +1,6 @@
 import 'dart:html';
 import "dart:math";
+import 'package:katikati_ui_lib/components/nav/button_links.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:katikati_ui_lib/components/nav/nav_header.dart';
@@ -29,6 +30,7 @@ DivElement navHeaderViewContainer = querySelector('#nav-header');
 DivElement brandAssetsContainer = querySelector('#brand-assets');
 ButtonElement getURLParamsButton = querySelector('#get-url-params');
 DivElement editableTextContainer = querySelector('#editable-text-wrapper');
+DivElement buttonLinksContainer = querySelector('#button-links-wrapper');
 DivElement tabsContainer = querySelector('#tabs-wrapper');
 ButtonElement removeTabButton = querySelector('#remove-tab');
 ButtonElement addTabButton = querySelector('#add-tab');
@@ -95,7 +97,7 @@ void main() {
   });
   authHeaderViewContainer.append(authHeaderView.authElement);
   authHeaderSimulateSignInTrigger.onClick.listen((_) {
-    authHeaderView.signIn("Username", "assets/profile.png");
+    authHeaderView.signIn("Username", "packages/katikati_ui_lib/globals/assets/profile.png");
   });
   authHeaderSimulateSignOutTrigger.onClick.listen((_) {
     authHeaderView.signOut();
@@ -104,7 +106,7 @@ void main() {
   // nav header
   NavHeaderView navHeaderView = NavHeaderView();
   navHeaderViewContainer.append(navHeaderView.navViewElement);
-  navHeaderView.projectLogos = ["assets/logo.png"];
+  navHeaderView.projectLogos = ["packages/katikati_ui_lib/globals/assets/logo.png"];
   navHeaderView.projectTitle = "Project name";
   navHeaderView.projectSubtitle = "Subtitle";
   navHeaderView.navContent = DivElement()..appendText("Some content like links, dropdown");
@@ -163,6 +165,11 @@ void main() {
     });
   editableTextContainer.append(textEditableDefault.renderElement);
 
+  // Button links
+  var links = [Link("Dashboard", "#dashboard"), Link("Converse", "#converse")];
+  var buttonLinks = ButtonLinksView(links, "#dashboard", openInNewTab: true);
+  buttonLinksContainer.append(buttonLinks.renderElement);
+
   // tabs
   var allTabs = [
     TabView("a", "Tab A", DivElement()..innerText = "Content A"),
@@ -192,17 +199,18 @@ void main() {
   });
 
   // Toggle icon buttons
-  var toggleUserPresenceButton = IconButtonView("user_presence", "assets/icons/user-presence.svg", false)
-    ..onToggle.listen((inView) {
-      window.alert("Command for user_presence - view $inView");
-    });
+  var toggleUserPresenceButton =
+      IconButtonView("user_presence", "/packages/katikati_ui_lib/globals/assets/icons/user-presence.svg", false)
+        ..onToggle.listen((inView) {
+          window.alert("Command for user_presence - view $inView");
+        });
   toggleIconButtonsContainer.append(toggleUserPresenceButton.renderElement);
-  var toggleNotesButton = IconButtonView("notes", "assets/icons/notes.svg", true)
+  var toggleNotesButton = IconButtonView("notes", "/packages/katikati_ui_lib/globals/assets/icons/notes.svg", true)
     ..onToggle.listen((inView) {
       window.alert("Command for notes - view $inView");
     });
   toggleIconButtonsContainer.append(toggleNotesButton.renderElement);
-  var toggleTagsButton = IconButtonView("tags", "assets/icons/tags.svg", false)
+  var toggleTagsButton = IconButtonView("tags", "/packages/katikati_ui_lib/globals/assets/icons/tags.svg", false)
     ..onToggle.listen((inView) {
       window.alert("Command for tags - view $inView");
     });

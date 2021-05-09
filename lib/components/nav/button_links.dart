@@ -30,7 +30,7 @@ class ButtonLinksView {
         linkElement.setAttribute('target', '_blank');
 
         if (link.url != _selected) {
-          var linkIcon = ImageElement(src: "assets/icons/link.svg");
+          var linkIcon = ImageElement(src: "/packages/katikati_ui_lib/globals/assets/icons/link.svg");
           linkContent.append(linkIcon);
         }
       }
