@@ -1,6 +1,5 @@
 import 'dart:html';
 import 'dart:async';
-import 'package:katikati_ui_lib/components/icons/icons.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 var logger = Logger('FreetextMessageSendView');
