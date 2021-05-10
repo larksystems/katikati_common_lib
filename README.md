@@ -12,3 +12,9 @@ katikati_ui_lib & Infrastructure should be in the same folder
 
 Run the following command under `katikati_ui_lib` folder
 `./lib/components/model/generate.sh`
+
+### Credits
+This project uses the following services:
+  - fontawesome free 5.15.3 (web) for all the icons.
+
+Our sincere thanks to all of above services that makes building katikati easier.
