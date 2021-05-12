@@ -94,7 +94,7 @@ class ConversationItemView {
     var idWrapper = SpanElement()
       ..className = "conversation-item__id"
       ..innerText = _id;
-    var warningElements = _createWarningElements();
+    var warningElements = _createWarningElements(_warnings);
     warningElements.forEach((element) {
       _warningWrapper.append(element);
     });
@@ -111,7 +111,7 @@ class ConversationItemView {
     contentWrapper..append(headerElement)..append(messageElement);
     renderElement..append(_checkboxWrapper)..append(contentWrapper);
 
-    if(!_allowToCheck) {
+    if (!_allowToCheck) {
       _checkboxWrapper.classes.toggle("hidden", true);
     }
 
@@ -158,9 +158,9 @@ class ConversationItemView {
     }
   }
 
-  List<Element> _createWarningElements() {
+  List<Element> _createWarningElements(Set<ConversationWarning> warnings) {
     List<Element> warningElements = [];
-    for (var warning in _warnings) {
+    for (var warning in warnings) {
       var className = "";
       switch (warning) {
         case ConversationWarning.notInFilterResults:
@@ -228,7 +228,7 @@ class ConversationItemView {
   void setWarnings(Set<ConversationWarning> warnings) {
     _warnings = warnings;
     _warningWrapper.children.clear();
-    var warningElements = _createWarningElements();
+    var warningElements = _createWarningElements(_warnings);
     warningElements.forEach((element) {
       _warningWrapper.append(element);
     });
