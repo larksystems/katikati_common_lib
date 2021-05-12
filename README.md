@@ -15,6 +15,6 @@ Run the following command under `katikati_ui_lib` folder
 
 ### Credits
 This project uses the following services:
-  - fontawesome free 5.15.3 (web) for all the icons.
+  - Font Awesome Free 5.15.3 by @fontawesome - https://fontawesome.com for most of the icons
 
 Our sincere thanks to all of above services that makes building katikati easier.
