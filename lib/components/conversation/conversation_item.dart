@@ -21,7 +21,7 @@ class ConversationItemView {
   bool _checked;
 
   CheckboxInputElement _checkboxElement;
-  SpanElement _messageStatusElement;
+  DivElement _messageStatusElement;
   SpanElement _warningWrapper;
 
   Stream<String> _onSelect;
@@ -95,10 +95,10 @@ class ConversationItemView {
     headerElement..append(_warningWrapper)..append(idWrapper);
 
     var messageElement = DivElement()..className = "conversation-item__message";
-    var messageTextElement = SpanElement()
+    var messageTextElement = DivElement()
       ..className = "conversation-item__message__text"
       ..innerText = _message;
-    _messageStatusElement = SpanElement()..className = "conversation-item__status";
+    _messageStatusElement = DivElement()..className = "conversation-item__status";
     _updateStatus(_status);
 
     messageElement..append(messageTextElement)..append(_messageStatusElement);
