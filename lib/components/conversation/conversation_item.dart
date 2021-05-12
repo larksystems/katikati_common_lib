@@ -1,15 +1,20 @@
 import 'dart:html';
 import 'dart:async';
+import 'package:katikati_ui_lib/components/tooltip/tooltip.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 var logger = Logger('ConversationItemView');
 
 enum ConversationItemStatus { normal, failed, pending, draft }
+enum ConversationReadStatus { read, unread }
+enum ConversationWarning { notInFilterResults }
 
 class ConversationItemView {
   DivElement renderElement;
 
   ConversationItemStatus _status;
+  ConversationReadStatus _readStatus;
+  Set<ConversationWarning> _warnings;
   String _id;
   String _message;
   bool _selected;
@@ -17,6 +22,7 @@ class ConversationItemView {
 
   CheckboxInputElement _checkboxElement;
   SpanElement _messageStatusElement;
+  SpanElement _warningWrapper;
 
   Stream<String> _onSelect;
   StreamController<String> _onSelectController;
@@ -30,14 +36,18 @@ class ConversationItemView {
   StreamController<String> _onUncheckController;
   Stream<String> get onUncheck => _onUncheck;
 
-  ConversationItemView(this._id, this._message, this._status,
-      {bool defaultSelected = false, bool defaultChecked = false}) {
+  ConversationItemView(this._id, this._message, this._status, this._readStatus,
+      {bool defaultSelected = false, bool defaultChecked = false, Set<ConversationWarning> warnings}) {
     _selected = defaultSelected;
     _checked = defaultChecked;
+    _warnings = warnings ?? {};
 
     renderElement = DivElement()..className = "conversation-item";
     if (_selected) {
       renderElement.classes.add("conversation-item--selected");
+    }
+    if (_readStatus == ConversationReadStatus.unread) {
+      renderElement.classes.add("conversation-item--unread");
     }
 
     var checkboxWrapper = DivElement()..className = "conversation-item__checkbox";
@@ -73,9 +83,16 @@ class ConversationItemView {
         }
       });
 
-    var idElement = DivElement()
+    var headerElement = DivElement()..className = "conversation-item__header";
+    _warningWrapper = SpanElement()..className = "conversation-item__warnings";
+    var idWrapper = SpanElement()
       ..className = "conversation-item__id"
       ..innerText = _id;
+    var warningElements = _createWarningElements();
+    warningElements.forEach((element) {
+      _warningWrapper.append(element);
+    });
+    headerElement..append(_warningWrapper)..append(idWrapper);
 
     var messageElement = DivElement()..className = "conversation-item__message";
     var messageTextElement = SpanElement()
@@ -85,7 +102,7 @@ class ConversationItemView {
     _updateStatus(_status);
 
     messageElement..append(messageTextElement)..append(_messageStatusElement);
-    contentWrapper..append(idElement)..append(messageElement);
+    contentWrapper..append(headerElement)..append(messageElement);
     renderElement..append(checkboxWrapper)..append(contentWrapper);
 
     this._onSelectController = StreamController();
@@ -100,7 +117,9 @@ class ConversationItemView {
     _messageStatusElement.classes..removeWhere((className) => className.startsWith("converversation-item__status--"));
     renderElement.classes
       ..removeWhere((classname) =>
-          !classname.startsWith("conversation-item--selected") && classname.startsWith("conversation-item--"));
+          !classname.startsWith("conversation-item--selected") &&
+          !classname.startsWith("conversation-item--unread") &&
+          classname.startsWith("conversation-item--"));
     switch (status) {
       case ConversationItemStatus.draft:
         renderElement.classes.add("conversation-item--draft");
@@ -129,6 +148,25 @@ class ConversationItemView {
     }
   }
 
+  List<Element> _createWarningElements() {
+    List<Element> warningElements = [];
+    for (var warning in _warnings) {
+      var className = "";
+      switch (warning) {
+        case ConversationWarning.notInFilterResults:
+          className = "filter";
+          break;
+        default:
+          className = "exclamation-triangle";
+          break;
+      }
+      var icon = Element.html('<i class="fa fa-${className} m-r-sm"></i>');
+      var iconWithTooltip = Tooltip(icon, "This conversation no longer meets the filter requirements");
+      warningElements.add(iconWithTooltip.renderElement);
+    }
+    return warningElements;
+  }
+
   void check() {
     _checked = true;
     _checkboxElement.checked = true;
@@ -147,6 +185,30 @@ class ConversationItemView {
   void unselect() {
     _selected = false;
     renderElement.classes.toggle('conversation-item--selected', false);
+  }
+
+  void markAsRead() {
+    _readStatus = ConversationReadStatus.read;
+    renderElement.classes.toggle('conversation-item--unread', false);
+  }
+
+  void markAsUnread() {
+    _readStatus = ConversationReadStatus.unread;
+    renderElement.classes.toggle('conversation-item--unread', true);
+  }
+
+  void setWarnings(Set<ConversationWarning> warnings) {
+    _warnings = warnings;
+    _warningWrapper.children.clear();
+    var warningElements = _createWarningElements();
+    warningElements.forEach((element) {
+      _warningWrapper.append(element);
+    });
+  }
+
+  void resetWarnings() {
+    _warnings = {};
+    _warningWrapper.children.clear();
   }
 
   void updateStatus(ConversationItemStatus status) {

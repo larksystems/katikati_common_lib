@@ -43,10 +43,14 @@ ButtonElement conversationSimulateSelect = querySelector('#conversation-item-sim
 ButtonElement conversationSimulateUnselect = querySelector('#conversation-item-simulate-unselect');
 ButtonElement conversationSimulateCheck = querySelector('#conversation-item-simulate-check');
 ButtonElement conversationSimulateUncheck = querySelector('#conversation-item-simulate-uncheck');
+ButtonElement conversationSimulateRead = querySelector('#conversation-item-simulate-read');
+ButtonElement conversationSimulateUnread = querySelector('#conversation-item-simulate-unread');
 ButtonElement conversationSimulateNormal = querySelector('#conversation-item-simulate-normal');
 ButtonElement conversationSimulateFailed = querySelector('#conversation-item-simulate-failed');
 ButtonElement conversationSimulatePending = querySelector('#conversation-item-simulate-pending');
 ButtonElement conversationSimulateDraft = querySelector('#conversation-item-simulate-draft');
+ButtonElement conversationAddWarning = querySelector("#conversation-item-add-warning");
+ButtonElement conversationRemoveWarning = querySelector("#conversation-item-remove-warning");
 
 Map<String, ButtonElement> setURLParamsButton = {
   "conversation-id": querySelector('#set-url-params--conversation-id') as ButtonElement,
@@ -209,8 +213,8 @@ void main() {
   toggleIconButtonsContainer.append(toggleTagsButton.renderElement);
 
   // Conversation items
-  var conversationItem = ConversationItemView(
-      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.normal,
+  var conversationItem = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
+      ConversationItemStatus.normal, ConversationReadStatus.read,
       defaultSelected: true)
     ..onSelect.listen((id) {
       logger.debug("Choosing conversation $id");
@@ -223,20 +227,24 @@ void main() {
     });
   conversationItemsContainer.append(conversationItem.renderElement);
 
-  var conversationDraft = ConversationItemView(
-      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.draft);
+  var conversationDraft = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
+      ConversationItemStatus.draft, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationDraft.renderElement);
 
-  var conversationPending = ConversationItemView(
-      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.pending);
+  var conversationPending = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
+      ConversationItemStatus.pending, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationPending.renderElement);
 
-  var conversationFailed = ConversationItemView(
-      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.failed);
+  var conversationFailed = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
+      ConversationItemStatus.failed, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationFailed.renderElement);
 
   var conversationSimulateItem = ConversationItemView(
-      "simulate_id", "Hello, this is an example preview message that is long", ConversationItemStatus.normal);
+      "simulate_id",
+      "Hello, this is an example preview message that is long",
+      ConversationItemStatus.normal,
+      ConversationReadStatus.read,
+      warnings: Set.from([ConversationWarning.notInFilterResults]));
   conversationSimulateItem.onSelect.listen((_) {
     conversationSimulateItem.select();
   });
@@ -254,6 +262,12 @@ void main() {
   conversationSimulateUncheck.onClick.listen((_) {
     conversationSimulateItem.uncheck();
   });
+  conversationSimulateRead.onClick.listen((_) {
+    conversationSimulateItem.markAsRead();
+  });
+  conversationSimulateUnread.onClick.listen((_) {
+    conversationSimulateItem.markAsUnread();
+  });
   conversationSimulateNormal.onClick.listen((_) {
     conversationSimulateItem.updateStatus(ConversationItemStatus.normal);
   });
@@ -265,6 +279,12 @@ void main() {
   });
   conversationSimulateDraft.onClick.listen((_) {
     conversationSimulateItem.updateStatus(ConversationItemStatus.draft);
+  });
+  conversationAddWarning.onClick.listen((_) {
+    conversationSimulateItem.setWarnings(Set.from([ConversationWarning.notInFilterResults]));
+  });
+  conversationRemoveWarning.onClick.listen((_) {
+    conversationSimulateItem.resetWarnings();
   });
 
   // Freetext message send
