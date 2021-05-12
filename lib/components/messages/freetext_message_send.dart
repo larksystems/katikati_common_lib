@@ -46,11 +46,13 @@ class FreetextMessageSendView {
           logger.warning("No listener for FreetextMessageSendView.onSend");
         }
       });
+
     _textLength = SpanElement()
       ..innerText = "${_text.length} / $_maxLength"
       ..className = "message-editor-with-send__text-length"
       ..hidden = !_alwaysShowTextLength;
-    var clearIcon = ImageElement(src: "assets/icons/clear.svg");
+    
+    var clearIcon = Element.html('<i class="fas fa-times"></i>');
     _clearButton = ButtonElement()
       ..append(clearIcon)
       ..className = "message-editor-with-send__clear-button"
