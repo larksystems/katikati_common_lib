@@ -23,6 +23,7 @@ class ConversationItemView {
 
   CheckboxInputElement _checkboxElement;
   DivElement _messageStatusElement;
+  DivElement _checkboxWrapper;
   SpanElement _warningWrapper;
 
   Stream<String> _onSelect;
@@ -55,7 +56,7 @@ class ConversationItemView {
       renderElement.classes.add("conversation-item--unread");
     }
 
-    var checkboxWrapper = DivElement()..className = "conversation-item__checkbox";
+    _checkboxWrapper = DivElement()..className = "conversation-item__checkbox";
     _checkboxElement = CheckboxInputElement()
       ..onInput.listen((_) {
         var checked = _checkboxElement.checked;
@@ -76,7 +77,7 @@ class ConversationItemView {
     if (_checked) {
       _checkboxElement.checked = true;
     }
-    checkboxWrapper.append(_checkboxElement);
+    _checkboxWrapper.append(_checkboxElement);
 
     var contentWrapper = DivElement()
       ..className = "conversation-item__content"
@@ -108,10 +109,11 @@ class ConversationItemView {
 
     messageElement..append(messageTextElement)..append(_messageStatusElement);
     contentWrapper..append(headerElement)..append(messageElement);
-    if (_allowToCheck) {
-      renderElement.append(checkboxWrapper);
+    renderElement..append(_checkboxWrapper)..append(contentWrapper);
+
+    if(!_allowToCheck) {
+      _checkboxWrapper.classes.toggle("hidden", true);
     }
-    renderElement..append(contentWrapper);
 
     this._onSelectController = StreamController();
     this._onSelect = _onSelectController.stream;
@@ -191,6 +193,16 @@ class ConversationItemView {
     }
     _checked = false;
     _checkboxElement.checked = false;
+  }
+
+  void allowToCheck() {
+    _allowToCheck = true;
+    _checkboxWrapper.classes.toggle("hidden", false);
+  }
+
+  void disallowToCheck() {
+    _allowToCheck = false;
+    _checkboxWrapper.classes.toggle("hidden", true);
   }
 
   void select() {
