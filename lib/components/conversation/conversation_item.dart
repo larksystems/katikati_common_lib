@@ -19,6 +19,7 @@ class ConversationItemView {
   String _message;
   bool _selected;
   bool _checked;
+  bool _allowToCheck;
 
   CheckboxInputElement _checkboxElement;
   DivElement _messageStatusElement;
@@ -37,10 +38,14 @@ class ConversationItemView {
   Stream<String> get onUncheck => _onUncheck;
 
   ConversationItemView(this._id, this._message, this._status, this._readStatus,
-      {bool defaultSelected = false, bool defaultChecked = false, Set<ConversationWarning> warnings}) {
+      {bool defaultSelected = false,
+      bool defaultChecked = false,
+      Set<ConversationWarning> warnings,
+      bool allowToCheck = false}) {
     _selected = defaultSelected;
     _checked = defaultChecked;
     _warnings = warnings ?? {};
+    _allowToCheck = allowToCheck;
 
     renderElement = DivElement()..className = "conversation-item";
     if (_selected) {
@@ -58,13 +63,13 @@ class ConversationItemView {
           if (_onCheckController.hasListener) {
             _onCheckController.sink.add(_id);
           } else {
-            logger.warning("No listener for ConversationItemView.onSelect");
+            logger.warning("No listener for ConversationItemView.onCheck");
           }
         } else {
           if (_onUncheckController.hasListener) {
             _onUncheckController.sink.add(_id);
           } else {
-            logger.warning("No listener for ConversationItemView.onSelect");
+            logger.warning("No listener for ConversationItemView.onUncheck");
           }
         }
       });
@@ -103,7 +108,10 @@ class ConversationItemView {
 
     messageElement..append(messageTextElement)..append(_messageStatusElement);
     contentWrapper..append(headerElement)..append(messageElement);
-    renderElement..append(checkboxWrapper)..append(contentWrapper);
+    if (_allowToCheck) {
+      renderElement.append(checkboxWrapper);
+    }
+    renderElement..append(contentWrapper);
 
     this._onSelectController = StreamController();
     this._onSelect = _onSelectController.stream;
@@ -161,18 +169,26 @@ class ConversationItemView {
           break;
       }
       var icon = Element.html('<i class="fa fa-${className} m-r-sm"></i>');
-      var iconWithTooltip = Tooltip(icon, "This conversation no longer meets the filter requirements");
+      var iconWithTooltip = Tooltip(icon, "Conversation no longer meets filtering constraints");
       warningElements.add(iconWithTooltip.renderElement);
     }
     return warningElements;
   }
 
   void check() {
+    if (!_allowToCheck) {
+      logger.error("Check not allowed");
+      return;
+    }
     _checked = true;
     _checkboxElement.checked = true;
   }
 
   void uncheck() {
+    if (!_allowToCheck) {
+      logger.error("Uncheck not allowed");
+      return;
+    }
     _checked = false;
     _checkboxElement.checked = false;
   }
