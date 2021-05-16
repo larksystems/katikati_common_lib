@@ -1,5 +1,5 @@
 .conversation-item {
-  padding: 12px;
+  padding: 8px;
   border: 1px solid transparent;
   border-bottom: 1px solid #ccc;
   display: flex;
@@ -54,7 +54,7 @@
 }
 
 .conversation-item__checkbox {
-  width: 32px;
+  width: 28px;
 }
 
 .conversation-item__content {
@@ -64,7 +64,7 @@
 .conversation-item__id {
   color: gray;
   margin-bottom: 6px;
-  font-family: monospace;
+  font-size: 0.75rem;
 }
 
 .conversation-item__warnings {
@@ -74,7 +74,6 @@
 
 .conversation-item__message {
   display: flex;
-  margin-top: 6px;
 }
 
 .conversation-item__message__text {
