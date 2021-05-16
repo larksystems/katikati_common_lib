@@ -2,27 +2,27 @@ import 'dart:html';
 import 'package:katikati_ui_lib/components/tooltip/tooltip.dart';
 
 mixin UserPresenceIndicator {
-  DivElement _otherUserPresenceIndicator;
+  DivElement otherUserPresenceIndicator;
   Map<String, bool> _presentUsers = {};
 
   void hideOtherUserPresence(String userId) {
-    var indicator = _otherUserPresenceIndicator.querySelector('[data-id="$userId"]');
+    var indicator = otherUserPresenceIndicator.querySelector('[data-id="$userId"]');
     indicator?.remove();
     _presentUsers.remove(userId);
 
     if (_presentUsers.isEmpty) {
-      _otherUserPresenceIndicator.children.clear();
+      otherUserPresenceIndicator.children.clear();
       _presentUsers = {};
     }
   }
 
   void showOtherUserPresence(String userId, bool recent) {
     if (_presentUsers.containsKey(userId)) {
-      var previousIndicator = _otherUserPresenceIndicator.querySelector('[data-id="$userId"]');
+      var previousIndicator = otherUserPresenceIndicator.querySelector('[data-id="$userId"]');
       previousIndicator.remove();
     }
 
-    _otherUserPresenceIndicator.append(_generateOtherUserPresenceIndicator(userId, recent));
+    otherUserPresenceIndicator.append(_generateOtherUserPresenceIndicator(userId, recent));
     _presentUsers[userId] = recent;
   }
 
