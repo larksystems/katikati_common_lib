@@ -19,7 +19,7 @@ class ConversationItemView {
   String _message;
   bool _selected;
   bool _checked;
-  bool _allowToCheck;
+  bool _checkEnabled;
 
   CheckboxInputElement _checkboxElement;
   DivElement _messageStatusElement;
@@ -42,11 +42,11 @@ class ConversationItemView {
       {bool defaultSelected = false,
       bool defaultChecked = false,
       Set<ConversationWarning> warnings,
-      bool allowToCheck = false}) {
+      bool checkEnabled = false}) {
     _selected = defaultSelected;
     _checked = defaultChecked;
     _warnings = warnings ?? {};
-    _allowToCheck = allowToCheck;
+    _checkEnabled = checkEnabled;
 
     renderElement = DivElement()..className = "conversation-item";
     if (_selected) {
@@ -111,7 +111,7 @@ class ConversationItemView {
     contentWrapper..append(headerElement)..append(messageElement);
     renderElement..append(_checkboxWrapper)..append(contentWrapper);
 
-    if (!_allowToCheck) {
+    if (!_checkEnabled) {
       _checkboxWrapper.classes.toggle("hidden", true);
     }
 
@@ -178,7 +178,7 @@ class ConversationItemView {
   }
 
   void check() {
-    if (!_allowToCheck) {
+    if (!_checkEnabled) {
       logger.error("Check not allowed");
       return;
     }
@@ -187,7 +187,7 @@ class ConversationItemView {
   }
 
   void uncheck() {
-    if (!_allowToCheck) {
+    if (!_checkEnabled) {
       logger.error("Uncheck not allowed");
       return;
     }
@@ -195,13 +195,13 @@ class ConversationItemView {
     _checkboxElement.checked = false;
   }
 
-  void allowToCheck() {
-    _allowToCheck = true;
+  void enableCheckbox() {
+    _checkEnabled = true;
     _checkboxWrapper.classes.toggle("hidden", false);
   }
 
-  void disallowToCheck() {
-    _allowToCheck = false;
+  void disableCheckbox() {
+    _checkEnabled = false;
     _checkboxWrapper.classes.toggle("hidden", true);
   }
 

@@ -252,6 +252,7 @@ void main() {
       "Hello, this is an example preview message that is long",
       ConversationItemStatus.normal,
       ConversationReadStatus.read,
+      checkEnabled: true,
       warnings: Set.from([ConversationWarning.notInFilterResults]));
   conversationSimulateItem.onSelect.listen((_) {
     conversationSimulateItem.select();
