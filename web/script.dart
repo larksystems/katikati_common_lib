@@ -1,4 +1,8 @@
 import 'dart:html';
+import "dart:math";
+import 'package:katikati_ui_lib/components/nav/button_links.dart';
+import 'package:uuid/uuid.dart';
+
 import 'package:katikati_ui_lib/components/nav/nav_header.dart';
 import 'package:katikati_ui_lib/components/nav/sidebar_icons.dart';
 import 'package:katikati_ui_lib/components/snackbar/snackbar.dart';
@@ -8,6 +12,7 @@ import 'package:katikati_ui_lib/components/auth/auth_header.dart';
 import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart' as brand;
 import 'package:katikati_ui_lib/components/url_view/url_view.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
+import 'package:katikati_ui_lib/components/tabs/tabs.dart';
 import 'package:katikati_ui_lib/components/conversation/conversation_item.dart';
 import 'package:katikati_ui_lib/components/messages/freetext_message_send.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
@@ -25,6 +30,12 @@ DivElement navHeaderViewContainer = querySelector('#nav-header');
 DivElement brandAssetsContainer = querySelector('#brand-assets');
 ButtonElement getURLParamsButton = querySelector('#get-url-params');
 DivElement editableTextContainer = querySelector('#editable-text-wrapper');
+DivElement buttonLinksContainer = querySelector('#button-links-wrapper');
+DivElement tabsContainer = querySelector('#tabs-wrapper');
+ButtonElement removeTabButton = querySelector('#remove-tab');
+ButtonElement addTabButton = querySelector('#add-tab');
+ButtonElement selectTabButton = querySelector('#select-tab');
+ParagraphElement tabStatusMessage = querySelector('#tab-status');
 DivElement toggleIconButtonsContainer = querySelector("#toggle-icon-buttons-wrapper");
 DivElement freetextMessageSendContainer = querySelector('#freetext-message-send--wrapper');
 
@@ -34,10 +45,14 @@ ButtonElement conversationSimulateSelect = querySelector('#conversation-item-sim
 ButtonElement conversationSimulateUnselect = querySelector('#conversation-item-simulate-unselect');
 ButtonElement conversationSimulateCheck = querySelector('#conversation-item-simulate-check');
 ButtonElement conversationSimulateUncheck = querySelector('#conversation-item-simulate-uncheck');
+ButtonElement conversationSimulateRead = querySelector('#conversation-item-simulate-read');
+ButtonElement conversationSimulateUnread = querySelector('#conversation-item-simulate-unread');
 ButtonElement conversationSimulateNormal = querySelector('#conversation-item-simulate-normal');
 ButtonElement conversationSimulateFailed = querySelector('#conversation-item-simulate-failed');
 ButtonElement conversationSimulatePending = querySelector('#conversation-item-simulate-pending');
 ButtonElement conversationSimulateDraft = querySelector('#conversation-item-simulate-draft');
+ButtonElement conversationAddWarning = querySelector("#conversation-item-add-warning");
+ButtonElement conversationRemoveWarning = querySelector("#conversation-item-remove-warning");
 
 Map<String, ButtonElement> setURLParamsButton = {
   "conversation-id": querySelector('#set-url-params--conversation-id') as ButtonElement,
@@ -50,6 +65,8 @@ Map<String, ButtonElement> setURLParamsButton = {
 };
 
 Logger logger = Logger('script.dart');
+final _random = Random();
+final uuid = Uuid();
 
 void main() {
   // snackbar
@@ -84,7 +101,7 @@ void main() {
   });
   authHeaderViewContainer.append(authHeaderView.authElement);
   authHeaderSimulateSignInTrigger.onClick.listen((_) {
-    authHeaderView.signIn("Username", "assets/profile.png");
+    authHeaderView.signIn("Username", "packages/katikati_ui_lib/globals/assets/profile.png");
   });
   authHeaderSimulateSignOutTrigger.onClick.listen((_) {
     authHeaderView.signOut();
@@ -93,7 +110,7 @@ void main() {
   // nav header
   NavHeaderView navHeaderView = NavHeaderView();
   navHeaderViewContainer.append(navHeaderView.navViewElement);
-  navHeaderView.projectLogos = ["assets/logo.png"];
+  navHeaderView.projectLogos = ["packages/katikati_ui_lib/globals/assets/logo.png"];
   navHeaderView.projectTitle = "Project name";
   navHeaderView.projectSubtitle = "Subtitle";
   navHeaderView.navContent = DivElement()..appendText("Some content like links, dropdown");
@@ -152,26 +169,60 @@ void main() {
     });
   editableTextContainer.append(textEditableDefault.renderElement);
 
+  // Button links
+  var links = [Link("Dashboard", "#dashboard"), Link("Converse", "#converse")];
+  var buttonLinks = ButtonLinksView(links, "#dashboard", openInNewTab: true);
+  buttonLinksContainer.append(buttonLinks.renderElement);
+
+  // tabs
+  var allTabs = [
+    TabView("a", "Tab A", DivElement()..innerText = "Content A"),
+    TabView("b", "Tab B", DivElement()..innerText = "Content B"),
+    TabView("c", "Tab C", DivElement()..innerText = "Content C"),
+    TabView("d", "Tab D", DivElement()..innerText = "Content D"),
+  ];
+  var tabsView = TabsView(allTabs, defaultSelectedID: "b");
+  tabsContainer.append(tabsView.renderElement);
+  var _tabIDs = ["a", "b", "c", "d"];
+  removeTabButton.onClick.listen((_) {
+    var randomID = _tabIDs[_random.nextInt(_tabIDs.length)];
+    tabStatusMessage.innerText = "Removing tab with id: $randomID";
+    tabsView.removeTab(randomID);
+    _tabIDs.remove(randomID);
+  });
+  addTabButton.onClick.listen((_) {
+    var randomID = uuid.v4().split("-").first;
+    var tabView = TabView(randomID, "Tab $randomID", DivElement()..innerText = "Content $randomID");
+    tabsView.addTab(tabView);
+    _tabIDs.add(randomID);
+  });
+  selectTabButton.onClick.listen((_) {
+    var randomID = _tabIDs[_random.nextInt(_tabIDs.length)];
+    tabStatusMessage.innerText = "Selecting tab with id: $randomID";
+    tabsView.selectTab(randomID);
+  });
+
   // Toggle icon buttons
-  var toggleUserPresenceButton = IconButtonView("user_presence", "assets/icons/user-presence.svg", false)
-    ..onToggle.listen((inView) {
-      window.alert("Command for user_presence - view $inView");
-    });
+  var toggleUserPresenceButton =
+      IconButtonView("user_presence", "users", false)
+        ..onToggle.listen((inView) {
+          window.alert("Command for user_presence - view $inView");
+        });
   toggleIconButtonsContainer.append(toggleUserPresenceButton.renderElement);
-  var toggleNotesButton = IconButtonView("notes", "assets/icons/notes.svg", true)
+  var toggleNotesButton = IconButtonView("notes", "sticky-note", true)
     ..onToggle.listen((inView) {
       window.alert("Command for notes - view $inView");
     });
   toggleIconButtonsContainer.append(toggleNotesButton.renderElement);
-  var toggleTagsButton = IconButtonView("tags", "assets/icons/tags.svg", false)
+  var toggleTagsButton = IconButtonView("tags", "tag", false)
     ..onToggle.listen((inView) {
       window.alert("Command for tags - view $inView");
     });
   toggleIconButtonsContainer.append(toggleTagsButton.renderElement);
 
   // Conversation items
-  var conversationItem = ConversationItemView(
-      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.normal,
+  var conversationItem = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
+      ConversationItemStatus.normal, ConversationReadStatus.read,
       defaultSelected: true)
     ..onSelect.listen((id) {
       logger.debug("Choosing conversation $id");
@@ -184,20 +235,25 @@ void main() {
     });
   conversationItemsContainer.append(conversationItem.renderElement);
 
-  var conversationDraft = ConversationItemView(
-      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.draft);
+  var conversationDraft = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
+      ConversationItemStatus.draft, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationDraft.renderElement);
 
-  var conversationPending = ConversationItemView(
-      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.pending);
+  var conversationPending = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
+      ConversationItemStatus.pending, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationPending.renderElement);
 
-  var conversationFailed = ConversationItemView(
-      "000cbc0c", "Hello, this is an example preview message that is long", ConversationItemStatus.failed);
+  var conversationFailed = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
+      ConversationItemStatus.failed, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationFailed.renderElement);
 
   var conversationSimulateItem = ConversationItemView(
-      "simulate_id", "Hello, this is an example preview message that is long", ConversationItemStatus.normal);
+      "simulate_id",
+      "Hello, this is an example preview message that is long",
+      ConversationItemStatus.normal,
+      ConversationReadStatus.read,
+      checkEnabled: true,
+      warnings: Set.from([ConversationWarning.notInFilterResults]));
   conversationSimulateItem.onSelect.listen((_) {
     conversationSimulateItem.select();
   });
@@ -215,6 +271,12 @@ void main() {
   conversationSimulateUncheck.onClick.listen((_) {
     conversationSimulateItem.uncheck();
   });
+  conversationSimulateRead.onClick.listen((_) {
+    conversationSimulateItem.markAsRead();
+  });
+  conversationSimulateUnread.onClick.listen((_) {
+    conversationSimulateItem.markAsUnread();
+  });
   conversationSimulateNormal.onClick.listen((_) {
     conversationSimulateItem.updateStatus(ConversationItemStatus.normal);
   });
@@ -227,9 +289,15 @@ void main() {
   conversationSimulateDraft.onClick.listen((_) {
     conversationSimulateItem.updateStatus(ConversationItemStatus.draft);
   });
+  conversationAddWarning.onClick.listen((_) {
+    conversationSimulateItem.setWarnings(Set.from([ConversationWarning.notInFilterResults]));
+  });
+  conversationRemoveWarning.onClick.listen((_) {
+    conversationSimulateItem.resetWarnings();
+  });
 
   // Freetext message send
-  var freetextMessageSend = FreetextMessageSendView("Default text");
+  var freetextMessageSend = FreetextMessageSendView("Default text", maxLength: 30);
   freetextMessageSend.onSend.listen((value) {
     window.alert("Sending: $value");
     freetextMessageSend.clear();

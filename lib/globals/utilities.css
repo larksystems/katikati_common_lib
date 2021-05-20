@@ -27,3 +27,7 @@
 .clickable { cursor: pointer; }
 
 .hidden { display: none !important; }
+
+.m-r-sm {
+  margin-right: 6px;
+}

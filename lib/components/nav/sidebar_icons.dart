@@ -6,7 +6,7 @@ var logger = Logger('SidebarIconsView');
 
 class IconButtonView {
   String _id;
-  String _assetPath;
+  String _favIconClassname;
   bool _inView;
 
   ButtonElement renderElement;
@@ -15,11 +15,11 @@ class IconButtonView {
   StreamController<bool> _onToggleController;
   Stream<bool> get onToggle => _onToggle;
 
-  IconButtonView(this._id, this._assetPath, this._inView) {
+  IconButtonView(this._id, this._favIconClassname, this._inView) {
     this._onToggleController = StreamController();
     this._onToggle = _onToggleController.stream;
 
-    var iconElement = ImageElement(src: this._assetPath)..className = "icon-toggle";
+    var iconElement = Element.html("<i class='fas fa-${_favIconClassname} icon-toggle'></i>");
 
     renderElement = ButtonElement()
       ..className = "icon-toggle-button"

@@ -7,7 +7,7 @@ Conversation:
   namespace:              'nook_conversations'
   demographicsInfo: 'map string'
   tags: 'publishable set string tagIds'
-  suggestedTags: 'set string suggestedTagIds, default {}'
+  suggested_tag_ids_set: 'set string suggestedTagIds, default {}'
   lastInboundTurnTags: 'set string lastInboundTurnTagIds, default {}'
   messages: 'array Message'
   suggestedMessages: 'array SuggestedMessage, default []'
@@ -20,7 +20,7 @@ Message:
   datetime: 'datetime'
   status: MessageStatus
   tags: 'array string tagIds'
-  suggestedTags: 'array string suggestedTagIds, default []'
+  suggested_tag_ids_set: 'set string suggestedTagIds, default {}'
   text: 'string'
   translation: 'string'
   id: 'string'
