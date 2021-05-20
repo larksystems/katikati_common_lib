@@ -79,7 +79,7 @@ class Conversation {
       ..suggestedTagIds = Set_fromData<String>(data['suggested_tag_ids_set'], String_fromData) ?? {}
       ..lastInboundTurnTagIds = Set_fromData<String>(data['lastInboundTurnTags'], String_fromData) ?? {}
       ..messages = List_fromData<Message>(data['messages'], Message.fromData)
-      ..suggestedMessages = List_fromData<SuggestedMessage>(data['suggestedMessages'], SuggestedMessage.fromData) ?? []
+      ..suggestedMessages = List_fromData<SuggestedMessage>(data['suggested_messages'], SuggestedMessage.fromData) ?? []
       ..notes = String_fromData(data['notes'])
       ..unread = bool_fromData(data['unread']) ?? true;
   }
@@ -109,7 +109,7 @@ class Conversation {
       if (suggestedTagIds != null) 'suggested_tag_ids_set': suggestedTagIds.toList(),
       if (lastInboundTurnTagIds != null) 'lastInboundTurnTags': lastInboundTurnTagIds.toList(),
       if (messages != null) 'messages': messages.map((elem) => elem?.toData()).toList(),
-      if (suggestedMessages != null) 'suggestedMessages': suggestedMessages.map((elem) => elem?.toData()).toList(),
+      if (suggestedMessages != null) 'suggested_messages': suggestedMessages.map((elem) => elem?.toData()).toList(),
       if (notes != null) 'notes': notes,
       if (unread != null) 'unread': unread,
     };
