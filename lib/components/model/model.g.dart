@@ -64,6 +64,7 @@ class Conversation {
   Set<String> suggestedTagIds;
   Set<String> lastInboundTurnTagIds;
   List<Message> messages;
+  List<SuggestedMessage> suggestedMessages;
   String notes;
   bool unread;
 
@@ -78,6 +79,7 @@ class Conversation {
       ..suggestedTagIds = Set_fromData<String>(data['suggested_tag_ids_set'], String_fromData) ?? {}
       ..lastInboundTurnTagIds = Set_fromData<String>(data['lastInboundTurnTags'], String_fromData) ?? {}
       ..messages = List_fromData<Message>(data['messages'], Message.fromData)
+      ..suggestedMessages = List_fromData<SuggestedMessage>(data['suggested_messages'], SuggestedMessage.fromData) ?? []
       ..notes = String_fromData(data['notes'])
       ..unread = bool_fromData(data['unread']) ?? true;
   }
@@ -107,6 +109,7 @@ class Conversation {
       if (suggestedTagIds != null) 'suggested_tag_ids_set': suggestedTagIds.toList(),
       if (lastInboundTurnTagIds != null) 'lastInboundTurnTags': lastInboundTurnTagIds.toList(),
       if (messages != null) 'messages': messages.map((elem) => elem?.toData()).toList(),
+      if (suggestedMessages != null) 'suggested_messages': suggestedMessages.map((elem) => elem?.toData()).toList(),
       if (notes != null) 'notes': notes,
       if (unread != null) 'unread': unread,
     };
@@ -353,6 +356,42 @@ class MessageStatus {
 
   @override
   String toString() => toData();
+}
+
+class SuggestedMessage {
+  String text;
+  String translation;
+
+  static SuggestedMessage fromData(data, [SuggestedMessage modelObj]) {
+    if (data == null) return null;
+    return (modelObj ?? SuggestedMessage())
+      ..text = String_fromData(data['text'])
+      ..translation = String_fromData(data['translation']);
+  }
+
+  static SuggestedMessage required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static SuggestedMessage notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  Map<String, dynamic> toData() {
+    return {
+      if (text != null) 'text': text,
+      if (translation != null) 'translation': translation,
+    };
+  }
+
+  @override
+  String toString() => 'SuggestedMessage: ${toData().toString()}';
 }
 
 class SuggestedReply {
