@@ -10,6 +10,7 @@ Conversation:
   suggested_tag_ids_set: 'set string suggestedTagIds, default {}'
   lastInboundTurnTags: 'set string lastInboundTurnTagIds, default {}'
   messages: 'array Message'
+  suggested_messages: 'array SuggestedMessage suggestedMessages, default []'
   notes: 'publishable string'
   unread: 'publishable bool, default true'
 
@@ -39,6 +40,11 @@ MessageStatus:
     - confirmed
     - failed
     - unknown
+
+SuggestedMessage:
+  firebaseDocId: 'none'
+  text: 'string'
+  translation: 'string'
 
 SuggestedReply:
   firebaseCollectionName: 'suggestedReplies'
