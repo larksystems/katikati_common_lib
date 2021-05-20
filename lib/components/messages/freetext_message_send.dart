@@ -1,12 +1,18 @@
 import 'dart:html';
 import 'dart:async';
+import 'dart:math';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 var logger = Logger('FreetextMessageSendView');
 
+const MAX_LENGTH = 1000;
+
 class FreetextMessageSendView {
   String _text;
+  int _maxLength;
+  bool _alwaysShowTextLength;
   TextAreaElement _textArea;
+  SpanElement _textLength;
   ButtonElement _sendButton;
   ButtonElement _clearButton;
 
@@ -16,7 +22,10 @@ class FreetextMessageSendView {
   StreamController<String> _onSendController;
   Stream<String> get onSend => _onSend;
 
-  FreetextMessageSendView(this._text) {
+  FreetextMessageSendView(this._text, {int maxLength = MAX_LENGTH, bool alwaysShowTextLength = false}) {
+    _maxLength = min(maxLength, MAX_LENGTH);
+    _alwaysShowTextLength = alwaysShowTextLength;
+
     _onSendController = StreamController();
     _onSend = _onSendController.stream;
 
@@ -26,6 +35,7 @@ class FreetextMessageSendView {
       ..onInput.listen((e) {
         _text = _textArea.value;
         _enableOrDisableButtons();
+        _showOrClearMaxLengthError();
       });
     _sendButton = ButtonElement()
       ..innerText = "Send"
@@ -35,8 +45,14 @@ class FreetextMessageSendView {
         } else {
           logger.warning("No listener for FreetextMessageSendView.onSend");
         }
-    });
-    var clearIcon = ImageElement(src: "assets/icons/clear.svg");
+      });
+
+    _textLength = SpanElement()
+      ..innerText = "${_text.length} / $_maxLength"
+      ..className = "message-editor-with-send__text-length"
+      ..hidden = !_alwaysShowTextLength;
+    
+    var clearIcon = Element.html('<i class="fas fa-times"></i>');
     _clearButton = ButtonElement()
       ..append(clearIcon)
       ..className = "message-editor-with-send__clear-button"
@@ -47,7 +63,8 @@ class FreetextMessageSendView {
     var textareaWrapper = DivElement()
       ..className = "message-editor-with-send__message"
       ..append(_textArea)
-      ..append(_clearButton);
+      ..append(_clearButton)
+      ..append(_textLength);
     var sendButtonWrapper = DivElement()
       ..className = "message-editor-with-send__send-button"
       ..append(_sendButton);
@@ -62,9 +79,24 @@ class FreetextMessageSendView {
     if (_text.isEmpty) {
       _sendButton.setAttribute("disabled", "true");
       _clearButton.setAttribute("disabled", "true");
+    } else if (_text.length > _maxLength) {
+      _sendButton.setAttribute("disabled", "true");
     } else {
       _sendButton.removeAttribute("disabled");
       _clearButton.removeAttribute("disabled");
+    }
+  }
+
+  void _showOrClearMaxLengthError() {
+    _textLength.innerText = "${_text.length} / $_maxLength";
+    if (_text.length > _maxLength) {
+      renderElement.classes.toggle("message-editor-with-send--error", true);
+      _textLength.hidden = false;
+    } else {
+      renderElement.classes.toggle("message-editor-with-send--error", false);
+      if (!_alwaysShowTextLength) {
+        _textLength.hidden = true;
+      }
     }
   }
 
@@ -72,5 +104,6 @@ class FreetextMessageSendView {
     _text = "";
     _textArea.value = "";
     _enableOrDisableButtons();
+    _showOrClearMaxLengthError();
   }
 }

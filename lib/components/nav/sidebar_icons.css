@@ -21,6 +21,6 @@
   background-color: #333;
 }
 
-.icon-toggle-button.icon-toggle-button--selected img {
-  filter: invert(1);
+.icon-toggle-button.icon-toggle-button--selected {
+  color: white;
 }
