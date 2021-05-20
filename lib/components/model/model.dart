@@ -77,7 +77,7 @@ extension ConversationUtil on g.Conversation {
 extension MessageUtil on g.Message {
   /// Add [tagId] to tagIds in this Message.
   /// Callers should catch and handle IOException.
-  Future<void> addTagId(g.DocPubSubUpdate pubSubClient, g.Conversation conversation, String tagId) async {
+  Future<void> addTagId(g.DocPubSubUpdate pubSubClient, g.Conversation conversation, String tagId, {bool wasSuggested = false}) async {
     if (tagIds.contains(tagId)) return;
     if (this.id == null) {
       throw AssertionError('Cannot add tag to a pending message - please try again in a few seconds');
@@ -87,12 +87,13 @@ extension MessageUtil on g.Message {
       "conversation_id": conversation.docId,
       "message_id": this.id,
       "tags": [tagId],
+      "was_suggested": wasSuggested,
     });
   }
 
   /// Remove [tagId] from tagIds in this Message.
   /// Callers should catch and handle IOException.
-  Future<void> removeTagId(g.DocPubSubUpdate pubSubClient, g.Conversation conversation, String tagId) async {
+  Future<void> removeTagId(g.DocPubSubUpdate pubSubClient, g.Conversation conversation, String tagId, {bool wasSuggested = false}) async {
     if (!tagIds.contains(tagId)) return;
     if (this.id == null) {
       throw AssertionError('Cannot remove a tag from a pending message - please try again in a few seconds');
@@ -102,6 +103,7 @@ extension MessageUtil on g.Message {
       "conversation_id": conversation.docId,
       "message_id": this.id,
       "tags": [tagId],
+      "was_suggested": wasSuggested,
     });
   }
 
