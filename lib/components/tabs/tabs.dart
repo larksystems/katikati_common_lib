@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'dart:async';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 var logger = Logger('Tabs');
@@ -15,38 +14,41 @@ class TabView {
 class TabsView {
   DivElement renderElement;
   List<TabView> _tabs;
+  List<String> get _tabIds => _tabs.map((tab) => tab.id).toList();
   Map<String, TabView> get _tabsById => Map.fromEntries(_tabs.map((t) => MapEntry(t.id, t)));
 
   String _selectedTabId;
-  String _tabContentClassname;
-
-  List<SpanElement> _tabChoosers = [];
+  List<SpanElement> _tabChoosers;
   DivElement _tabsHeader;
   DivElement _tabContent;
 
-  TabsView(this._tabs, {String defaultSelectedID, String tabContentClassname}) {
-    if (_tabs.isEmpty) {
-      throw NullThrownError();
+  TabsView(this._tabs, {String defaultSelectedID}) {
+    _tabs = _tabs ?? [];
+    if (defaultSelectedID != null && _tabIds.contains(defaultSelectedID)) {
+      _selectedTabId = defaultSelectedID;
     }
-
-    _selectedTabId = defaultSelectedID ?? _tabs.first.id;
-    _tabContentClassname = tabContentClassname;
-
-    _tabsHeader = DivElement();
-    _tabs.forEach((tab) {
-      var tabChooser = _createTabChooserElement(tab);
-      _tabChoosers.add(tabChooser);
-      _tabsHeader.append(tabChooser);
-    });
-
-    _tabContent = DivElement()
-      ..className = "tab-content"
-      ..append(_tabsById[_selectedTabId].content);
-    if (_tabContentClassname != null) {
-      _tabContent.classes.add(_tabContentClassname);
+    if (_selectedTabId == null && _tabs.isNotEmpty) {
+      _selectedTabId = _tabIds.first;
     }
+    _tabsHeader = DivElement()..classes.add("tab-choosers");
+    _tabContent = DivElement()..classes.add("tab-content");
+    _tabChoosers = [];
 
-    renderElement = DivElement()..append(_tabsHeader)..append(_tabContent);
+    _setTabs(_tabs);
+    renderElement = DivElement()
+      ..classes.add("tabs-container")
+      ..append(_tabsHeader)
+      ..append(_tabContent);
+  }
+
+  void _updateSelectedId(String id) {
+    if (id != null && _tabIds.contains(id)) {
+      _selectedTabId = id;
+      return;
+    }
+    if (!_tabIds.contains(_selectedTabId)) {
+      _selectedTabId = _tabs.isNotEmpty ? _tabs.first.id : null;
+    }
   }
 
   SpanElement _createTabChooserElement(TabView tab) {
@@ -67,11 +69,13 @@ class TabsView {
     _tabContent.children.clear();
     if (_tabsById.containsKey(_selectedTabId)) {
       _tabContent.append(_tabsById[_selectedTabId].content);
+    } else {
+      _tabContent.innerText = "No tabs present";
     }
   }
 
   void _selectTab(String id) {
-    _selectedTabId = id;
+    _updateSelectedId(id);
     _tabChoosers.forEach((tabChooser) {
       tabChooser.classes.toggle("tab-chooser--selected", false);
       if (tabChooser.dataset['id'] == id) {
@@ -86,36 +90,29 @@ class TabsView {
     _selectTab(id);
   }
 
-  void removeTab(String id) {
+  void _setTabs(List<TabView> tabs) {
+    _tabs = tabs ?? [];
+    _tabsHeader.children.clear();
+    _tabChoosers.clear();
+    _tabContent.children.clear();
+
     if (_tabs.isEmpty) {
-      throw NullThrownError();
+      _updateSelectedId(null);
+      _updateTabContent();
+      return;
     }
 
-    _tabs.removeWhere((tab) => tab.id == id);
-    _tabChoosers.removeWhere((tabChooser) {
-      if (tabChooser.dataset['id'] == id) {
-        tabChooser.remove();
-        return true;
-      }
-      return false;
+    _updateSelectedId(null);
+    _tabs.forEach((tab) {
+      var tabChooser = _createTabChooserElement(tab);
+      _tabChoosers.add(tabChooser);
+      _tabsHeader.append(tabChooser);
     });
 
-    if (_selectedTabId == id) {
-      // todo: be a little bit more smart
-      _selectTab(_tabs.isNotEmpty ? _tabs.first.id : null);
-      _updateTabContent();
-    }
-
-    if(_tabs.isEmpty) {
-      _tabContent.innerText = "No tabs present";
-    }
+    _updateTabContent();
   }
 
-  void addTab(TabView tab) {
-    _tabs.add(tab);
-    var tabChooser = _createTabChooserElement(tab);
-    _tabChoosers.add(tabChooser);
-    _tabsHeader.append(tabChooser);
-    _selectTab(tab.id);
+  void setTabs(List<TabView> tabs) {
+    _setTabs(tabs);
   }
 }

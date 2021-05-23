@@ -176,10 +176,10 @@ void main() {
 
   // tabs
   var allTabs = [
-    TabView("a", "Tab A", DivElement()..innerText = "Content A"),
-    TabView("b", "Tab B", DivElement()..innerText = "Content B"),
-    TabView("c", "Tab C", DivElement()..innerText = "Content C"),
-    TabView("d", "Tab D", DivElement()..innerText = "Content D"),
+    TabView("a", "Tab A", DivElement()..style.padding = "30px"..innerText = "Content A"),
+    TabView("b", "Tab B", DivElement()..style.padding = "30px"..innerText = "Content B"),
+    TabView("c", "Tab C", DivElement()..style.padding = "30px"..innerText = "Content C"),
+    TabView("d", "Tab D", DivElement()..style.padding = "30px"..innerText = "Content D"),
   ];
   var tabsView = TabsView(allTabs, defaultSelectedID: "b");
   tabsContainer.append(tabsView.renderElement);
@@ -187,14 +187,16 @@ void main() {
   removeTabButton.onClick.listen((_) {
     var randomID = _tabIDs[_random.nextInt(_tabIDs.length)];
     tabStatusMessage.innerText = "Removing tab with id: $randomID";
-    tabsView.removeTab(randomID);
+    allTabs.removeWhere((tab) => tab.id == randomID);
     _tabIDs.remove(randomID);
+    tabsView.setTabs(allTabs);
   });
   addTabButton.onClick.listen((_) {
     var randomID = uuid.v4().split("-").first;
     var tabView = TabView(randomID, "Tab $randomID", DivElement()..innerText = "Content $randomID");
-    tabsView.addTab(tabView);
+    allTabs.add(tabView);
     _tabIDs.add(randomID);
+    tabsView.setTabs(allTabs);
   });
   selectTabButton.onClick.listen((_) {
     var randomID = _tabIDs[_random.nextInt(_tabIDs.length)];
@@ -203,11 +205,10 @@ void main() {
   });
 
   // Toggle icon buttons
-  var toggleUserPresenceButton =
-      IconButtonView("user_presence", "users", false)
-        ..onToggle.listen((inView) {
-          window.alert("Command for user_presence - view $inView");
-        });
+  var toggleUserPresenceButton = IconButtonView("user_presence", "users", false)
+    ..onToggle.listen((inView) {
+      window.alert("Command for user_presence - view $inView");
+    });
   toggleIconButtonsContainer.append(toggleUserPresenceButton.renderElement);
   var toggleNotesButton = IconButtonView("notes", "sticky-note", true)
     ..onToggle.listen((inView) {
