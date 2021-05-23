@@ -4,8 +4,11 @@ set -e
 WORKDIR="$(pwd)"
 
 # get absolute paths
+cd "$(dirname $0)"
+OUTDIR="$(pwd)"
+
+cd "../../.."
 PROJDIR="$(pwd)"
-OUTDIR="$PROJDIR/lib/components/model"
 
 cd ".."
 LARKDIR="$(pwd)"
