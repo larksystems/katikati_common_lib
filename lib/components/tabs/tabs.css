@@ -1,3 +1,13 @@
+.tabs-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tab-choosers {
+  z-index: 1;
+}
+
 .tab-chooser {
   font-size: 0.9em;
   padding: 6px 12px;
@@ -28,7 +38,8 @@
 }
 
 .tab-content {
-  padding: 12px;
   border: 1px solid #ccc;
   margin-top: -1px;
+  flex: 1;
+  overflow-y: scroll;
 }
