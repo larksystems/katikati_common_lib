@@ -24,6 +24,15 @@ Message:
   text: 'string'
   translation: 'string'
   id: 'string'
+  channel: MessageChannel
+
+MessageChannel:
+  dartType: 'enum'
+  defaultValue: 'rapidpro_sms'
+  dartValues:
+    - rapidpro_sms
+    - twilio_sms
+    - twilio_whatsapp
 
 MessageDirection:
   dartType: 'enum'

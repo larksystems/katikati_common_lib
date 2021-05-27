@@ -208,6 +208,7 @@ class Message {
   String text;
   String translation;
   String id;
+  MessageChannel channel;
 
   static Message fromData(data, [Message modelObj]) {
     if (data == null) return null;
@@ -219,7 +220,8 @@ class Message {
       ..suggestedTagIds = Set_fromData<String>(data['suggested_tag_ids_set'], String_fromData) ?? {}
       ..text = String_fromData(data['text'])
       ..translation = String_fromData(data['translation'])
-      ..id = String_fromData(data['id']);
+      ..id = String_fromData(data['id'])
+      ..channel = MessageChannel.fromData(data['channel']);
   }
 
   static Message required(Map data, String fieldName, String className) {
@@ -246,11 +248,65 @@ class Message {
       if (text != null) 'text': text,
       if (translation != null) 'translation': translation,
       if (id != null) 'id': id,
+      if (channel != null) 'channel': channel.toData(),
     };
   }
 
   @override
   String toString() => 'Message: ${toData().toString()}';
+}
+
+class MessageChannel {
+  static const rapidpro_sms = MessageChannel('rapidpro_sms');
+  static const twilio_sms = MessageChannel('twilio_sms');
+  static const twilio_whatsapp = MessageChannel('twilio_whatsapp');
+
+  static const values = <MessageChannel>[
+    rapidpro_sms,
+    twilio_sms,
+    twilio_whatsapp,
+  ];
+
+  static MessageChannel fromString(String text, [MessageChannel defaultValue = MessageChannel.rapidpro_sms]) {
+    if (text != null) {
+      const prefix = 'MessageChannel.';
+      var valueName = text.startsWith(prefix) ? text.substring(prefix.length) : text;
+      for (var value in values) {
+        if (value.name == valueName) return value;
+      }
+    }
+    // Only warn if this is an unknown value
+    if (text != null && text.isNotEmpty) log.warning('unknown MessageChannel $text');
+    return defaultValue;
+  }
+
+  static MessageChannel fromData(data, [MessageChannel defaultValue = MessageChannel.rapidpro_sms]) {
+    if (data is String || data == null) return fromString(data, defaultValue);
+    log.warning('invalid MessageChannel: ${data.runtimeType}: $data');
+    return defaultValue;
+  }
+
+  static MessageChannel required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static MessageChannel notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  final String name;
+  const MessageChannel(this.name);
+
+  String toData() => 'MessageChannel.$name';
+
+  @override
+  String toString() => toData();
 }
 
 class MessageDirection {
