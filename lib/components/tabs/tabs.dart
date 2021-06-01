@@ -1,7 +1,4 @@
 import 'dart:html';
-import 'package:katikati_ui_lib/components/logger.dart';
-
-var logger = Logger('Tabs');
 
 class TabView {
   String id;

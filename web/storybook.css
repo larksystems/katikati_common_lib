@@ -17,3 +17,13 @@ hr {
   border: none;
   border-top: 1px dashed darkgray;
 }
+
+.mono {
+  font-family: monospace;
+  margin-bottom: 6px;
+  margin-top: 18px;
+}
+
+.light {
+  color: #999;
+}
