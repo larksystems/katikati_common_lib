@@ -1,17 +1,23 @@
-# katikati_ui_lib.dart
+# katikati_common_lib
+A common library containing Dart UI and model packages
 
-A library for shared UI components between Katikati UIs
+## UI package
+A Dart package for shared UI components between Katikati UIs.  
+This katikati_ui_lib package is located in the `ui` subdirectory.
 
 ### Generating model
-katikati_ui_lib & Infrastructure should be in the same folder
+katikati_common_lib & Infrastructure should be in the same folder
 ```
 /lark (or any other name)
-  /katikati_ui_lib
+  /katikati_common_lib
   /Infrastructure (should be latest)
 ```
 
-Run the following command under `katikati_ui_lib` folder
+Run the following command under `ui` folder
+```
+cd katikati_common_lib/ui
 `./lib/components/model/generate.sh`
+```
 
 ### Credits
 This project uses the following services:
