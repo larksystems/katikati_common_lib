@@ -54,6 +54,8 @@ class TagView {
   void Function() onSelect = () {};
   void Function() onAccept = () {};
   void Function() onCancel = () {};
+  void Function() onMouseEnter = () {};
+  void Function() onMouseLeave = () {};
 
   TagView(this._text, this._tagId,
       {String groupId,
@@ -76,9 +78,6 @@ class TagView {
       ..dataset['id'] = _tagId
       ..dataset['group-id'] = groupId ?? ''
       ..classes.add('tag');
-    if (_category != null) {
-      renderElement.dataset['category-id'] = _category;
-    }
 
     _tagText = SpanElement()
       ..classes.add('tag__text')
@@ -102,6 +101,8 @@ class TagView {
     if (_selectable) {
       renderElement.classes.add('tag--selectable');
       _tagText.onClick.listen((_) => onSelect());
+      _tagText.onMouseEnter.listen((_) => onMouseEnter());
+      _tagText.onMouseLeave.listen((_) => onMouseLeave());
     }
 
     if (_acceptable) {
