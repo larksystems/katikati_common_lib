@@ -32,6 +32,7 @@ class TagView {
 
   String _text;
   String _tagId;
+  String _category;
 
   bool _selectable;
   bool _editable;
@@ -56,6 +57,7 @@ class TagView {
 
   TagView(this._text, this._tagId,
       {String groupId,
+      String category,
       bool selectable = true,
       bool editable = false,
       bool removable = false,
@@ -63,6 +65,7 @@ class TagView {
       bool suggested = false,
       TagStyle tagStyle = TagStyle.None,
       bool doubleClickToEdit = true}) {
+    _category = category;
     _selectable = selectable;
     _editable = editable;
     _removable = removable;
@@ -73,6 +76,9 @@ class TagView {
       ..dataset['id'] = _tagId
       ..dataset['group-id'] = groupId ?? ''
       ..classes.add('tag');
+    if (_category != null) {
+      renderElement.dataset['category-id'] = _category;
+    }
 
     _tagText = SpanElement()
       ..classes.add('tag__text')
