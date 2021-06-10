@@ -9,7 +9,6 @@
   border-radius: 2px;
   border: 1px dashed #aaa;
   text-overflow: ellipsis;
-  max-width: 200px;
   font-style: italic;
   position: relative;
   display: inline-block;
@@ -47,7 +46,6 @@
 .tag .tag__actions {
   visibility: hidden;
   font-size: 12px;
-  margin-top: -2px;
   line-height: 0;
 }
 
