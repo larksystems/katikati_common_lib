@@ -1,5 +1,6 @@
 import 'dart:html';
 import "dart:math";
+import 'package:katikati_ui_lib/components/button/button.dart';
 import 'package:katikati_ui_lib/components/nav/button_links.dart';
 import 'package:uuid/uuid.dart';
 
@@ -311,7 +312,7 @@ void main() {
   tagContainer.append(ParagraphElement()
     ..innerText = 'Display only tag'
     ..className = "mono light");
-  var displayTag = TagView('Display tag value', 'display-tag');
+  var displayTag = TagView('Display tag value', 'display-tag', selectable: false);
   tagContainer.append(displayTag.renderElement);
 
   tagContainer.append(ParagraphElement()
@@ -349,17 +350,47 @@ void main() {
   tagContainer.append(suggestedTag.renderElement);
 
   tagContainer.append(ParagraphElement()
-    ..innerText = 'Edit on add tag'
+    ..innerText = 'Styles'
     ..className = "mono light");
-  var editOnAddTag =
-      TagView('', 'edit-on-add-tag', editable: true, editableOnAdd: true, removable: true);
-  editOnAddTag.onEdit = (value) {
-    window.alert('Added new tag with value: $value');
-  };
-  editOnAddTag.onDelete = () {
-    window.alert('Request to delete:');
-  };
-  tagContainer.append(editOnAddTag.renderElement);
+  var greenTag = TagView('green tag', 'green-tag', tagStyle: TagStyle.Green);
+  var yellowTag = TagView('yellow tag', 'yellow-tag', tagStyle: TagStyle.Yellow);
+  var redTag = TagView('red tag', 'red-tag', tagStyle: TagStyle.Red);
+  var importantTag = TagView('important tag', 'important-tag', tagStyle: TagStyle.Important);
+  var pendingTag = TagView('pending tag', 'pending-tag');
+  pendingTag.markPending(true);
+  var highlightTag = TagView('highlight tag', 'highlight-tag');
+  highlightTag.markHighlighted(true);
+  tagContainer
+    ..append(greenTag.renderElement)
+    ..append(yellowTag.renderElement)
+    ..append(redTag.renderElement)
+    ..append(importantTag.renderElement)
+    ..append(pendingTag.renderElement)
+    ..append(highlightTag.renderElement);
+
+  tagContainer.append(ParagraphElement()
+    ..innerText = 'Add edit on add'
+    ..className = "mono light");
+  var editAddContainer = DivElement();
+  var editAddButton = Button(ButtonType.add, onClick: (_){
+    var editOnAddTag =
+      TagView('', 'edit-on-add-tag', editable: true, removable: true);
+    editOnAddTag.onEdit = (value) {
+      window.alert('Added new tag with value: $value');
+    };
+    editOnAddTag.onDelete = () {
+      editOnAddTag.renderElement.remove();
+    };
+    editOnAddTag.onCancel = () {
+      editOnAddTag.renderElement.remove();
+    };
+
+    editAddContainer.append(editOnAddTag.renderElement);
+    editOnAddTag.makeEditable();
+  });
+  tagContainer
+    ..append(editAddButton.renderElement)
+    ..append(editAddContainer);
 }
 
 void printURLViewParams(UrlView urlView) {

@@ -12,6 +12,19 @@ enum TagStyle {
   Important,
 }
 
+/*
+
+<span class="tag tag--suggested tag--editing tag--highlighted tag--pending tag-style--green">
+  <span class="tag__text">
+    text <span class="fas fa-robot tag--suggested__icon"/>
+  </span>
+  <span class="tag__actions">
+    <button />
+  </span>
+</span>
+
+*/
+
 class TagView {
   SpanElement renderElement;
   SpanElement _tagText;
@@ -22,38 +35,36 @@ class TagView {
 
   bool _selectable;
   bool _editable;
-  bool _editableOnAdd;
   bool _removable;
   bool _acceptable;
   bool _suggested;
 
   TagStyle _tagStyle;
 
-  ButtonElement _editButton;
-  ButtonElement _deleteButton;
-  ButtonElement _confirmButton;
-  ButtonElement _cancelButton;
-  ButtonElement _acceptButton;
+  Button _editButton;
+  Button _deleteButton;
+  Button _confirmButton;
+  Button _cancelButton;
+  Button _acceptButton;
 
   // some default callbacks, so we can use some behaviours like reset without implementing the raw onclicks
   void Function(String) onEdit = (_) {};
   void Function() onDelete = () {};
   void Function() onSelect = () {};
   void Function() onAccept = () {};
+  void Function() onCancel = () {};
 
   TagView(this._text, this._tagId,
       {String groupId,
       bool selectable = true,
       bool editable = false,
-      bool editableOnAdd = false,
       bool removable = false,
       bool acceptable = false,
       bool suggested = false,
       TagStyle tagStyle = TagStyle.None,
-      bool disableDoubleClickEdit = false}) {
+      bool doubleClickToEdit = true}) {
     _selectable = selectable;
     _editable = editable;
-    _editableOnAdd = editableOnAdd;
     _removable = removable;
     _acceptable = acceptable;
     _suggested = suggested;
@@ -64,71 +75,52 @@ class TagView {
       ..classes.add('tag');
 
     _tagText = SpanElement()
-      ..classes.add('tag-text')
+      ..classes.add('tag__text')
       ..dataset['placeholder'] = "untitled tag";
-    _tagActions = SpanElement()..classes.add('tag-actions');
+    _tagActions = SpanElement()..classes.add('tag__actions');
 
     _tagText.innerText = this._text;
+
+    _acceptButton = Button(ButtonType.confirm, onClick: (_) => _acceptTag());
+    _editButton = Button(ButtonType.edit, onClick: (_) => makeEditable());
+    _confirmButton = Button(ButtonType.confirm, onClick: (_) => _confirmEdit());
+    _cancelButton = Button(ButtonType.cancel, onClick: (_) => _cancelEditing());
+    _deleteButton = Button(ButtonType.remove, onClick: (_) => _deleteTag());
+
     if (suggested) {
-      var suggestedIcon = SpanElement()..className = 'fas fa-robot tag-suggested__icon';
+      var suggestedIcon = SpanElement()..className = 'fas fa-robot tag--suggested__icon';
       _tagText.append(suggestedIcon);
-      _tagText.classes.toggle('tag-text--suggested', true);
+      renderElement.classes.toggle('tag--suggested', true);
     }
 
-    updateStyle(tagStyle);
-
     if (_selectable) {
-      _tagText.onClick.listen((_) {
-        onSelect();
-      });
+      renderElement.classes.add('tag--selectable');
+      _tagText.onClick.listen((_) => onSelect());
     }
 
     if (_acceptable) {
-      _acceptButton = Button(ButtonType.confirm, onClick: (_) {
-        _acceptTag();
-      }).renderElement;
-      _tagActions.append(_acceptButton);
+      _tagActions.append(_acceptButton.renderElement);
     }
 
     if (_editable) {
-      _editButton = Button(ButtonType.edit, onClick: (_) {
-        _makeEditable();
-      }).renderElement;
-      _tagActions.append(_editButton);
+      _tagActions.append(_editButton.renderElement);
 
-      _confirmButton = Button(ButtonType.confirm, onClick: (_) {
-        _confirmEdit();
-      }).renderElement;
-
-      _cancelButton = Button(ButtonType.cancel, onClick: (_) {
-        _cancelEditing();
-      }).renderElement;
-
-      if (!disableDoubleClickEdit) {
-        _tagText.onDoubleClick.listen((_) {
-          _makeEditable();
-        });
+      if (doubleClickToEdit) {
+        _tagText.onDoubleClick.listen((_) => makeEditable());
       }
     }
 
     if (_removable) {
-      _deleteButton = Button(ButtonType.remove, onClick: (_) {
-        _deleteTag();
-      }).renderElement;
-      _tagActions.append(_deleteButton);
-    }
-
-    if (editable && editableOnAdd) {
-      _makeEditable();
+      _tagActions.append(_deleteButton.renderElement);
     }
 
     renderElement..append(_tagText)..append(_tagActions);
+    setTagStyle(tagStyle);
   }
 
-  void _makeEditable() {
+  void makeEditable() {
     _tagText
       ..contentEditable = "true"
-      ..focus()
       ..onKeyDown.listen((event) {
         if (event.keyCode == KeyCode.ENTER) {
           event.preventDefault();
@@ -139,15 +131,21 @@ class TagView {
           _cancelEditing();
         }
       });
-    renderElement.classes.toggle("tag-text--editing", true);
+    renderElement.classes.toggle("tag--editing", true);
 
     _tagActions.children.clear();
-    _tagActions..append(_confirmButton)..append(_cancelButton);
+    _tagActions..append(_confirmButton.renderElement)..append(_cancelButton.renderElement);
+    focusEditText();
+  }
+
+  void focusEditText() {
+    _tagText.focus();
   }
 
   void _cancelEditing() {
     _resetActions();
     _tagText.innerText = _text;
+    onCancel();
   }
 
   void _confirmEdit() {
@@ -169,43 +167,43 @@ class TagView {
   }
 
   void _resetActions() {
-    renderElement.classes.toggle("tag-text--editing", false);
+    renderElement.classes.toggle("tag--editing", false);
     _tagText..contentEditable = "false";
     _tagActions.children.clear();
     if (_editable) {
-      _tagActions.append(_editButton);
-    }
-    if (_removable) {
-      _tagActions.append(_deleteButton);
+      _tagActions.append(_editButton.renderElement);
     }
     if (_acceptable) {
-      _tagActions.append(_acceptButton);
+      _tagActions.append(_acceptButton.renderElement);
+    }
+    if (_removable) {
+      _tagActions.append(_deleteButton.renderElement);
     }
   }
 
   void markPending(bool pending) {
-    renderElement.classes.toggle("tag-text--pending", pending);
+    renderElement.classes.toggle("tag--pending", pending);
   }
 
   void markHighlighted(bool highlighted) {
-    renderElement.classes.toggle("tag-text--highlighted", highlighted);
+    renderElement.classes.toggle("tag--highlighted", highlighted);
   }
 
-  void updateStyle(TagStyle tagStyle) {
+  void setTagStyle(TagStyle tagStyle) {
     _tagStyle = tagStyle;
-    _tagText.classes.removeWhere((className) => className.startsWith('tag-text-style'));
+    renderElement.classes.removeWhere((className) => className.startsWith('tag-style'));
     switch (_tagStyle) {
       case TagStyle.Green:
-        _tagText.classes.add("tag-text-style--green");
+        renderElement.classes.add("tag-style--green");
         break;
       case TagStyle.Yellow:
-        _tagText.classes.add("tag-text-style--yellow");
+        renderElement.classes.add("tag-style--yellow");
         break;
       case TagStyle.Red:
-        _tagText.classes.add("tag-text-style--green");
+        renderElement.classes.add("tag-style--red");
         break;
       case TagStyle.Important:
-        _tagText.classes.add("tag-text-style--important");
+        renderElement.classes.add("tag-style--important");
         break;
       default:
     }

@@ -2,7 +2,7 @@
   margin-right: 6px;
 }
 
-.tag .tag-text {
+.tag .tag__text {
   font-size: 12px;
   padding-left: 6px;
   padding-right: 6px;
@@ -16,37 +16,42 @@
   line-height: 1.2rem;
 }
 
-.tag.tag-text--editing .tag-text {
+.tag .tag__text:empty::before {
+  content:attr(data-placeholder);
+  color:grey;
+}
+
+.tag.tag--editing .tag__text {
   border: 1px solid black;
   cursor: auto;
   min-width: 64px;
   font-style: normal;
 }
 
-.tag.tag-text--editing .tag-actions {
-  display: inline-block;
+.tag.tag--editing .tag__actions {
+  visibility: visible;
 }
 
-.tag .tag-suggested__icon {
+.tag.tag--suggested .tag--suggested__icon {
   position: absolute;
   top: -8px;
   right: -8px;
 }
 
-.tag:hover .tag-text {
+.tag.tag--selectable:hover .tag__text {
   border-color: #888;
   background-color: #eee;
   cursor: default;
 }
 
-.tag .tag-actions {
+.tag .tag__actions {
   visibility: hidden;
   font-size: 12px;
   margin-top: -2px;
   line-height: 0;
 }
 
-.tag .tag-actions .button {
+.tag .tag__actions .button {
   width: 24px;
   padding-left: 2px;
   padding-right: 2px;
@@ -54,23 +59,18 @@
   border: 1px solid transparent;
 }
 
-.tag:hover .tag-actions {
+.tag:hover .tag__actions {
   visibility: visible;
 }
 
-.tag-text:empty::before {
-  content:attr(data-placeholder);
-  color:grey;
-}
-
-.tag.tag-text--editing .tag-text:not(:focus) {
+.tag.tag--editing .tag__text:not(:focus) {
   animation-delay: 3s;
   animation-duration: 2s;
   animation-iteration-count: infinite;
   animation-name: tagUnsavedAnimation;
 }
 
-.tag .tag-text.tag-text--suggested {
+.tag.tag--suggested .tag__text {
   border: 1px dotted #888;
 }
 
@@ -80,11 +80,44 @@
   }
 }
 
-.tag.tag-text--pending .tag-text {
-  color: #666;
+@keyframes tagPendingAnimation {
+  50% {
+    color: #aaa;
+  }
 }
 
-.tag.tag-text--highlighted .tag-text {
+/* tag highlights mods */
+.tag.tag--pending .tag__text, .tag.tag--pending:hover .tag__text {
+  color: #666;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-name: tagPendingAnimation;
+  background-color: inherit;
+}
+
+.tag.tag--highlighted .tag__text {
   background-color: #ddd;
   border-color: black;
+}
+
+/* tag styles */
+.tag.tag-style--green .tag__text {
+  color:  darkgreen;
+}
+.tag.tag-style--yellow .tag__text {
+  color: darkorange;
+}
+.tag.tag-style--red .tag__text {
+  color: crimson;
+}
+.tag.tag-style--important .tag__text {
+  border-color: crimson;
+  background-color: crimson;
+  color: white;
+}
+
+.tag.tag-style--important:hover .tag__text {
+  border-color: crimson;
+  background-color: darkred;
+  color: white;
 }
