@@ -12,6 +12,7 @@ enum ButtonType {
   add,
   remove,
   confirm,
+  cancel,
   edit,
 }
 
@@ -48,16 +49,29 @@ class Button {
         break;
 
       case ButtonType.add:
-        _element.classes.add('button--add');
+        _element.classes.add('button-text');
+        var icon = SpanElement()..className = "fas fa-plus";
+        _element.append(icon);
         break;
       case ButtonType.remove:
-        _element.classes.add('button--remove');
+        _element.classes.add('button--text');
+        var icon = SpanElement()..className = "far fa-trash-alt";
+        _element.append(icon);
         break;
       case ButtonType.confirm:
-        _element.classes.add('button--confirm');
+        _element.classes.add('button--text');
+        var icon = SpanElement()..className = "fas fa-check";
+        _element.append(icon);
         break;
       case ButtonType.edit:
-        _element.classes.add('button--edit');
+        _element.classes.add('button--text');
+        var icon = SpanElement()..className = "fas fa-pen";
+        _element.append(icon);
+        break;
+      case ButtonType.cancel:
+        _element.classes.add('button--text');
+        var icon = SpanElement()..className = "fas fa-times";
+        _element.append(icon);
         break;
     }
   }

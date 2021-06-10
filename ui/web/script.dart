@@ -1,5 +1,6 @@
 import 'dart:html';
 import "dart:math";
+import 'package:katikati_ui_lib/components/button/button.dart';
 import 'package:katikati_ui_lib/components/nav/button_links.dart';
 import 'package:uuid/uuid.dart';
 
@@ -15,6 +16,7 @@ import 'package:katikati_ui_lib/components/editable/editable_text.dart';
 import 'package:katikati_ui_lib/components/tabs/tabs.dart';
 import 'package:katikati_ui_lib/components/conversation/conversation_item.dart';
 import 'package:katikati_ui_lib/components/messages/freetext_message_send.dart';
+import 'package:katikati_ui_lib/components/tag/tag.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 DivElement snackbarContainer = querySelector('#snackbar-container');
@@ -53,6 +55,7 @@ ButtonElement conversationSimulatePending = querySelector('#conversation-item-si
 ButtonElement conversationSimulateDraft = querySelector('#conversation-item-simulate-draft');
 ButtonElement conversationAddWarning = querySelector("#conversation-item-add-warning");
 ButtonElement conversationRemoveWarning = querySelector("#conversation-item-remove-warning");
+DivElement tagContainer = querySelector('#tag--wrapper');
 
 Map<String, ButtonElement> setURLParamsButton = {
   "conversation-id": querySelector('#set-url-params--conversation-id') as ButtonElement,
@@ -304,6 +307,90 @@ void main() {
     freetextMessageSend.clear();
   });
   freetextMessageSendContainer.append(freetextMessageSend.renderElement);
+
+  // Tag
+  tagContainer.append(ParagraphElement()
+    ..innerText = 'Display only tag'
+    ..className = "mono light");
+  var displayTag = TagView('Display tag value', 'display-tag', selectable: false);
+  tagContainer.append(displayTag.renderElement);
+
+  tagContainer.append(ParagraphElement()
+    ..innerText = 'Selectable tag'
+    ..className = "mono light");
+  var selectableTag = TagView('Select tag value', 'select-tag', selectable: true);
+  selectableTag.onSelect = () {
+    window.alert('Request to select select-tag');
+  };
+  tagContainer.append(selectableTag.renderElement);
+
+  tagContainer.append(ParagraphElement()
+    ..innerText = 'Editable, deletable tag, double click to edit'
+    ..className = "mono light");
+  var editDelTag = TagView('Edit, delete tag value', 'edit-del-tag', editable: true, removable: true);
+  editDelTag.onEdit = (value) {
+    window.alert('Request to edit with new value: $value');
+  };
+  editDelTag.onDelete = () {
+    window.alert('Request to delete edit-del-tag');
+  };
+  tagContainer.append(editDelTag.renderElement);
+
+  tagContainer.append(ParagraphElement()
+    ..innerText = 'Suggested tag'
+    ..className = "mono light");
+  var suggestedTag =
+      TagView('Suggested tag value', 'suggested-tag', suggested: true, acceptable: true, removable: true);
+  suggestedTag.onAccept = () {
+    window.alert('Request to accept suggestion: suggested-tag');
+  };
+  suggestedTag.onDelete = () {
+    window.alert('Request to delete: suggested-tag');
+  };
+  tagContainer.append(suggestedTag.renderElement);
+
+  tagContainer.append(ParagraphElement()
+    ..innerText = 'Styles'
+    ..className = "mono light");
+  var greenTag = TagView('green tag', 'green-tag', tagStyle: TagStyle.Green);
+  var yellowTag = TagView('yellow tag', 'yellow-tag', tagStyle: TagStyle.Yellow);
+  var redTag = TagView('red tag', 'red-tag', tagStyle: TagStyle.Red);
+  var importantTag = TagView('important tag', 'important-tag', tagStyle: TagStyle.Important);
+  var pendingTag = TagView('pending tag', 'pending-tag');
+  pendingTag.markPending(true);
+  var highlightTag = TagView('highlight tag', 'highlight-tag');
+  highlightTag.markHighlighted(true);
+  tagContainer
+    ..append(greenTag.renderElement)
+    ..append(yellowTag.renderElement)
+    ..append(redTag.renderElement)
+    ..append(importantTag.renderElement)
+    ..append(pendingTag.renderElement)
+    ..append(highlightTag.renderElement);
+
+  tagContainer.append(ParagraphElement()
+    ..innerText = 'Add edit on add'
+    ..className = "mono light");
+  var editAddContainer = DivElement();
+  var editAddButton = Button(ButtonType.add, onClick: (_){
+    var editOnAddTag =
+      TagView('', 'edit-on-add-tag', editable: true, removable: true);
+    editOnAddTag.onEdit = (value) {
+      window.alert('Added new tag with value: $value');
+    };
+    editOnAddTag.onDelete = () {
+      editOnAddTag.renderElement.remove();
+    };
+    editOnAddTag.onCancel = () {
+      editOnAddTag.renderElement.remove();
+    };
+
+    editAddContainer.append(editOnAddTag.renderElement);
+    editOnAddTag.makeEditable();
+  });
+  tagContainer
+    ..append(editAddButton.renderElement)
+    ..append(editAddContainer);
 }
 
 void printURLViewParams(UrlView urlView) {
