@@ -30,7 +30,6 @@
   flex-grow: 1;
   padding-left: var(--spacer-mid);
   padding-right: var(--spacer-mid);
-  text-align: center;
 }
 
 .nav__auth_header {

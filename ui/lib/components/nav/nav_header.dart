@@ -14,8 +14,8 @@ class NavHeaderView {
     navViewElement = DivElement()..classes.add('nav');
 
     _appLogos = DivElement()..classes.add('nav__app_logos');
-    _projectTitle = DivElement()..classes.add('nav__project_title');
-    _projectSubtitle = DivElement()..classes.add('nav__project_subtitle');
+    _projectTitle = DivElement();
+    _projectSubtitle = DivElement();
     _navContent = DivElement()..classes.add('nav__contents');
     _authHeader = DivElement()..classes.add('nav__auth_header');
 
@@ -30,8 +30,14 @@ class NavHeaderView {
     _appLogos.children.clear();
     logoPaths.forEach((path) => _appLogos.append(ImageElement(src: path)));
   }
-  void set projectTitle(String projectTitle) => _projectTitle.text = projectTitle;
-  void set projectSubtitle(String projectSubtitle) => _projectSubtitle.text = projectSubtitle;
+  void set projectTitle(String projectTitle) {
+    _projectTitle.text = projectTitle;
+    _projectTitle.classes.toggle('nav__project_title', true);
+  }
+  void set projectSubtitle(String projectSubtitle) {
+    _projectSubtitle.text = projectSubtitle;
+    _projectSubtitle.classes.toggle('nav__project_subtitle', true);
+  }
   void set navContent(DivElement content) {
     _navContent.children.clear();
     _navContent.append(content);
