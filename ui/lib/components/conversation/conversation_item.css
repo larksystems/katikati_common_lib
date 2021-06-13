@@ -61,6 +61,10 @@
   width: calc(100% - 32px);
 }
 
+.conversation-item__content.full-width {
+  width: 100%;
+}
+
 .conversation-item__id {
   color: gray;
   margin-bottom: 6px;

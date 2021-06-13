@@ -48,7 +48,15 @@ class ConversationItemView {
     _warnings = warnings ?? {};
     _checkEnabled = checkEnabled;
 
-    renderElement = DivElement()..className = "conversation-item";
+    renderElement = DivElement()
+      ..className = "conversation-item"
+      ..onClick.listen((event) {
+        if (_onSelectController.hasListener) {
+          _onSelectController.sink.add(_id);
+        } else {
+          logger.warning("No listener for ConversationItemView.onSelect");
+        }
+      });
     if (_selected) {
       renderElement.classes.add("conversation-item--selected");
     }
@@ -58,6 +66,9 @@ class ConversationItemView {
 
     _checkboxWrapper = DivElement()..className = "conversation-item__checkbox";
     _checkboxElement = CheckboxInputElement()
+      ..onClick.listen((e) {
+        e.stopPropagation();
+      })
       ..onInput.listen((_) {
         var checked = _checkboxElement.checked;
         if (checked) {
@@ -79,15 +90,7 @@ class ConversationItemView {
     }
     _checkboxWrapper.append(_checkboxElement);
 
-    var contentWrapper = DivElement()
-      ..className = "conversation-item__content"
-      ..onClick.listen((event) {
-        if (_onSelectController.hasListener) {
-          _onSelectController.sink.add(_id);
-        } else {
-          logger.warning("No listener for ConversationItemView.onSelect");
-        }
-      });
+    var contentWrapper = DivElement()..className = "conversation-item__content";
 
     var headerElement = DivElement()..className = "conversation-item__header";
     _warningWrapper = SpanElement()..className = "conversation-item__warnings";
@@ -113,6 +116,7 @@ class ConversationItemView {
 
     if (!_checkEnabled) {
       _checkboxWrapper.classes.toggle("hidden", true);
+      contentWrapper.classes.toggle("full-width", true);
     }
 
     this._onSelectController = StreamController();
