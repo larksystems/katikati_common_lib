@@ -61,7 +61,7 @@
   width: calc(100% - 32px);
 }
 
-.conversation-item__content.checkbox--hidden {
+.conversation-item__content.full-width {
   width: 100%;
 }
 
