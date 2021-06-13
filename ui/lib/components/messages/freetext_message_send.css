@@ -1,5 +1,7 @@
 .message-editor-with-send {
   display: flex;
+  padding: 12px 12px 0 12px;
+  border-top: 1px solid #ccc;
 }
 
 .message-editor-with-send__message {
@@ -9,7 +11,7 @@
 }
 
 .message-editor-with-send__send-button {
-  margin-left: 32px;
+  margin-left: 12px;
   align-self: center;
 }
 
