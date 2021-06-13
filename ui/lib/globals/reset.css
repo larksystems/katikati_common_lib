@@ -80,3 +80,8 @@ b, strong {
 code {
   font-family: monospace;
 }
+
+/* custom written */
+textarea {
+  font-family: sans-serif;
+}
