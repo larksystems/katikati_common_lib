@@ -113,6 +113,7 @@ class ConversationItemView {
 
     if (!_checkEnabled) {
       _checkboxWrapper.classes.toggle("hidden", true);
+      contentWrapper.classes.toggle('checkbox--hidden', true);
     }
 
     this._onSelectController = StreamController();
