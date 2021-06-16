@@ -36,7 +36,7 @@ class TagView {
 
   bool _selectable;
   bool _editable;
-  bool _removable;
+  bool _deletable;
   bool _acceptable;
   bool _suggested;
 
@@ -62,7 +62,7 @@ class TagView {
       String category,
       bool selectable = true,
       bool editable = false,
-      bool removable = false,
+      bool deletable = false,
       bool acceptable = false,
       bool suggested = false,
       TagStyle tagStyle = TagStyle.None,
@@ -70,7 +70,7 @@ class TagView {
     _category = category;
     _selectable = selectable;
     _editable = editable;
-    _removable = removable;
+    _deletable = deletable;
     _acceptable = acceptable;
     _suggested = suggested;
 
@@ -87,7 +87,7 @@ class TagView {
     _tagText.innerText = this._text;
 
     _acceptButton = Button(ButtonType.confirm, onClick: (_) => _acceptTag());
-    _editButton = Button(ButtonType.edit, onClick: (_) => makeEditable());
+    _editButton = Button(ButtonType.edit, onClick: (_) => beginEdit());
     _confirmButton = Button(ButtonType.confirm, onClick: (_) => _confirmEdit());
     _cancelButton = Button(ButtonType.cancel, onClick: (_) => _cancelEditing());
     _deleteButton = Button(ButtonType.remove, onClick: (_) => _deleteTag());
@@ -113,11 +113,11 @@ class TagView {
       _tagActions.append(_editButton.renderElement);
 
       if (doubleClickToEdit) {
-        _tagText.onDoubleClick.listen((_) => makeEditable());
+        _tagText.onDoubleClick.listen((_) => beginEdit());
       }
     }
 
-    if (_removable) {
+    if (_deletable) {
       _tagActions.append(_deleteButton.renderElement);
     }
 
@@ -125,7 +125,7 @@ class TagView {
     setTagStyle(tagStyle);
   }
 
-  void makeEditable() {
+  void beginEdit() {
     _tagText
       ..contentEditable = "true"
       ..onKeyDown.listen((event) {
@@ -142,10 +142,10 @@ class TagView {
 
     _tagActions.children.clear();
     _tagActions..append(_confirmButton.renderElement)..append(_cancelButton.renderElement);
-    focusEditText();
+    focus();
   }
 
-  void focusEditText() {
+  void focus() {
     _tagText.focus();
   }
 
@@ -183,7 +183,7 @@ class TagView {
     if (_acceptable) {
       _tagActions.append(_acceptButton.renderElement);
     }
-    if (_removable) {
+    if (_deletable) {
       _tagActions.append(_deleteButton.renderElement);
     }
   }

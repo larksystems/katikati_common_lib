@@ -327,7 +327,7 @@ void main() {
   tagContainer.append(ParagraphElement()
     ..innerText = 'Editable, deletable tag, double click to edit'
     ..className = "mono light");
-  var editDelTag = TagView('Edit, delete tag value', 'edit-del-tag', editable: true, removable: true);
+  var editDelTag = TagView('Edit, delete tag value', 'edit-del-tag', editable: true, deletable: true);
   editDelTag.onEdit = (value) {
     window.alert('Request to edit with new value: $value');
   };
@@ -340,7 +340,7 @@ void main() {
     ..innerText = 'Suggested tag'
     ..className = "mono light");
   var suggestedTag =
-      TagView('Suggested tag value', 'suggested-tag', suggested: true, acceptable: true, removable: true);
+      TagView('Suggested tag value', 'suggested-tag', suggested: true, acceptable: true, deletable: true);
   suggestedTag.onAccept = () {
     window.alert('Request to accept suggestion: suggested-tag');
   };
@@ -374,7 +374,7 @@ void main() {
   var editAddContainer = DivElement();
   var editAddButton = Button(ButtonType.add, onClick: (_){
     var editOnAddTag =
-      TagView('', 'edit-on-add-tag', editable: true, removable: true);
+      TagView('', 'edit-on-add-tag', editable: true, deletable: true);
     editOnAddTag.onEdit = (value) {
       window.alert('Added new tag with value: $value');
     };
@@ -386,7 +386,7 @@ void main() {
     };
 
     editAddContainer.append(editOnAddTag.renderElement);
-    editOnAddTag.makeEditable();
+    editOnAddTag.beginEdit();
   });
   tagContainer
     ..append(editAddButton.renderElement)
