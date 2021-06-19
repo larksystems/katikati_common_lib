@@ -2,18 +2,20 @@ import 'dart:html';
 
 typedef void OnEventCallback(Event e);
 
-enum ButtonType {
-  // Text buttons
-  text,
-  outlined,
-  contained,
+class ButtonType {
+  final String className;
+  final String iconClassName;
 
-  // Icon buttons
-  add,
-  remove,
-  confirm,
-  cancel,
-  edit,
+  const ButtonType(this.className, {this.iconClassName});
+
+  static const text = ButtonType("button--text");
+  static const outlined = ButtonType("button--outlined");
+  static const contained = ButtonType("button--contained");
+  static const add = ButtonType("button--icon", iconClassName: "fas fa-plus");
+  static const remove = ButtonType("button--icon", iconClassName: "far fa-trash-alt");
+  static const edit = ButtonType("button--icon", iconClassName: "fas fa-pen");
+  static const confirm = ButtonType("button--icon", iconClassName: "fas fa-check");
+  static const cancel = ButtonType("button--icon", iconClassName: "fas fa-times");
 }
 
 class ButtonAction {
@@ -29,51 +31,17 @@ class Button {
   Button(ButtonType buttonType, {String buttonText = '', String hoverText = '', OnEventCallback onClick}) {
     _element = new ButtonElement()
       ..classes.add('button')
-      ..title = hoverText;
+      ..classes.add(buttonType.className)
+      ..title = hoverText
+      ..text = buttonText;
+
+    if (buttonType.iconClassName != null) {
+      var icon = SpanElement()..className = buttonType.iconClassName;
+      _element.append(icon);
+    }
 
     onClick = onClick ?? (_) {};
     _element.onClick.listen(onClick);
-
-    switch (buttonType) {
-      case ButtonType.text:
-        _element.classes.add('button--text');
-        _element.text = buttonText;
-        break;
-      case ButtonType.outlined:
-        _element.classes.add('button--outlined');
-        _element.text = buttonText;
-        break;
-      case ButtonType.contained:
-        _element.classes.add('button--contained');
-        _element.text = buttonText;
-        break;
-
-      case ButtonType.add:
-        _element.classes.add('button-text');
-        var icon = SpanElement()..className = "fas fa-plus";
-        _element.append(icon);
-        break;
-      case ButtonType.remove:
-        _element.classes.add('button--text');
-        var icon = SpanElement()..className = "far fa-trash-alt";
-        _element.append(icon);
-        break;
-      case ButtonType.confirm:
-        _element.classes.add('button--text');
-        var icon = SpanElement()..className = "fas fa-check";
-        _element.append(icon);
-        break;
-      case ButtonType.edit:
-        _element.classes.add('button--text');
-        var icon = SpanElement()..className = "fas fa-pen";
-        _element.append(icon);
-        break;
-      case ButtonType.cancel:
-        _element.classes.add('button--text');
-        var icon = SpanElement()..className = "fas fa-times";
-        _element.append(icon);
-        break;
-    }
   }
 
   Element get renderElement => _element;
