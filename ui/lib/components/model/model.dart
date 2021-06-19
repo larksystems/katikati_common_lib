@@ -73,6 +73,10 @@ extension ConversationUtil on g.Conversation {
     return result != 0 ? result : c2.hashCode.compareTo(c1.hashCode);
   }
 
+  static int alphabeticalById(g.Conversation c1, g.Conversation c2) {
+    return c1.docId.compareTo(c2.docId);
+  }
+
   /// Remove the suggested messages for this Conversation.
   /// Callers should catch and handle IOException.
   Future<void> removeSuggestedMessages(g.DocPubSubUpdate pubSubClient) async {
