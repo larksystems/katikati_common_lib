@@ -480,7 +480,7 @@ class SuggestedReply {
       ..groupId = String_fromData(data['group_id'])
       ..groupDescription = String_fromData(data['group_description'])
       ..indexInGroup = int_fromData(data['index_in_group'])
-      ..additionalInfo = Map_fromData<String>(data['additionalInfo'], String_fromData) ?? {};
+      ..additionalInfo = Map_fromData<String>(data['additionalInfo'], String_fromData);
   }
 
   static SuggestedReply required(Map data, String fieldName, String className) {
