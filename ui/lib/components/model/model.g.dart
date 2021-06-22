@@ -462,6 +462,7 @@ class SuggestedReply {
   String groupId;
   String groupDescription;
   int indexInGroup;
+  Map<String, String> additionalInfo;
 
   String get suggestedReplyId => docId;
 
@@ -478,7 +479,8 @@ class SuggestedReply {
       ..category = String_fromData(data['category'])
       ..groupId = String_fromData(data['group_id'])
       ..groupDescription = String_fromData(data['group_description'])
-      ..indexInGroup = int_fromData(data['index_in_group']);
+      ..indexInGroup = int_fromData(data['index_in_group'])
+      ..additionalInfo = Map_fromData<String>(data['additionalInfo'], String_fromData);
   }
 
   static SuggestedReply required(Map data, String fieldName, String className) {
@@ -509,6 +511,7 @@ class SuggestedReply {
       if (groupId != null) 'group_id': groupId,
       if (groupDescription != null) 'group_description': groupDescription,
       if (indexInGroup != null) 'index_in_group': indexInGroup,
+      if (additionalInfo != null) 'additionalInfo': additionalInfo,
     };
   }
 

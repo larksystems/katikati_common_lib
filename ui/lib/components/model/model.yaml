@@ -66,6 +66,7 @@ SuggestedReply:
   group_id: 'string groupId'
   group_description: 'string groupDescription'
   index_in_group: 'int indexInGroup'
+  additionalInfo: 'map string'
 
 Tag:
   firebaseDocId: 'string tagId'
