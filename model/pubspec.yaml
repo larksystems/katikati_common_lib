@@ -1,0 +1,9 @@
+name: katikati_model_lib
+version: 0.0.1
+description: Shared Katikati model components
+environment:
+  sdk: 2.10.4
+
+dependencies:
+  firebase: ^7.2.0
+  uuid: ^2.0.0
