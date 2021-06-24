@@ -23,7 +23,7 @@ class TextEdit {
   Button _confirmButton;
   Button _cancelButton;
 
-  bool _stopPropagation = true;
+  bool _isEditing = false;
 
   void Function(String) onEdit = (_) {};
   void Function() onDelete = () {};
@@ -38,7 +38,22 @@ class TextEdit {
 
     _textSpan = SpanElement()
       ..classes.add('text-edit__text')
-      ..dataset['placeholder'] = "untitled";
+      ..dataset['placeholder'] = "untitled"
+      ..onClick.listen((e) {
+        if (!_isEditing) return;
+        e.stopPropagation();
+      })
+      ..onKeyDown.listen((event) {
+        if (!_isEditing) return;
+        if (event.keyCode == KeyCode.ENTER) {
+          event.preventDefault();
+          _confirmEdit();
+        }
+        if (event.keyCode == KeyCode.ESC) {
+          event.preventDefault();
+          _cancelEditing();
+        }
+      });
     _textSpan.innerText = this._text;
 
     _editButton = Button(ButtonType.edit, onClick: (e) {
@@ -67,29 +82,9 @@ class TextEdit {
     renderElement..append(_textSpan)..append(_textActions);
   }
 
-  void _preventDefault(e) {
-    e.stopPropagation();
-  }
-
   void beginEdit() {
-    _stopPropagation = true;
-    _textSpan
-      ..contentEditable = "true"
-      ..onClick.listen((e) {
-        if (_stopPropagation) {
-          e.stopPropagation();
-        }
-      })
-      ..onKeyDown.listen((event) {
-        if (event.keyCode == KeyCode.ENTER) {
-          event.preventDefault();
-          _confirmEdit();
-        }
-        if (event.keyCode == KeyCode.ESC) {
-          event.preventDefault();
-          _cancelEditing();
-        }
-      });
+    _isEditing = true;
+    _textSpan.contentEditable = "true";
     renderElement.classes.toggle("text-edit--editing", true);
 
     _textActions.children.clear();
@@ -121,9 +116,10 @@ class TextEdit {
   }
 
   void _resetActions() {
-    _stopPropagation = false;
-    renderElement.classes.toggle("text-edit--editing", false);
+    _isEditing = false;
     _textSpan..contentEditable = "false";
+    renderElement.classes.toggle("text-edit--editing", false);
+
     _textActions.children.clear();
     _textActions.append(_editButton.renderElement);
     if (_removable) {
