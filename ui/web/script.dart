@@ -155,22 +155,23 @@ void main() {
   });
 
   // editable text
-  var textEditable = TextEditableView("text")
-    ..onChange.listen((value) {
+  var textEditable = TextEdit("text", removable: true)
+    ..onEdit = (value) {
       window.alert("New text: ${value}");
-    })
-    ..onDelete.listen((_) {
+    }
+    ..onDelete = () {
       window.alert("Requesting delete...");
-    });
+    };
   editableTextContainer.append(textEditable.renderElement);
-  var textEditableDefault = TextEditableView("", editableOnAdd: true)
-    ..onChange.listen((value) {
+  var textEditableDefault = TextEdit("", removable: true)
+    ..onEdit = (value) {
       window.alert("New text: ${value}");
-    })
-    ..onDelete.listen((_) {
+    }
+    ..onDelete = () {
       window.alert("Requesting delete...");
-    });
+    };
   editableTextContainer.append(textEditableDefault.renderElement);
+  textEditableDefault.beginEdit();
 
   // Button links
   var links = [Link("Dashboard", "#dashboard"), Link("Converse", "#converse")];
