@@ -38,3 +38,101 @@ abstract class DocBatchUpdate {
   /// The update will fail if applied to a document that does not exist.
   void update(String documentPath, {Map<String, dynamic> data});
 }
+
+StreamSubscription<List<DocSnapshot>> listenForUpdates<T>(
+  Logger log,
+  DocStorage docStorage,
+  void Function(List<T> added, List<T> modified, List<T> removed) listener,
+  String collectionRoot,
+  T Function(DocSnapshot doc) createModel, {
+  OnErrorListener onError,
+}) {
+  log.verbose('Loading from $collectionRoot');
+  log.verbose('Query root: $collectionRoot');
+  return docStorage.onChange(collectionRoot).listen((List<DocSnapshot> snapshots) {
+    var added = <T>[];
+    var modified = <T>[];
+    var removed = <T>[];
+    log.verbose("Starting processing ${snapshots.length} changes.");
+    for (var snapshot in snapshots) {
+      log.verbose('Processing ${snapshot.id}');
+      switch (snapshot.changeType) {
+        case DocChangeType.added:
+          added.add(createModel(snapshot));
+          break;
+        case DocChangeType.modified:
+          modified.add(createModel(snapshot));
+          break;
+        case DocChangeType.removed:
+          removed.add(createModel(snapshot));
+          break;
+      }
+    }
+    listener(added, modified, removed);
+  }, onError: onError);
+}
+
+typedef OnErrorListener = void Function(Object error, StackTrace stackTrace);
+
+// ======================================================================
+// Data conversion methods
+
+bool bool_fromData(Logger log, String key, dynamic data) {
+  if (data == null) return null;
+  var value = data[key];
+  if (value == null) return null;
+  if (value is bool) return value;
+  if (value is String) {
+    var boolStr = value.toLowerCase();
+    if (boolStr == 'true') return true;
+    if (boolStr == 'false') return false;
+  }
+  log.warning('Expected bool at "$key", but found "$value" in $data');
+  return null;
+}
+
+DateTime DateTime_fromData(Logger log, String key, dynamic data) {
+  if (data == null) return null;
+  var value = data[key];
+  if (value == null) return null;
+  var datetime = DateTime.tryParse(value);
+  if (datetime != null) return datetime;
+  log.warning('Expected DateTime at "$key", but found "$value" in $data');
+  return null;
+}
+
+int int_fromData(Logger log, String key, dynamic data) {
+  if (data == null) return null;
+  var value = data[key];
+  if (value == null) return null;
+  if (value is int) return value;
+  if (value is String) {
+    var result = int.tryParse(value);
+    if (result is int) return result;
+  }
+  log.warning('Expected int at "$key", but found "$value" in $data');
+  return null;
+}
+
+double double_fromData(Logger log, String key, dynamic data) {
+  if (data == null) return null;
+  var value = data[key];
+  if (value == null) return null;
+  if (value is double) return value;
+  if (value is String) {
+    var result = double.tryParse(value);
+    if (result is double) return result;
+  }
+  log.warning('Expected double at "$key", but found "$value" in $data');
+  return null;
+}
+
+Map<String, T> Map_fromData<T>(Logger log, String key, dynamic data, [T Function(dynamic) valueFunct]) {
+  if (data == null) return null;
+  var value = data[key];
+  if (value == null) return null;
+  if (valueFunct == null && value is Map<String, T>) return value;
+  if (value is Map) return (value as Map).map<String, T>((key, value) => MapEntry(key.toString(), valueFunct(value)));
+  log.warning('Expected Map at "$key", but found $value in $data');
+  return null;
+}
