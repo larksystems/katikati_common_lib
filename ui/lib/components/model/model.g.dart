@@ -5,7 +5,9 @@ import 'dart:async';
 
 import 'package:katikati_ui_lib/components/logger.dart';
 import 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show DocSnapshot, DocChangeType, DocBatchUpdate, DocStorage;
+
 export 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show DocSnapshot, DocChangeType, DocBatchUpdate, DocStorage;
+export 'package:katikati_ui_lib/components/datatypes/suggested_reply.dart';
 
 Logger log = Logger('model.g.dart');
 
@@ -451,80 +453,6 @@ class SuggestedMessage {
   @override
   String toString() => 'SuggestedMessage: ${toData().toString()}';
 }
-
-class SuggestedReply {
-  static const collectionName = 'suggestedReplies';
-
-  String docId;
-  String text;
-  String translation;
-  String shortcut;
-  int seqNumber;
-  String category;
-  String groupId;
-  String groupDescription;
-  int indexInGroup;
-  Map<String, String> additionalInfo;
-
-  String get suggestedReplyId => docId;
-
-  static SuggestedReply fromSnapshot(DocSnapshot doc, [SuggestedReply modelObj]) =>
-      fromData(doc.data, modelObj)..docId = doc.id;
-
-  static SuggestedReply fromData(data, [SuggestedReply modelObj]) {
-    if (data == null) return null;
-    return (modelObj ?? SuggestedReply())
-      ..text = String_fromData(data['text'])
-      ..translation = String_fromData(data['translation'])
-      ..shortcut = String_fromData(data['shortcut'])
-      ..seqNumber = int_fromData(data['seq_no'])
-      ..category = String_fromData(data['category'])
-      ..groupId = String_fromData(data['group_id'])
-      ..groupDescription = String_fromData(data['group_description'])
-      ..indexInGroup = int_fromData(data['index_in_group'])
-      ..additionalInfo = Map_fromData<String>(data['additionalInfo'], String_fromData);
-  }
-
-  static SuggestedReply required(Map data, String fieldName, String className) {
-    var value = fromData(data[fieldName]);
-    if (value == null && !data.containsKey(fieldName))
-      throw ValueException("$className.$fieldName is missing");
-    return value;
-  }
-
-  static SuggestedReply notNull(Map data, String fieldName, String className) {
-    var value = required(data, fieldName, className);
-    if (value == null)
-      throw ValueException("$className.$fieldName must not be null");
-    return value;
-  }
-
-  static StreamSubscription listen(DocStorage docStorage, SuggestedReplyCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onErrorListener}) =>
-      listenForUpdates<SuggestedReply>(docStorage, listener, collectionRoot, SuggestedReply.fromSnapshot, onErrorListener);
-
-  Map<String, dynamic> toData() {
-    return {
-      if (text != null) 'text': text,
-      if (translation != null) 'translation': translation,
-      if (shortcut != null) 'shortcut': shortcut,
-      if (seqNumber != null) 'seq_no': seqNumber,
-      if (category != null) 'category': category,
-      if (groupId != null) 'group_id': groupId,
-      if (groupDescription != null) 'group_description': groupDescription,
-      if (indexInGroup != null) 'index_in_group': indexInGroup,
-      if (additionalInfo != null) 'additionalInfo': additionalInfo,
-    };
-  }
-
-  @override
-  String toString() => 'SuggestedReply [$docId]: ${toData().toString()}';
-}
-typedef SuggestedReplyCollectionListener = void Function(
-  List<SuggestedReply> added,
-  List<SuggestedReply> modified,
-  List<SuggestedReply> removed,
-);
 
 class Tag {
   String docId;
