@@ -149,8 +149,8 @@ extension NotFoundTagType on g.TagType {
   static const NotFound = g.TagType('not found');
 
   static const values = <g.TagType>[
-    g.TagType.Normal,
-    g.TagType.Important,
+    g.TagType.normal,
+    g.TagType.important,
     NotFoundTagType.NotFound,
   ];
 }
