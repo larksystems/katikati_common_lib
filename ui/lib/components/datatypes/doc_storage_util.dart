@@ -127,12 +127,32 @@ double double_fromData(Logger log, String key, dynamic data) {
   return null;
 }
 
-Map<String, T> Map_fromData<T>(Logger log, String key, dynamic data, [T Function(dynamic) valueFunct]) {
+List<T> List_fromData<T>(Logger log, String key, dynamic data) {
   if (data == null) return null;
   var value = data[key];
   if (value == null) return null;
-  if (valueFunct == null && value is Map<String, T>) return value;
-  if (value is Map) return (value as Map).map<String, T>((key, value) => MapEntry(key.toString(), valueFunct(value)));
+  if (value is List<T>) return value;
+  if (value is Iterable) return List<T>.from(value);
+  log.warning('Expected List or Set at "$key", but found $value in $data');
+  return null;
+}
+
+Map<String, T> Map_fromData<T>(Logger log, String key, dynamic data) {
+  if (data == null) return null;
+  var value = data[key];
+  if (value == null) return null;
+  if (value is Map<String, T>) return value;
+  if (value is Map) return Map<String, T>.from(value);
   log.warning('Expected Map at "$key", but found $value in $data');
+  return null;
+}
+
+Set<T> Set_fromData<T>(Logger log, String key, dynamic data) {
+  if (data == null) return null;
+  var value = data[key];
+  if (value == null) return null;
+  if (value is Set<T>) return value;
+  if (value is Iterable) return Set<T>.from(value);
+  log.warning('Expected Set or List at "$key", but found $value in $data');
   return null;
 }
