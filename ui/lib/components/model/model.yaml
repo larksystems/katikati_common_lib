@@ -55,26 +55,6 @@ SuggestedMessage:
   text: 'string'
   translation: 'string'
 
-Tag:
-  firebaseDocId: 'string tagId'
-  text: 'string'
-  type: 'TagType, default TagType.Normal'
-  shortcut: 'string'
-  filterable: 'bool'
-  group: 'string, default ""' # deprecated, replaced by groups
-  groups: 'array string, default []'
-  visible: 'bool, default true'
-  isUnifier: 'bool, default false'
-  unifierTagId: 'string'
-  unifiesTagIds: 'array string'
-
-TagType:
-  dartType: 'enum'
-  defaultValue: 'Normal'
-  dartValues:
-    normal: 'Normal'
-    important: 'Important'
-
 SystemMessage:
   firebaseCollectionName: 'systemMessages'
   firebaseDocId: 'string msgId'
