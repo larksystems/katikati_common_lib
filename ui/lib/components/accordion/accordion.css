@@ -1,0 +1,36 @@
+.accordion {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.accordion-item {
+  border-bottom: 1px solid #ccc;
+  position: relative;
+}
+
+.accordion-item:first-child {
+  border-top: 1px solid #cccc;
+}
+
+.accordion-item__header {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.accordion-item__header > div {
+  display: inline-block;
+}
+
+.accordion-indicator {
+  display: inline-block;
+  font-size: 18px;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.accordion-body__wrapper {
+  padding: 6px 18px;
+  margin-left: 18px;
+  margin-bottom: 12px;
+  position: relative;
+}
