@@ -12,12 +12,12 @@
   border-top: 1px solid #cccc;
 }
 
-.accordion-header__wrapper {
+.accordion-item__header {
   padding: 6px 12px;
   cursor: pointer;
 }
 
-.accordion-header__wrapper > div{
+.accordion-item__header > div {
   display: inline-block;
 }
 

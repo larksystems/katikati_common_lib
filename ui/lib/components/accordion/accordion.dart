@@ -3,7 +3,7 @@ import 'dart:html';
 /*
 <div class="accordion">
   <div class="accordion-item">
-    <div class="accordion-header__wrapper">
+    <div class="accordion-item__header">
       <span class="accordion-indicator">
         <icon />
       </span>
@@ -32,7 +32,7 @@ class AccordionItem {
   DivElement _bodyWrapper;
 
   AccordionItem(this.id, this.headerElement, this.bodyElement, this._isOpen, {String dataId}) {
-    _headerWrapper = DivElement()..className = 'accordion-header__wrapper';
+    _headerWrapper = DivElement()..className = 'accordion-item__header';
     _indicatorIcon = SpanElement()..className = _isOpen ? COLLAPSE_CSS_CLASSSNAME : EXPAND_CSS_CLASSNAME;
     var indicatorElement = SpanElement()
       ..className = 'accordion-indicator'
@@ -100,7 +100,7 @@ class Accordion {
   }
 
   AccordionItem queryItem(String id) {
-    return _accordionItems.firstWhere((item) => item.id == id);
+    return _accordionItems.firstWhere((item) => item.id == id, orElse: () => null);
   }
 
   void appendItem(AccordionItem item) {
