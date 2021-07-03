@@ -21,7 +21,7 @@ const EXPAND_CSS_CLASSNAME = "fas fa-caret-right";
 const COLLAPSE_CSS_CLASSSNAME = "fas fa-caret-down";
 
 class AccordionItem {
-  String id;
+  String _id;
   bool _isOpen = false;
   SpanElement _indicatorIcon;
   DivElement headerElement;
@@ -31,7 +31,14 @@ class AccordionItem {
   DivElement _headerWrapper;
   DivElement _bodyWrapper;
 
-  AccordionItem(this.id, this.headerElement, this.bodyElement, this._isOpen, {String dataId}) {
+  bool get isOpen => _isOpen;
+
+  void set id (String newID) {
+    _id = newID;
+    renderElement.dataset['id'] = 'accordion-item-${_id ?? ""}';
+  }
+
+  AccordionItem(this._id, this.headerElement, this.bodyElement, this._isOpen, {String dataId}) {
     _headerWrapper = DivElement()..className = 'accordion-item__header';
     _indicatorIcon = SpanElement()..className = _isOpen ? COLLAPSE_CSS_CLASSSNAME : EXPAND_CSS_CLASSNAME;
     var indicatorElement = SpanElement()
@@ -57,7 +64,7 @@ class AccordionItem {
     }
 
     renderElement = DivElement()
-      ..dataset['id'] = 'accordion-item-${id ?? ""}'
+      ..dataset['id'] = 'accordion-item-${_id ?? ""}'
       ..className = 'accordion-item'
       ..append(_headerWrapper)
       ..append(_bodyWrapper);
@@ -85,6 +92,8 @@ class Accordion {
   bool _onlyOneOpen;
   DivElement renderElement;
 
+  List<AccordionItem> get items => _accordionItems;
+
   Accordion(this._accordionItems, {collapseAtStart: true, expandAtStart: false, onlyOneOpen: false}) {
     _onlyOneOpen = onlyOneOpen;
     renderElement = DivElement()..className = "accordion";
@@ -100,7 +109,7 @@ class Accordion {
   }
 
   AccordionItem queryItem(String id) {
-    return _accordionItems.firstWhere((item) => item.id == id, orElse: () => null);
+    return _accordionItems.firstWhere((item) => item._id == id, orElse: () => null);
   }
 
   void appendItem(AccordionItem item) {
@@ -109,8 +118,16 @@ class Accordion {
   }
 
   void removeItem(String id) {
-    _accordionItems.removeWhere((item) => item.id == id);
+    _accordionItems.removeWhere((item) => item._id == id);
     renderElement.children.removeWhere((item) => item.dataset['id'] == 'accordion-item-${id}');
+  }
+
+  void updateItem(String id, AccordionItem item) {
+    _accordionItems.forEach((accordionItem) {
+      if (item._id == id) {
+        accordionItem = item;
+      }
+    });
   }
 
   void collapseAllItems() {
@@ -127,7 +144,7 @@ class Accordion {
 
   void collapseItem(String id) {
     for (var item in _accordionItems) {
-      if (item.id == id) {
+      if (item._id == id) {
         item.collapse();
       }
     }
@@ -135,7 +152,7 @@ class Accordion {
 
   void expandItem(String id) {
     for (var item in _accordionItems) {
-      if (item.id == id) {
+      if (item._id == id) {
         item.expand();
       } else if (_onlyOneOpen) {
         item.collapse();
