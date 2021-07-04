@@ -8,6 +8,7 @@ import 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show
 
 export 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show DocSnapshot, DocChangeType, DocBatchUpdate, DocStorage;
 export 'package:katikati_ui_lib/components/datatypes/suggested_reply.dart';
+export 'package:katikati_ui_lib/components/datatypes/tag.dart';
 
 Logger log = Logger('model.g.dart');
 
@@ -452,130 +453,6 @@ class SuggestedMessage {
 
   @override
   String toString() => 'SuggestedMessage: ${toData().toString()}';
-}
-
-class Tag {
-  String docId;
-  String text;
-  TagType type;
-  String shortcut;
-  bool filterable;
-  String group;
-  List<String> groups;
-  bool visible;
-  bool isUnifier;
-  String unifierTagId;
-  List<String> unifiesTagIds;
-
-  String get tagId => docId;
-
-  static Tag fromSnapshot(DocSnapshot doc, [Tag modelObj]) =>
-      fromData(doc.data, modelObj)..docId = doc.id;
-
-  static Tag fromData(data, [Tag modelObj]) {
-    if (data == null) return null;
-    return (modelObj ?? Tag())
-      ..text = String_fromData(data['text'])
-      ..type = TagType.fromData(data['type']) ?? TagType.Normal
-      ..shortcut = String_fromData(data['shortcut'])
-      ..filterable = bool_fromData(data['filterable'])
-      ..group = String_fromData(data['group']) ?? ""
-      ..groups = List_fromData<String>(data['groups'], String_fromData) ?? []
-      ..visible = bool_fromData(data['visible']) ?? true
-      ..isUnifier = bool_fromData(data['isUnifier']) ?? false
-      ..unifierTagId = String_fromData(data['unifierTagId'])
-      ..unifiesTagIds = List_fromData<String>(data['unifiesTagIds'], String_fromData);
-  }
-
-  static Tag required(Map data, String fieldName, String className) {
-    var value = fromData(data[fieldName]);
-    if (value == null && !data.containsKey(fieldName))
-      throw ValueException("$className.$fieldName is missing");
-    return value;
-  }
-
-  static Tag notNull(Map data, String fieldName, String className) {
-    var value = required(data, fieldName, className);
-    if (value == null)
-      throw ValueException("$className.$fieldName must not be null");
-    return value;
-  }
-
-  static void listen(DocStorage docStorage, TagCollectionListener listener, String collectionRoot, {OnErrorListener onErrorListener}) =>
-      listenForUpdates<Tag>(docStorage, listener, collectionRoot, Tag.fromSnapshot, onErrorListener);
-
-  Map<String, dynamic> toData() {
-    return {
-      if (text != null) 'text': text,
-      if (type != null) 'type': type.toData(),
-      if (shortcut != null) 'shortcut': shortcut,
-      if (filterable != null) 'filterable': filterable,
-      if (group != null) 'group': group,
-      if (groups != null) 'groups': groups,
-      if (visible != null) 'visible': visible,
-      if (isUnifier != null) 'isUnifier': isUnifier,
-      if (unifierTagId != null) 'unifierTagId': unifierTagId,
-      if (unifiesTagIds != null) 'unifiesTagIds': unifiesTagIds,
-    };
-  }
-
-  @override
-  String toString() => 'Tag [$docId]: ${toData().toString()}';
-}
-typedef TagCollectionListener = void Function(
-  List<Tag> added,
-  List<Tag> modified,
-  List<Tag> removed,
-);
-
-class TagType {
-  static const Normal = TagType('normal');
-  static const Important = TagType('important');
-
-  static const values = <TagType>[
-    Normal,
-    Important,
-  ];
-
-  static TagType fromString(String text, [TagType defaultValue = TagType.Normal]) {
-    if (text != null) {
-      const prefix = 'TagType.';
-      var valueName = text.startsWith(prefix) ? text.substring(prefix.length) : text;
-      for (var value in values) {
-        if (value.name == valueName) return value;
-      }
-    }
-    log.warning('unknown TagType $text');
-    return defaultValue;
-  }
-
-  static TagType fromData(data, [TagType defaultValue = TagType.Normal]) {
-    if (data is String || data == null) return fromString(data, defaultValue);
-    log.warning('invalid TagType: ${data.runtimeType}: $data');
-    return defaultValue;
-  }
-
-  static TagType required(Map data, String fieldName, String className) {
-    var value = fromData(data[fieldName]);
-    if (value == null && !data.containsKey(fieldName))
-      throw ValueException("$className.$fieldName is missing");
-    return value;
-  }
-
-  static TagType notNull(Map data, String fieldName, String className) {
-    var value = required(data, fieldName, className);
-    if (value == null)
-      throw ValueException("$className.$fieldName must not be null");
-    return value;
-  }
-
-  final String name;
-  const TagType(this.name);
-
-  String toData() => 'TagType.$name';
-
-  @override
-  String toString() => toData();
 }
 
 class SystemMessage {
