@@ -4,12 +4,6 @@
 import 'dart:async';
 
 import 'package:katikati_ui_lib/components/logger.dart';
-import 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show DocSnapshot, DocChangeType, DocBatchUpdate, DocStorage;
-
-export 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show DocSnapshot, DocChangeType, DocBatchUpdate, DocStorage;
-export 'package:katikati_ui_lib/components/datatypes/suggested_reply.dart';
-export 'package:katikati_ui_lib/components/datatypes/tag.dart';
-export 'package:katikati_ui_lib/components/datatypes/user.dart';
 
 Logger log = Logger('model.g.dart');
 
@@ -456,6 +450,204 @@ class SuggestedMessage {
   String toString() => 'SuggestedMessage: ${toData().toString()}';
 }
 
+class SuggestedReply {
+  static const collectionName = 'suggestedReplies';
+
+  String docId;
+  String text;
+  String translation;
+  String shortcut;
+  int seqNumber;
+  String category;
+  String groupId;
+  String groupDescription;
+  int indexInGroup;
+  Map<String, String> additionalInfo;
+
+  String get suggestedReplyId => docId;
+
+  static SuggestedReply fromSnapshot(DocSnapshot doc, [SuggestedReply modelObj]) =>
+      fromData(doc.data, modelObj)..docId = doc.id;
+
+  static SuggestedReply fromData(data, [SuggestedReply modelObj]) {
+    if (data == null) return null;
+    return (modelObj ?? SuggestedReply())
+      ..text = String_fromData(data['text'])
+      ..translation = String_fromData(data['translation'])
+      ..shortcut = String_fromData(data['shortcut'])
+      ..seqNumber = int_fromData(data['seq_no'])
+      ..category = String_fromData(data['category'])
+      ..groupId = String_fromData(data['group_id'])
+      ..groupDescription = String_fromData(data['group_description'])
+      ..indexInGroup = int_fromData(data['index_in_group'])
+      ..additionalInfo = Map_fromData<String>(data['additionalInfo'], String_fromData);
+  }
+
+  static SuggestedReply required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static SuggestedReply notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  static StreamSubscription listen(DocStorage docStorage, SuggestedReplyCollectionListener listener,
+          {String collectionRoot = '/$collectionName', OnErrorListener onErrorListener}) =>
+      listenForUpdates<SuggestedReply>(docStorage, listener, collectionRoot, SuggestedReply.fromSnapshot, onErrorListener);
+
+  Map<String, dynamic> toData() {
+    return {
+      if (text != null) 'text': text,
+      if (translation != null) 'translation': translation,
+      if (shortcut != null) 'shortcut': shortcut,
+      if (seqNumber != null) 'seq_no': seqNumber,
+      if (category != null) 'category': category,
+      if (groupId != null) 'group_id': groupId,
+      if (groupDescription != null) 'group_description': groupDescription,
+      if (indexInGroup != null) 'index_in_group': indexInGroup,
+      if (additionalInfo != null) 'additionalInfo': additionalInfo,
+    };
+  }
+
+  @override
+  String toString() => 'SuggestedReply [$docId]: ${toData().toString()}';
+}
+typedef SuggestedReplyCollectionListener = void Function(
+  List<SuggestedReply> added,
+  List<SuggestedReply> modified,
+  List<SuggestedReply> removed,
+);
+
+class Tag {
+  String docId;
+  String text;
+  TagType type;
+  String shortcut;
+  bool filterable;
+  String group;
+  List<String> groups;
+  bool visible;
+  bool isUnifier;
+  String unifierTagId;
+  List<String> unifiesTagIds;
+
+  String get tagId => docId;
+
+  static Tag fromSnapshot(DocSnapshot doc, [Tag modelObj]) =>
+      fromData(doc.data, modelObj)..docId = doc.id;
+
+  static Tag fromData(data, [Tag modelObj]) {
+    if (data == null) return null;
+    return (modelObj ?? Tag())
+      ..text = String_fromData(data['text'])
+      ..type = TagType.fromData(data['type']) ?? TagType.Normal
+      ..shortcut = String_fromData(data['shortcut'])
+      ..filterable = bool_fromData(data['filterable'])
+      ..group = String_fromData(data['group']) ?? ""
+      ..groups = List_fromData<String>(data['groups'], String_fromData) ?? []
+      ..visible = bool_fromData(data['visible']) ?? true
+      ..isUnifier = bool_fromData(data['isUnifier']) ?? false
+      ..unifierTagId = String_fromData(data['unifierTagId'])
+      ..unifiesTagIds = List_fromData<String>(data['unifiesTagIds'], String_fromData);
+  }
+
+  static Tag required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static Tag notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  static void listen(DocStorage docStorage, TagCollectionListener listener, String collectionRoot, {OnErrorListener onErrorListener}) =>
+      listenForUpdates<Tag>(docStorage, listener, collectionRoot, Tag.fromSnapshot, onErrorListener);
+
+  Map<String, dynamic> toData() {
+    return {
+      if (text != null) 'text': text,
+      if (type != null) 'type': type.toData(),
+      if (shortcut != null) 'shortcut': shortcut,
+      if (filterable != null) 'filterable': filterable,
+      if (group != null) 'group': group,
+      if (groups != null) 'groups': groups,
+      if (visible != null) 'visible': visible,
+      if (isUnifier != null) 'isUnifier': isUnifier,
+      if (unifierTagId != null) 'unifierTagId': unifierTagId,
+      if (unifiesTagIds != null) 'unifiesTagIds': unifiesTagIds,
+    };
+  }
+
+  @override
+  String toString() => 'Tag [$docId]: ${toData().toString()}';
+}
+typedef TagCollectionListener = void Function(
+  List<Tag> added,
+  List<Tag> modified,
+  List<Tag> removed,
+);
+
+class TagType {
+  static const Normal = TagType('normal');
+  static const Important = TagType('important');
+
+  static const values = <TagType>[
+    Normal,
+    Important,
+  ];
+
+  static TagType fromString(String text, [TagType defaultValue = TagType.Normal]) {
+    if (text != null) {
+      const prefix = 'TagType.';
+      var valueName = text.startsWith(prefix) ? text.substring(prefix.length) : text;
+      for (var value in values) {
+        if (value.name == valueName) return value;
+      }
+    }
+    log.warning('unknown TagType $text');
+    return defaultValue;
+  }
+
+  static TagType fromData(data, [TagType defaultValue = TagType.Normal]) {
+    if (data is String || data == null) return fromString(data, defaultValue);
+    log.warning('invalid TagType: ${data.runtimeType}: $data');
+    return defaultValue;
+  }
+
+  static TagType required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static TagType notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  final String name;
+  const TagType(this.name);
+
+  String toData() => 'TagType.$name';
+
+  @override
+  String toString() => toData();
+}
+
 class SystemMessage {
   static const collectionName = 'systemMessages';
 
@@ -507,6 +699,145 @@ typedef SystemMessageCollectionListener = void Function(
   List<SystemMessage> added,
   List<SystemMessage> modified,
   List<SystemMessage> removed,
+);
+
+class UserConfiguration {
+  static const collectionName = 'users';
+
+  String docId;
+  bool tagsKeyboardShortcutsEnabled;
+  bool repliesKeyboardShortcutsEnabled;
+  bool sendMessagesEnabled;
+  bool sendCustomMessagesEnabled;
+  bool sendMultiMessageEnabled;
+  bool tagMessagesEnabled;
+  bool tagConversationsEnabled;
+  bool editTranslationsEnabled;
+  bool editNotesEnabled;
+  bool conversationalTurnsEnabled;
+  bool tagsPanelVisibility;
+  bool repliesPanelVisibility;
+  bool suggestedRepliesGroupsEnabled;
+
+  String get userId => docId;
+
+  static UserConfiguration fromSnapshot(DocSnapshot doc, [UserConfiguration modelObj]) =>
+      fromData(doc.data, modelObj)..docId = doc.id;
+
+  static UserConfiguration fromData(data, [UserConfiguration modelObj]) {
+    if (data == null) return null;
+    return (modelObj ?? UserConfiguration())
+      ..tagsKeyboardShortcutsEnabled = bool_fromData(data['tags_keyboard_shortcuts_enabled'])
+      ..repliesKeyboardShortcutsEnabled = bool_fromData(data['replies_keyboard_shortcuts_enabled'])
+      ..sendMessagesEnabled = bool_fromData(data['send_messages_enabled'])
+      ..sendCustomMessagesEnabled = bool_fromData(data['send_custom_messages_enabled'])
+      ..sendMultiMessageEnabled = bool_fromData(data['send_multi_message_enabled'])
+      ..tagMessagesEnabled = bool_fromData(data['tag_messages_enabled'])
+      ..tagConversationsEnabled = bool_fromData(data['tag_conversations_enabled'])
+      ..editTranslationsEnabled = bool_fromData(data['edit_translations_enabled'])
+      ..editNotesEnabled = bool_fromData(data['edit_notes_enabled'])
+      ..conversationalTurnsEnabled = bool_fromData(data['conversational_turns_enabled'])
+      ..tagsPanelVisibility = bool_fromData(data['tags_panel_visibility'])
+      ..repliesPanelVisibility = bool_fromData(data['replies_panel_visibility'])
+      ..suggestedRepliesGroupsEnabled = bool_fromData(data['suggested_replies_groups_enabled']);
+  }
+
+  static UserConfiguration required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static UserConfiguration notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  static StreamSubscription listen(DocStorage docStorage, UserConfigurationCollectionListener listener,
+          {String collectionRoot = '/$collectionName', OnErrorListener onErrorListener}) =>
+      listenForUpdates<UserConfiguration>(docStorage, listener, collectionRoot, UserConfiguration.fromSnapshot, onErrorListener);
+
+  Map<String, dynamic> toData() {
+    return {
+      if (tagsKeyboardShortcutsEnabled != null) 'tags_keyboard_shortcuts_enabled': tagsKeyboardShortcutsEnabled,
+      if (repliesKeyboardShortcutsEnabled != null) 'replies_keyboard_shortcuts_enabled': repliesKeyboardShortcutsEnabled,
+      if (sendMessagesEnabled != null) 'send_messages_enabled': sendMessagesEnabled,
+      if (sendCustomMessagesEnabled != null) 'send_custom_messages_enabled': sendCustomMessagesEnabled,
+      if (sendMultiMessageEnabled != null) 'send_multi_message_enabled': sendMultiMessageEnabled,
+      if (tagMessagesEnabled != null) 'tag_messages_enabled': tagMessagesEnabled,
+      if (tagConversationsEnabled != null) 'tag_conversations_enabled': tagConversationsEnabled,
+      if (editTranslationsEnabled != null) 'edit_translations_enabled': editTranslationsEnabled,
+      if (editNotesEnabled != null) 'edit_notes_enabled': editNotesEnabled,
+      if (conversationalTurnsEnabled != null) 'conversational_turns_enabled': conversationalTurnsEnabled,
+      if (tagsPanelVisibility != null) 'tags_panel_visibility': tagsPanelVisibility,
+      if (repliesPanelVisibility != null) 'replies_panel_visibility': repliesPanelVisibility,
+      if (suggestedRepliesGroupsEnabled != null) 'suggested_replies_groups_enabled': suggestedRepliesGroupsEnabled,
+    };
+  }
+
+  @override
+  String toString() => 'UserConfiguration [$docId]: ${toData().toString()}';
+}
+typedef UserConfigurationCollectionListener = void Function(
+  List<UserConfiguration> added,
+  List<UserConfiguration> modified,
+  List<UserConfiguration> removed,
+);
+
+class UserPresence {
+  static const collectionName = 'user_presence';
+
+  String docId;
+  String timestamp;
+  String conversationId;
+
+  String get userId => docId;
+
+  static UserPresence fromSnapshot(DocSnapshot doc, [UserPresence modelObj]) =>
+      fromData(doc.data, modelObj)..docId = doc.id;
+
+  static UserPresence fromData(data, [UserPresence modelObj]) {
+    if (data == null) return null;
+    return (modelObj ?? UserPresence())
+      ..timestamp = String_fromData(data['timestamp'])
+      ..conversationId = String_fromData(data['conversation_id']);
+  }
+
+  static UserPresence required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static UserPresence notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  static StreamSubscription listen(DocStorage docStorage, UserPresenceCollectionListener listener,
+          {String collectionRoot = '/$collectionName', OnErrorListener onErrorListener}) =>
+      listenForUpdates<UserPresence>(docStorage, listener, collectionRoot, UserPresence.fromSnapshot, onErrorListener);
+
+  Map<String, dynamic> toData() {
+    return {
+      if (timestamp != null) 'timestamp': timestamp,
+      if (conversationId != null) 'conversation_id': conversationId,
+    };
+  }
+
+  @override
+  String toString() => 'UserPresence [$docId]: ${toData().toString()}';
+}
+typedef UserPresenceCollectionListener = void Function(
+  List<UserPresence> added,
+  List<UserPresence> modified,
+  List<UserPresence> removed,
 );
 
 typedef OnErrorListener = void Function(
@@ -756,6 +1087,47 @@ StreamSubscription<List<DocSnapshot>> listenForUpdates<T>(
     }
     listener(added, modified, removed);
   }, onError: onErrorListener);
+}
+
+/// Document storage interface.
+/// See [FirebaseDocStorage] for a firebase specific version of this.
+abstract class DocStorage {
+  /// Return a stream of document snapshots
+  Stream<List<DocSnapshot>> onChange(String collectionRoot);
+
+  /// Return a object for batching document updates.
+  /// Call [DocBatchUpdate.commit] after the changes have been made.
+  DocBatchUpdate batch();
+}
+
+enum DocChangeType {
+  added,
+  modified,
+  removed
+}
+
+/// A snapshot of a document's id and data at a particular moment in time.
+class DocSnapshot {
+  final String id;
+  final Map<String, dynamic> data;
+  final DocChangeType changeType;
+
+  DocSnapshot(this.id, this.data, this.changeType);
+}
+
+/// A batch update, used to perform multiple writes as a single atomic unit.
+/// None of the writes are committed (or visible locally) until
+/// [DocBatchUpdate.commit()] is called.
+abstract class DocBatchUpdate {
+  /// Commits all of the writes in this write batch as a single atomic unit.
+  /// Returns non-null [Future] that resolves once all of the writes in the
+  /// batch have been successfully written to the backend as an atomic unit.
+  /// Note that it won't resolve while you're offline.
+  Future<Null> commit();
+
+  /// Updates fields in the document referred to by this [DocumentReference].
+  /// The update will fail if applied to a document that does not exist.
+  void update(String documentPath, {Map<String, dynamic> data});
 }
 
 // ======================================================================
