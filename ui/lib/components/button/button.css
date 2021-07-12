@@ -28,6 +28,9 @@
   padding: 3px;
 }
 
+.button--icon:hover .far.fa-trash-alt {
+  color: #FA8072;
+}
 
 .button--outline {
   padding: 8px;
