@@ -51,7 +51,7 @@ class FreetextMessageSendView {
       ..innerText = "${_text.length} / $_maxLength"
       ..className = "message-editor-with-send__text-length"
       ..hidden = !_alwaysShowTextLength;
-    
+
     var clearIcon = Element.html('<i class="fas fa-times"></i>');
     _clearButton = ButtonElement()
       ..append(clearIcon)

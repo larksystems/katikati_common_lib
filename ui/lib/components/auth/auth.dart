@@ -25,7 +25,7 @@ class AuthMainView {
   AuthMainView(this.brand, this.title, this.description, this.domainsInfo, this.onSigninClick) {
     authElement = new DivElement()..classes.add('auth-main');
 
-    var logosContainer = new DivElement()..classes.add('auth-main__logos');
+    var logosContainer = new DivElement();
     authElement.append(logosContainer);
 
     var avfLogo = brand.logo(className: 'partner-logo');
