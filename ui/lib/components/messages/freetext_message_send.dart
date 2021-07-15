@@ -32,6 +32,9 @@ class FreetextMessageSendView {
     _textArea = TextAreaElement()
       ..defaultValue = _text
       ..placeholder = "Type your message..."
+      ..onKeyDown.listen((e) {
+        e.stopPropagation();
+      })
       ..onInput.listen((e) {
         _text = _textArea.value;
         _enableOrDisableButtons();
@@ -51,7 +54,7 @@ class FreetextMessageSendView {
       ..innerText = "${_text.length} / $_maxLength"
       ..className = "message-editor-with-send__text-length"
       ..hidden = !_alwaysShowTextLength;
-    
+
     var clearIcon = Element.html('<i class="fas fa-times"></i>');
     _clearButton = ButtonElement()
       ..append(clearIcon)
