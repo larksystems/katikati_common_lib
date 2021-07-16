@@ -398,7 +398,7 @@ void main() {
   Turnline turnline1 = new Turnline('Demog survey');
   turnline1.addStep(new TurnlineStep('Consent step', true, true));
   turnline1.addStep(new TurnlineStep('Age question', true, true));
-  turnline1.addStep(new TurnlineStep('Gener question', true, true));
+  turnline1.addStep(new TurnlineStep('Gender question', true, true));
   turnlinesContainer.append(turnline1.renderElement);
 
   Turnline turnline2 = new Turnline('Cohort discussion');
