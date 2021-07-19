@@ -55,19 +55,6 @@ SuggestedMessage:
   text: 'string'
   translation: 'string'
 
-SuggestedReply:
-  firebaseCollectionName: 'suggestedReplies'
-  firebaseDocId: 'string suggestedReplyId'
-  text: 'string'
-  translation: string
-  shortcut: 'string'
-  seq_no: 'int seqNumber'
-  category: 'string'
-  group_id: 'string groupId'
-  group_description: 'string groupDescription'
-  index_in_group: 'int indexInGroup'
-  additionalInfo: 'map string'
-
 Tag:
   firebaseDocId: 'string tagId'
   text: 'string'
