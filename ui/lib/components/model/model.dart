@@ -1,9 +1,11 @@
 import 'package:uuid/uuid.dart' as uuid;
 
 import 'model.g.dart' as g;
-export 'model.g.dart' hide
-  MessageDirection_fromStringOverride,
-  TagType_fromStringOverride;
+
+export 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
+export 'package:katikati_ui_lib/components/datatypes/suggested_reply.dart';
+
+export 'model.g.dart';
 
 extension UserConfigurationUtil on g.UserConfiguration {
   g.UserConfiguration applyDefaults(g.UserConfiguration defaults) =>
