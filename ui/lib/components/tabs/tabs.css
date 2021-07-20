@@ -10,32 +10,25 @@
 
 .tab-chooser {
   padding: 6px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--light-gray);
+  background-color: var(--extra-light-gray);
   border-right: none;
   display: inline-block;
   cursor: pointer;
 }
 
-.tab-chooser:nth-child(odd) {
-  background-color: #ddd;
-}
-
-.tab-chooser:nth-child(even) {
-  background-color: #eee;
-}
-
 .tab-chooser:last-child {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--light-gray);
 }
 
 .tab-chooser--selected {
-  border-bottom: 1px solid white;
-  background-color: white !important;
+  border-bottom: 1px solid var(--white);
+  background-color: var(--white) !important;
   cursor: default;
 }
 
 .tab-content {
-  border: 1px solid #ccc;
+  border: 1px solid var(--light-gray);
   margin-top: -1px;
   flex: 1;
   overflow-y: scroll;

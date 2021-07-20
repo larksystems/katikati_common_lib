@@ -4,9 +4,9 @@
   margin-top: var(--spacer);
   margin-left: auto;
   margin-right: auto;
-  border: var(--spacer) solid var(--grey-light--extra);
+  border: var(--spacer) solid var(--extra-light-gray);
   border-radius: 50%;
-  border-top: var(--spacer) solid var(--highlight);
+  border-top: var(--spacer) solid var(--blue);
   width: var(--spacer-6);
   height: var(--spacer-6);
   -webkit-animation: spin 2s linear infinite;
@@ -34,7 +34,7 @@
 }
 
 .bar-wave-spinner__part {
-  background-color: var(--grey-dark);
+  background-color: var(--extra-dark-gray);
   height: 100%;
   width: 15%;
   animation: stretchdelay-up 2s infinite ease-in-out;

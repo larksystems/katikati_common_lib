@@ -1,7 +1,6 @@
 @charset "utf-8";
 
+@import "globals/variables.css";
 @import "globals/reset.css";
 @import "globals/utilities.css";
-@import "globals/colours.css";
 @import "globals/font.css";
-@import "globals/link.css";
