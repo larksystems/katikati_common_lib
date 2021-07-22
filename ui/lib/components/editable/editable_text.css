@@ -9,7 +9,7 @@
 }
 
 .text-edit.text-edit--editing .text-edit__text {
-  border: 1px solid black;
+  border: 1px solid var(--black);
   cursor: auto;
   min-width: 64px;
   font-style: normal;
@@ -19,7 +19,7 @@
 
 .text-edit__text:empty::before {
   content:attr(data-placeholder);
-  color:grey;
+  color:var(--dark-gray);
 }
 
 .text-edit.text-edit--editing .text-edit__actions {
@@ -53,6 +53,6 @@
 
 @keyframes unsavedAnimation {
   to {
-    box-shadow: inset 0 0 3px 3px #FA8072;
+    box-shadow: inset 0 0 3px 3px var(--light-red);
   }
 }

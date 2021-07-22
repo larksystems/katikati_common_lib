@@ -7,8 +7,8 @@
   padding: 12px;
   box-shadow: var(--shadow-standard);
   text-align: center;
-  background: #ffffff;
-  border: 3px solid #ffffff;
+  background: var(--white);
+  border: 3px solid var(--white);
 
   /* Copy the style from buttons */
   -webkit-appearance: none;
@@ -20,23 +20,23 @@
 }
 
 #snackbar[type="info"] {
-  border-left: 3px solid var(--info);
-  border-right: 3px solid var(--info);
+  border-left: 3px solid var(--blue);
+  border-right: 3px solid var(--blue);
 }
 
 #snackbar[type="success"] {
-  border-left: 3px solid var(--success);
-  border-right: 3px solid var(--success);
+  border-left: 3px solid var(--green);
+  border-right: 3px solid var(--green);
 }
 
 #snackbar[type="warning"] {
-  border-left: 3px solid var(--warning);
-  border-right: 3px solid var(--warning);
+  border-left: 3px solid var(--orange);
+  border-right: 3px solid var(--orange);
 }
 
 #snackbar[type="error"] {
-  border-left: 3px solid var(--error);
-  border-right: 3px solid var(--error);
+  border-left: 3px solid var(--red);
+  border-right: 3px solid var(--red);
 }
 
 #snackbar.hidden {
@@ -45,7 +45,7 @@
 }
 
 #snackbar .contents {
-  color: var(--text-snackbar);
+  color: var(--coal);
   font-weight: 400;
   visibility: visible;
 }

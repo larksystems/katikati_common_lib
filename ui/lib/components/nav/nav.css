@@ -3,8 +3,8 @@
   flex-direction: row;
   align-items: center;
   padding: var(--spacer-small);
-  background-color: white;
-  border-bottom: 1px solid var(--divider);
+  background-color: var(--white);
+  border-bottom: 1px solid var(--light-gray);
   width: 100%;
 }
 
@@ -23,7 +23,7 @@
 
 .nav__project_subtitle {
   padding-right: var(--spacer-small);
-  color: var(--grey-dark);
+  color: var(--extra-dark-gray);
 }
 
 .nav__contents {

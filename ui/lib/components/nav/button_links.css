@@ -1,12 +1,12 @@
 .button-link {
   font-size: 0.8em;
-  background-color: white;
+  background-color: var(--white);
   padding: 6px 9px;
   border-radius: 3px;
   text-decoration: underline;
   margin-right: 9px;
-  color: black;
-  border: 1px solid black;
+  color: var(--black);
+  border: 1px solid var(--black);
   cursor: pointer;
 }
 
@@ -17,12 +17,12 @@
 }
 
 .button-link:hover {
-  background-color: #eee;
+  background-color: var(--extra-light-gray);
 }
 
 .button-link--selected {
-  background-color: black;
-  color: white;
+  background-color: var(--black);
+  color: var(--white);
   text-decoration: none;
   pointer-events: none;
   cursor: none;

@@ -14,11 +14,11 @@
 .scroll-indicator-container .shadow.shadow-top {
   position: sticky;
   top: 0;
-  box-shadow: 0 0 12px 1px black;
+  box-shadow: 0 0 12px 1px var(--black);
 }
 
 .scroll-indicator-container .shadow.shadow-bottom {
   position: sticky;
   top: 100%;
-  box-shadow: 0 0px 20px 2px black;
+  box-shadow: 0 0px 20px 2px var(--black);
 }

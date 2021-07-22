@@ -1,0 +1,56 @@
+:root {
+  /* base colors */
+  --white: #fff;
+  --black: #000;
+
+  --black-10: rgba(0, 0, 0, 0.1);
+  --black-30: rgba(0, 0, 0, 0.3);
+
+  --extra-light-gray: #F2F2F2;
+  --light-gray: #ddd;
+  --gray: #BDBDBD;
+  --dark-gray: #828282;
+  --extra-dark-gray: #4f4f4f;
+  --coal: #333;
+
+  --light-red: #FA8072;
+  --red: #EB5757;
+  --dark-red: darkred;
+
+  --light-blue: #81D4FA;
+  --blue: #03A9F4;
+  --dark-blue: #0277BD;
+
+  --light-green: #A5D6A7;
+  --green: #4CB09B;
+  --dark-green: #3F917F;
+
+  --light-orange: #FFE082;
+  --orange: #fcb131;
+  --dark-orange: #ff824c;
+
+  --light-purple: #B39DDB;
+  --purple: #4950ba;
+  --dark-purple: #30389c;
+
+  --light-teal: #80CBC4;
+  --teal: #00A4BD;
+  --dark-teal: #00695C;
+
+  /* legacy */
+  --shadow-standard: var(--black-30) 0px 0px 3px 0px;
+
+  --banner-height: 50px;
+
+  --spacer: 16px;
+  --spacer-mid: 12px;
+  --spacer-small: 6px;
+  --spacer-6: calc(6 * var(--spacer));
+
+  --login-img-height: 60px;
+  --header-logo-height: 30px;
+
+  --h1-font-size: 24px;
+
+  --container-width: 600px;
+}
