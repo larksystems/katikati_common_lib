@@ -11,6 +11,7 @@ Conversation:
   lastInboundTurnTags: 'set string lastInboundTurnTagIds, default {}'
   messages: 'array Message'
   suggested_messages: 'array SuggestedMessage suggestedMessages, default []'
+  turnlines: 'publishable array string, default []'
   notes: 'publishable string'
   unread: 'publishable bool, default true'
 
@@ -74,6 +75,21 @@ TagType:
   dartValues:
     normal: 'Normal'
     important: 'Important'
+
+Turnline:
+  firebaseDocId: 'none'
+  title: 'string'
+  steps: 'array TurnlineStep, default []'
+
+TurnlineStep:
+  firebaseDocId: 'none'
+  title: 'string'
+  description: 'string'
+  tag_ids_set: 'set string tagIds, default {}'
+  standard_messages_ids_set: 'set string standardMessagesIds, default {}'
+  done: 'bool'
+  verified: 'bool'
+  additionalInfo: 'map string'
 
 SystemMessage:
   firebaseCollectionName: 'systemMessages'

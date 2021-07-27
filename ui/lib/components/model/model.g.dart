@@ -66,6 +66,7 @@ class Conversation {
   Set<String> lastInboundTurnTagIds;
   List<Message> messages;
   List<SuggestedMessage> suggestedMessages;
+  List<String> turnlines;
   String notes;
   bool unread;
 
@@ -81,6 +82,7 @@ class Conversation {
       ..lastInboundTurnTagIds = Set_fromData<String>(data['lastInboundTurnTags'], String_fromData) ?? {}
       ..messages = List_fromData<Message>(data['messages'], Message.fromData)
       ..suggestedMessages = List_fromData<SuggestedMessage>(data['suggested_messages'], SuggestedMessage.fromData) ?? []
+      ..turnlines = List_fromData<String>(data['turnlines'], String_fromData) ?? []
       ..notes = String_fromData(data['notes'])
       ..unread = bool_fromData(data['unread']) ?? true;
   }
@@ -111,6 +113,7 @@ class Conversation {
       if (lastInboundTurnTagIds != null) 'lastInboundTurnTags': lastInboundTurnTagIds.toList(),
       if (messages != null) 'messages': messages.map((elem) => elem?.toData()).toList(),
       if (suggestedMessages != null) 'suggested_messages': suggestedMessages.map((elem) => elem?.toData()).toList(),
+      if (turnlines != null) 'turnlines': turnlines,
       if (notes != null) 'notes': notes,
       if (unread != null) 'unread': unread,
     };
@@ -162,6 +165,52 @@ class Conversation {
       'conversation_id': docId,
       'tags': toBeRemoved.toList(),
       "was_suggested": wasSuggested,
+    });
+  }
+
+  /// Add [newTurnlines] to turnlines in this Conversation.
+  /// Callers should catch and handle IOException.
+  Future<void> addTurnlines(DocPubSubUpdate pubSubClient, Iterable<String> newTurnlines) {
+    var toBeAdded = Set<String>();
+    for (var elem in newTurnlines) {
+      if (!turnlines.contains(elem)) {
+        toBeAdded.add(elem);
+      }
+    }
+    if (toBeAdded.isEmpty) return Future.value(null);
+    turnlines.addAll(toBeAdded);
+    return pubSubClient.publishAddOpinion('nook_conversations/add_turnlines', {
+      'conversation_id': docId,
+      'turnlines': toBeAdded,
+    });
+  }
+
+  /// Set turnlines in this Conversation.
+  /// Callers should catch and handle IOException.
+  Future<void> setTurnlines(DocPubSubUpdate pubSubClient, List<String> newTurnlines) {
+    if (turnlines == newTurnlines) {
+      return Future.value(null);
+    }
+    turnlines = newTurnlines;
+    return pubSubClient.publishAddOpinion('nook_conversations/set_turnlines', {
+      'conversation_id': docId,
+      'turnlines': turnlines,
+    });
+  }
+
+  /// Remove [oldTurnlines] from turnlines in this Conversation.
+  /// Callers should catch and handle IOException.
+  Future<void> removeTurnlines(DocPubSubUpdate pubSubClient, Iterable<String> oldTurnlines) {
+    var toBeRemoved = Set<String>();
+    for (var elem in oldTurnlines) {
+      if (turnlines.remove(elem)) {
+        toBeRemoved.add(elem);
+      }
+    }
+    if (toBeRemoved.isEmpty) return Future.value(null);
+    return pubSubClient.publishAddOpinion('nook_conversations/remove_turnlines', {
+      'conversation_id': docId,
+      'turnlines': toBeRemoved,
     });
   }
 
@@ -573,6 +622,93 @@ class TagType {
 
   @override
   String toString() => toData();
+}
+
+class Turnline {
+  String title;
+  List<TurnlineStep> steps;
+
+  static Turnline fromData(data, [Turnline modelObj]) {
+    if (data == null) return null;
+    return (modelObj ?? Turnline())
+      ..title = String_fromData(data['title'])
+      ..steps = List_fromData<TurnlineStep>(data['steps'], TurnlineStep.fromData) ?? [];
+  }
+
+  static Turnline required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static Turnline notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  Map<String, dynamic> toData() {
+    return {
+      if (title != null) 'title': title,
+      if (steps != null) 'steps': steps.map((elem) => elem?.toData()).toList(),
+    };
+  }
+
+  @override
+  String toString() => 'Turnline: ${toData().toString()}';
+}
+
+class TurnlineStep {
+  String title;
+  String description;
+  Set<String> tagIds;
+  Set<String> standardMessagesIds;
+  bool done;
+  bool verified;
+  Map<String, String> additionalInfo;
+
+  static TurnlineStep fromData(data, [TurnlineStep modelObj]) {
+    if (data == null) return null;
+    return (modelObj ?? TurnlineStep())
+      ..title = String_fromData(data['title'])
+      ..description = String_fromData(data['description'])
+      ..tagIds = Set_fromData<String>(data['tag_ids_set'], String_fromData) ?? {}
+      ..standardMessagesIds = Set_fromData<String>(data['standard_messages_ids_set'], String_fromData) ?? {}
+      ..done = bool_fromData(data['done'])
+      ..verified = bool_fromData(data['verified'])
+      ..additionalInfo = Map_fromData<String>(data['additionalInfo'], String_fromData);
+  }
+
+  static TurnlineStep required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static TurnlineStep notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  Map<String, dynamic> toData() {
+    return {
+      if (title != null) 'title': title,
+      if (description != null) 'description': description,
+      if (tagIds != null) 'tag_ids_set': tagIds.toList(),
+      if (standardMessagesIds != null) 'standard_messages_ids_set': standardMessagesIds.toList(),
+      if (done != null) 'done': done,
+      if (verified != null) 'verified': verified,
+      if (additionalInfo != null) 'additionalInfo': additionalInfo,
+    };
+  }
+
+  @override
+  String toString() => 'TurnlineStep: ${toData().toString()}';
 }
 
 class SystemMessage {
