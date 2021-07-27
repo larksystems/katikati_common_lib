@@ -66,7 +66,7 @@ class Conversation {
   Set<String> lastInboundTurnTagIds;
   List<Message> messages;
   List<SuggestedMessage> suggestedMessages;
-  List<String> turnlines;
+  List<Turnline> turnlines;
   String notes;
   bool unread;
 
@@ -82,7 +82,7 @@ class Conversation {
       ..lastInboundTurnTagIds = Set_fromData<String>(data['lastInboundTurnTags'], String_fromData) ?? {}
       ..messages = List_fromData<Message>(data['messages'], Message.fromData)
       ..suggestedMessages = List_fromData<SuggestedMessage>(data['suggested_messages'], SuggestedMessage.fromData) ?? []
-      ..turnlines = List_fromData<String>(data['turnlines'], String_fromData) ?? []
+      ..turnlines = List_fromData<Turnline>(data['turnlines'], Turnline.fromData) ?? []
       ..notes = String_fromData(data['notes'])
       ..unread = bool_fromData(data['unread']) ?? true;
   }
@@ -113,7 +113,7 @@ class Conversation {
       if (lastInboundTurnTagIds != null) 'lastInboundTurnTags': lastInboundTurnTagIds.toList(),
       if (messages != null) 'messages': messages.map((elem) => elem?.toData()).toList(),
       if (suggestedMessages != null) 'suggested_messages': suggestedMessages.map((elem) => elem?.toData()).toList(),
-      if (turnlines != null) 'turnlines': turnlines,
+      if (turnlines != null) 'turnlines': turnlines.map((elem) => elem?.toData()).toList(),
       if (notes != null) 'notes': notes,
       if (unread != null) 'unread': unread,
     };
@@ -165,52 +165,6 @@ class Conversation {
       'conversation_id': docId,
       'tags': toBeRemoved.toList(),
       "was_suggested": wasSuggested,
-    });
-  }
-
-  /// Add [newTurnlines] to turnlines in this Conversation.
-  /// Callers should catch and handle IOException.
-  Future<void> addTurnlines(DocPubSubUpdate pubSubClient, Iterable<String> newTurnlines) {
-    var toBeAdded = Set<String>();
-    for (var elem in newTurnlines) {
-      if (!turnlines.contains(elem)) {
-        toBeAdded.add(elem);
-      }
-    }
-    if (toBeAdded.isEmpty) return Future.value(null);
-    turnlines.addAll(toBeAdded);
-    return pubSubClient.publishAddOpinion('nook_conversations/add_turnlines', {
-      'conversation_id': docId,
-      'turnlines': toBeAdded,
-    });
-  }
-
-  /// Set turnlines in this Conversation.
-  /// Callers should catch and handle IOException.
-  Future<void> setTurnlines(DocPubSubUpdate pubSubClient, List<String> newTurnlines) {
-    if (turnlines == newTurnlines) {
-      return Future.value(null);
-    }
-    turnlines = newTurnlines;
-    return pubSubClient.publishAddOpinion('nook_conversations/set_turnlines', {
-      'conversation_id': docId,
-      'turnlines': turnlines,
-    });
-  }
-
-  /// Remove [oldTurnlines] from turnlines in this Conversation.
-  /// Callers should catch and handle IOException.
-  Future<void> removeTurnlines(DocPubSubUpdate pubSubClient, Iterable<String> oldTurnlines) {
-    var toBeRemoved = Set<String>();
-    for (var elem in oldTurnlines) {
-      if (turnlines.remove(elem)) {
-        toBeRemoved.add(elem);
-      }
-    }
-    if (toBeRemoved.isEmpty) return Future.value(null);
-    return pubSubClient.publishAddOpinion('nook_conversations/remove_turnlines', {
-      'conversation_id': docId,
-      'turnlines': toBeRemoved,
     });
   }
 
@@ -674,8 +628,8 @@ class TurnlineStep {
     return (modelObj ?? TurnlineStep())
       ..title = String_fromData(data['title'])
       ..description = String_fromData(data['description'])
-      ..tagIds = Set_fromData<String>(data['tag_ids_set'], String_fromData) ?? {}
-      ..standardMessagesIds = Set_fromData<String>(data['standard_messages_ids_set'], String_fromData) ?? {}
+      ..tagIds = Set_fromData<String>(data['tagIds'], String_fromData) ?? {}
+      ..standardMessagesIds = Set_fromData<String>(data['standardMessagesIds'], String_fromData) ?? {}
       ..done = bool_fromData(data['done'])
       ..verified = bool_fromData(data['verified'])
       ..additionalInfo = Map_fromData<String>(data['additionalInfo'], String_fromData);
@@ -699,8 +653,8 @@ class TurnlineStep {
     return {
       if (title != null) 'title': title,
       if (description != null) 'description': description,
-      if (tagIds != null) 'tag_ids_set': tagIds.toList(),
-      if (standardMessagesIds != null) 'standard_messages_ids_set': standardMessagesIds.toList(),
+      if (tagIds != null) 'tagIds': tagIds.toList(),
+      if (standardMessagesIds != null) 'standardMessagesIds': standardMessagesIds.toList(),
       if (done != null) 'done': done,
       if (verified != null) 'verified': verified,
       if (additionalInfo != null) 'additionalInfo': additionalInfo,
