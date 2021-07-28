@@ -19,6 +19,7 @@ class Tag {
   TagType type;
   String shortcut;
   bool filterable;
+  @deprecated
   String group;
   List<String> groups;
   bool visible;
