@@ -1,9 +1,11 @@
 import 'package:uuid/uuid.dart' as uuid;
 
 import 'model.g.dart' as g;
+import 'package:katikati_ui_lib/components/datatypes/user.dart' as g;
 
 export 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
 export 'package:katikati_ui_lib/components/datatypes/suggested_reply.dart';
+export 'package:katikati_ui_lib/components/datatypes/user.dart';
 
 export 'model.g.dart';
 

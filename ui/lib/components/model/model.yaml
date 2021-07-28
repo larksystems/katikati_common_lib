@@ -96,26 +96,3 @@ SystemMessage:
   firebaseDocId: 'string msgId'
   text: string
   expired: 'bool, default false'
-
-UserConfiguration:
-  firebaseCollectionName: 'users'
-  firebaseDocId: 'string userId'
-  tags_keyboard_shortcuts_enabled: 'bool tagsKeyboardShortcutsEnabled'
-  replies_keyboard_shortcuts_enabled: 'bool repliesKeyboardShortcutsEnabled'
-  send_messages_enabled: 'bool sendMessagesEnabled'
-  send_custom_messages_enabled: 'bool sendCustomMessagesEnabled'
-  send_multi_message_enabled: 'bool sendMultiMessageEnabled'
-  tag_messages_enabled: 'bool tagMessagesEnabled'
-  tag_conversations_enabled: 'bool tagConversationsEnabled'
-  edit_translations_enabled: 'bool editTranslationsEnabled'
-  edit_notes_enabled: 'bool editNotesEnabled'
-  conversational_turns_enabled: 'bool conversationalTurnsEnabled'
-  tags_panel_visibility: 'bool tagsPanelVisibility'
-  replies_panel_visibility: 'bool repliesPanelVisibility'
-  suggested_replies_groups_enabled: 'bool suggestedRepliesGroupsEnabled'
-
-UserPresence:
-  firebaseCollectionName: 'user_presence'
-  firebaseDocId: 'string userId'
-  timestamp: 'string'
-  conversation_id: 'string conversationId'
