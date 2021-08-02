@@ -17,16 +17,24 @@
   cursor: pointer;
 }
 
-.accordion-item__header > div {
-  display: inline-block;
-}
-
-.accordion-indicator {
+.accordion-item__indicator {
   display: inline-block;
   font-size: 18px;
   width: 12px;
-  margin-right: 12px;
+  margin-right: 6px;
   cursor: pointer;
+}
+
+.accordion-item__title {
+  display: inline-block;
+  width: calc(100% - 30px);
+  line-height: 16px;
+}
+
+.accordion-item__title > div {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .accordion-body__wrapper {
