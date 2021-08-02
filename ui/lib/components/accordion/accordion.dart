@@ -4,10 +4,11 @@ import 'dart:html';
 <div class="accordion">
   <div class="accordion-item">
     <div class="accordion-item__header">
-      <span class="accordion-indicator">
+      <span class="accordion-item__indicator">
         <icon />
       </span>
-      <header />
+      <span class="accordion-item__title">
+      </span>
     </div>
     <div class="accordion-body__wrapper">
       <body />
@@ -45,15 +46,14 @@ class AccordionItem {
     _headerWrapper = DivElement()..className = 'accordion-item__header';
     _indicatorIcon = SpanElement()..className = _isOpen ? COLLAPSE_CSS_CLASSSNAME : EXPAND_CSS_CLASSNAME;
     var indicatorElement = SpanElement()
-      ..className = 'accordion-indicator'
-      ..append(_indicatorIcon)
-      ..onClick.listen((e) {
-        e.stopPropagation();
-        toggle();
-      });
+      ..className = 'accordion-item__indicator'
+      ..append(_indicatorIcon);
+    var titleElement = SpanElement()
+      ..className = 'accordion-item__title'
+      ..append(headerElement);
     _headerWrapper
       ..append(indicatorElement)
-      ..append(headerElement)
+      ..append(titleElement)
       ..onClick.listen((e) {
         e.stopPropagation();
         toggle();

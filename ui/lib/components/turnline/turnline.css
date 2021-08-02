@@ -37,16 +37,15 @@
 }
 
 .step__contents {
-  padding: 8px 6px;
   display: grid;
-  grid-template-columns: 18px 25px auto;
+  grid-template-columns: 26px 20px auto;
   border: 1px solid #bbb;
   border-radius: 5px;
 }
 
 .step__check {
   margin: 0 auto;
-  padding: 6px 0;
+  padding: 7px 4px 4px 6px;
 }
 
 .step__node {
@@ -80,6 +79,10 @@
 
 .step__info .accordion-item {
   border: none;
+}
+
+.step__info .accordion-item__header {
+  padding: 6px;
 }
 
 .step__messages,
