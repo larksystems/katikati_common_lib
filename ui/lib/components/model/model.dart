@@ -1,10 +1,12 @@
 import 'package:uuid/uuid.dart' as uuid;
 
 import 'model.g.dart' as g;
+import 'package:katikati_ui_lib/components/datatypes/tag.dart' as g;
 import 'package:katikati_ui_lib/components/datatypes/user.dart' as g;
 
 export 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
 export 'package:katikati_ui_lib/components/datatypes/suggested_reply.dart';
+export 'package:katikati_ui_lib/components/datatypes/tag.dart';
 export 'package:katikati_ui_lib/components/datatypes/user.dart';
 
 export 'model.g.dart';
@@ -153,8 +155,8 @@ extension NotFoundTagType on g.TagType {
   static const NotFound = g.TagType('not found');
 
   static const values = <g.TagType>[
-    g.TagType.Normal,
-    g.TagType.Important,
+    g.TagType.normal,
+    g.TagType.important,
     NotFoundTagType.NotFound,
   ];
 }
