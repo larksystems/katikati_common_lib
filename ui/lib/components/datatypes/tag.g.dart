@@ -20,7 +20,7 @@ class Tag {
   String shortcut;
   bool filterable;
   @deprecated
-  String group;
+  String group = '';
   List<String> groups;
   bool visible;
   bool isUnifier;
@@ -38,7 +38,7 @@ class Tag {
       ..type = TagType.fromData(_log, 'type', data)
       ..shortcut = data['shortcut']?.toString()
       ..filterable = bool_fromData(_log, 'filterable', data)
-      ..group = data['group']?.toString()
+      ..group = data['group']?.toString() ?? ''
       ..groups = List_fromData<String>(_log, 'groups', data)
       ..visible = bool_fromData(_log, 'visible', data)
       ..isUnifier = bool_fromData(_log, 'isUnifier', data)
