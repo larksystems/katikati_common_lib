@@ -151,16 +151,6 @@ extension MessageUtil on g.Message {
   }
 }
 
-extension NotFoundTagType on g.TagType {
-  static const NotFound = g.TagType('not found');
-
-  static const values = <g.TagType>[
-    g.TagType.normal,
-    g.TagType.important,
-    NotFoundTagType.NotFound,
-  ];
-}
-
 class User {
   String userName;
   String userEmail;
