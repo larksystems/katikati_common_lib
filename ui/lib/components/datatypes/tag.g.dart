@@ -46,8 +46,8 @@ class Tag {
       ..unifiesTagIds = List_fromData<String>(_log, 'unifiesTagIds', data);
   }
 
-  static StreamSubscription listen(DocStorage docStorage, TagCollectionListener listener,
-          {String collectionRoot, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
+  static StreamSubscription listen(DocStorage docStorage, TagCollectionListener listener, String collectionRoot,
+          {OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
       listenForUpdates<Tag>(_log, docStorage, listener, collectionRoot, Tag.fromSnapshot, onError: onError ?? onErrorListener);
 
   Map<String, dynamic> toData() {
