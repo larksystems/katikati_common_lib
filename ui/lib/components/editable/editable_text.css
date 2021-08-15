@@ -9,7 +9,7 @@
 }
 
 .text-edit.text-edit--editing .text-edit__text {
-  border: 1px solid var(--black);
+  border: 1px solid var(--selection-color);
   cursor: auto;
   min-width: 64px;
   font-style: normal;

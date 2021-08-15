@@ -3,39 +3,55 @@
   --white: #fff;
   --black: #000;
 
+  --lightest-gray: #FBFBFB;
+  --lighter-gray: #F2F2F2;
+  --light-gray: #DDDDDD;
+  --gray: #BDBDBD;
+  --dark-gray: #828282;
+  --darker-gray: #4F4F4F;
+  --darkest-gray: #333333;
+
+  --purple: #9B51E0;
+  --purple-blue: #4950ba;
+
+  --teal: #00A4BD;
+  --teal-green: #499398;
+
+  --green: #6FCF97;
+  --orange: #FCB131;
+  --red: #EB5757;
+  --light-red: #FA8072;
+
+  --primary-text-color: var(--black);
+  --secondary-text-color: var(--dark-gray);
+
+  --primary-accent-color: var(--purple);
+  --primary-variant-accent-color: var(--purple-blue);
+  --text-on-primary-accent-color: var(--white);
+
+  --secondary-accent-color: var(--teal);
+  --secondary-variant-accent-color: var(--teal-green);
+  --text-on-secondary-accent-color: var(--black);
+
+  --success-color: var(--green);
+  --warning-color: var(--orange);
+  --failure-color: var(--red);
+
+  --selection-color: var(--black);
+  --disabled-color: var(--gray);
+
+  --lighter-border-color: var(--lighter-gray);
+  --default-border-color: #CCCCCC; /* todo: find a suitable name in the grays above */
+  --darker-border-color: var(--gray);
+
+  --lighter-background-color: var(--lightest-gray);
+  --default-background-color: var(--lighter-gray);
+  --darker-background-color: var(--light-gray);
+
   --black-10: rgba(0, 0, 0, 0.1);
   --black-30: rgba(0, 0, 0, 0.3);
 
-  --extra-light-gray: #F2F2F2;
-  --light-gray: #ddd;
-  --gray: #BDBDBD;
-  --dark-gray: #828282;
-  --extra-dark-gray: #4f4f4f;
-  --coal: #333;
-
-  --light-red: #FA8072;
-  --red: #EB5757;
-  --dark-red: darkred;
-
-  --light-blue: #81D4FA;
-  --blue: #03A9F4;
-  --dark-blue: #0277BD;
-
-  --light-green: #A5D6A7;
-  --green: #4CB09B;
-  --dark-green: #3F917F;
-
-  --light-orange: #FFE082;
-  --orange: #fcb131;
-  --dark-orange: #ff824c;
-
-  --light-purple: #B39DDB;
-  --purple: #4950ba;
-  --dark-purple: #30389c;
-
-  --light-teal: #80CBC4;
-  --teal: #00A4BD;
-  --dark-teal: #00695C;
+  --hover-brightness: 1.2;
 
   /* legacy */
   --shadow-standard: var(--black-30) 0px 0px 3px 0px;
