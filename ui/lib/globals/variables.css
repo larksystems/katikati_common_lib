@@ -31,7 +31,7 @@
 
   --secondary-accent-color: var(--teal);
   --secondary-variant-accent-color: var(--teal-green);
-  --text-on-secondary-accent-color: var(--black);
+  --text-on-secondary-accent-color: var(--white);
 
   --success-color: var(--green);
   --warning-color: var(--orange);
@@ -50,6 +50,7 @@
 
   --black-10: rgba(0, 0, 0, 0.1);
   --black-30: rgba(0, 0, 0, 0.3);
+  --white-80: rgba(255, 255, 255, 0.8);
 
   --hover-brightness: 1.2;
 
