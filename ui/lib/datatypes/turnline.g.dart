@@ -58,8 +58,8 @@ class TurnlineStep {
     return {
       if (title != null) 'title': title,
       if (description != null) 'description': description,
-      if (tagIds != null) 'tagIds': tagIds,
-      if (standardMessagesIds != null) 'standardMessagesIds': standardMessagesIds,
+      if (tagIds != null) 'tagIds': tagIds.toList(),
+      if (standardMessagesIds != null) 'standardMessagesIds': standardMessagesIds.toList(),
       if (done != null) 'done': done,
       if (verified != null) 'verified': verified,
       if (additionalInfo != null) 'additionalInfo': additionalInfo,
