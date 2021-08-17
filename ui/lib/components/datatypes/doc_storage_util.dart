@@ -127,12 +127,15 @@ double double_fromData(Logger log, String key, dynamic data) {
   return null;
 }
 
-List<T> List_fromData<T>(Logger log, String key, dynamic data) {
+List<T> List_fromData<T>(Logger log, String key, dynamic data, [T Function(dynamic) fromData]) {
   if (data == null) return null;
   var value = data[key];
   if (value == null) return null;
   if (value is List<T>) return value;
-  if (value is Iterable) return List<T>.from(value);
+  if (value is Iterable) {
+    if (fromData != null) return value.map((elem) => fromData(elem)).toList();
+    return List<T>.from(value);
+  }
   log.warning('Expected List or Set at "$key", but found $value in $data');
   return null;
 }

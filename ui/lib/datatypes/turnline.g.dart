@@ -19,13 +19,13 @@ class Turnline {
     if (data == null) return null;
     return (modelObj ?? Turnline())
       ..title = data['title']?.toString()
-      ..steps = List_fromData<TurnlineStep>(_log, 'steps', data);
+      ..steps = List_fromData<TurnlineStep>(_log, 'steps', data, TurnlineStep.fromData);
   }
 
   Map<String, dynamic> toData() {
     return {
       if (title != null) 'title': title,
-      if (steps != null) 'steps': steps,
+      if (steps != null) 'steps': steps.map((elem) => elem.toData()).toList(),
     };
   }
 
