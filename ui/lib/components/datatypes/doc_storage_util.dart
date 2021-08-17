@@ -140,22 +140,28 @@ List<T> List_fromData<T>(Logger log, String key, dynamic data, [T Function(dynam
   return null;
 }
 
-Map<String, T> Map_fromData<T>(Logger log, String key, dynamic data) {
+Map<String, T> Map_fromData<T>(Logger log, String key, dynamic data, [T Function(dynamic) fromData]) {
   if (data == null) return null;
   var value = data[key];
   if (value == null) return null;
   if (value is Map<String, T>) return value;
-  if (value is Map) return Map<String, T>.from(value);
+  if (value is Map) {
+    if (fromData != null) return value.map<String, T>((key, value) => MapEntry(key, fromData(value)));
+    return Map<String, T>.from(value);
+  }
   log.warning('Expected Map at "$key", but found $value in $data');
   return null;
 }
 
-Set<T> Set_fromData<T>(Logger log, String key, dynamic data) {
+Set<T> Set_fromData<T>(Logger log, String key, dynamic data, [T Function(dynamic) fromData]) {
   if (data == null) return null;
   var value = data[key];
   if (value == null) return null;
   if (value is Set<T>) return value;
-  if (value is Iterable) return Set<T>.from(value);
+  if (value is Iterable) {
+    if (fromData != null) return value.map((elem) => fromData(elem)).toSet();
+    return Set<T>.from(value);
+  }
   log.warning('Expected Set or List at "$key", but found $value in $data');
   return null;
 }
