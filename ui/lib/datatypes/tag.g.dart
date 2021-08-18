@@ -10,7 +10,7 @@
 
 import 'dart:async';
 
-import 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart';
+import 'package:katikati_ui_lib/datatypes/doc_storage_util.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 class Tag {
