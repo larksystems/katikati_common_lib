@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:katikati_ui_lib/components/logger.dart';
 import 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
+import 'package:katikati_ui_lib/datatypes/turnline.dart';
 
 Logger log = Logger('model.g.dart');
 
@@ -452,93 +453,6 @@ class SuggestedMessage {
 
   @override
   String toString() => 'SuggestedMessage: ${toData().toString()}';
-}
-
-class Turnline {
-  String title;
-  List<TurnlineStep> steps;
-
-  static Turnline fromData(data, [Turnline modelObj]) {
-    if (data == null) return null;
-    return (modelObj ?? Turnline())
-      ..title = String_fromData(data['title'])
-      ..steps = List_fromData<TurnlineStep>(data['steps'], TurnlineStep.fromData) ?? [];
-  }
-
-  static Turnline required(Map data, String fieldName, String className) {
-    var value = fromData(data[fieldName]);
-    if (value == null && !data.containsKey(fieldName))
-      throw ValueException("$className.$fieldName is missing");
-    return value;
-  }
-
-  static Turnline notNull(Map data, String fieldName, String className) {
-    var value = required(data, fieldName, className);
-    if (value == null)
-      throw ValueException("$className.$fieldName must not be null");
-    return value;
-  }
-
-  Map<String, dynamic> toData() {
-    return {
-      if (title != null) 'title': title,
-      if (steps != null) 'steps': steps.map((elem) => elem?.toData()).toList(),
-    };
-  }
-
-  @override
-  String toString() => 'Turnline: ${toData().toString()}';
-}
-
-class TurnlineStep {
-  String title;
-  String description;
-  Set<String> tagIds;
-  Set<String> standardMessagesIds;
-  bool done;
-  bool verified;
-  Map<String, String> additionalInfo;
-
-  static TurnlineStep fromData(data, [TurnlineStep modelObj]) {
-    if (data == null) return null;
-    return (modelObj ?? TurnlineStep())
-      ..title = String_fromData(data['title'])
-      ..description = String_fromData(data['description'])
-      ..tagIds = Set_fromData<String>(data['tagIds'], String_fromData) ?? {}
-      ..standardMessagesIds = Set_fromData<String>(data['standardMessagesIds'], String_fromData) ?? {}
-      ..done = bool_fromData(data['done'])
-      ..verified = bool_fromData(data['verified'])
-      ..additionalInfo = Map_fromData<String>(data['additionalInfo'], String_fromData);
-  }
-
-  static TurnlineStep required(Map data, String fieldName, String className) {
-    var value = fromData(data[fieldName]);
-    if (value == null && !data.containsKey(fieldName))
-      throw ValueException("$className.$fieldName is missing");
-    return value;
-  }
-
-  static TurnlineStep notNull(Map data, String fieldName, String className) {
-    var value = required(data, fieldName, className);
-    if (value == null)
-      throw ValueException("$className.$fieldName must not be null");
-    return value;
-  }
-
-  Map<String, dynamic> toData() {
-    return {
-      if (title != null) 'title': title,
-      if (description != null) 'description': description,
-      if (tagIds != null) 'tagIds': tagIds.toList(),
-      if (standardMessagesIds != null) 'standardMessagesIds': standardMessagesIds.toList(),
-      if (done != null) 'done': done,
-      if (verified != null) 'verified': verified,
-      if (additionalInfo != null) 'additionalInfo': additionalInfo,
-    };
-  }
-
-  @override
-  String toString() => 'TurnlineStep: ${toData().toString()}';
 }
 
 class SystemMessage {

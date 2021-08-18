@@ -56,21 +56,6 @@ SuggestedMessage:
   text: 'string'
   translation: 'string'
 
-Turnline:
-  firebaseDocId: 'none'
-  title: 'string'
-  steps: 'array TurnlineStep, default []'
-
-TurnlineStep:
-  firebaseDocId: 'none'
-  title: 'string'
-  description: 'string'
-  tagIds: 'set string, default {}'
-  standardMessagesIds: 'set string, default {}'
-  done: 'bool'
-  verified: 'bool'
-  additionalInfo: 'map string'
-
 SystemMessage:
   firebaseCollectionName: 'systemMessages'
   firebaseDocId: 'string msgId'
