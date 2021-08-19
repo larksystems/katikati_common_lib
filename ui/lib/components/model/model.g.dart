@@ -4,7 +4,7 @@
 import 'dart:async';
 
 import 'package:katikati_ui_lib/components/logger.dart';
-import 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
+import 'package:katikati_ui_lib/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
 import 'package:katikati_ui_lib/datatypes/turnline.dart';
 
 Logger log = Logger('model.g.dart');

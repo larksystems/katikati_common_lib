@@ -8,7 +8,7 @@
 // Use "kktool codegen Lark/Katikati-Core/katikati_lib/lib/datatypes/nook_turnline.dart" to regenerate this file.
 // Adjust the imports as necessary as they are preserved when the code is regenerated.
 
-import 'package:katikati_ui_lib/components/datatypes/doc_storage_util.dart';
+import 'package:katikati_ui_lib/datatypes/doc_storage_util.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
 class Turnline {
