@@ -11,8 +11,8 @@
 }
 
 .button:hover, .button:active {
-  background-color: var(--extra-light-gray);
-  border-color: var(--light-gray);
+  background-color: var(--lighter-background-color);
+  border-color: var(--default-border-color);
 }
 
 .button--text {
@@ -29,31 +29,32 @@
 
 .button--outline {
   padding: 8px;
-  border: 1px solid var(--purple);
-  color: var(--purple);
+  border: 1px solid var(--primary-variant-accent-color);
+  color: var(--primary-variant-accent-color);
 }
 
 .button--outline:hover {
-  border: 1px solid var(--purple);
+  border: 1px solid var(--primary-variant-accent-color);
 }
 
 .button--outline:active {
-  border: 1px solid var(--purple);
+  border: 1px solid var(--primary-variant-accent-color);
 }
 
 
 .button--contained {
   padding: 8px;
-  background-color: var(--purple);
-  color: var(--white);
+  background-color: var(--primary-variant-accent-color);
+  color: var(--text-on-primary-accent-color);
   font-weight: lighter;
 }
 
 .button--contained:hover, .button--contained:active {
-  background-color: var(--dark-purple);
+  background-color: var(--primary-variant-accent-color);
+  filter: brightness(var(--hover-brightness));
 }
 
 .button--contained:disabled {
-  background-color: var(--gray);
+  background-color: var(--darker-background-color);
   cursor: not-allowed;
 }

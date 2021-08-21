@@ -1,7 +1,7 @@
 .message-editor-with-send {
   display: flex;
   padding: 12px 12px 0 12px;
-  border-top: 1px solid var(--light-gray);
+  border-top: 1px solid var(--default-border-color);
 }
 
 .message-editor-with-send__message {
@@ -27,7 +27,7 @@
   width: 100%;
   height: 64px;
   padding: 12px;
-  border: 1px dashed var(--gray);
+  border: 1px dashed var(--default-border-color);
   border-radius: 3px;
   box-sizing: border-box;
   resize: none;
@@ -63,7 +63,7 @@
   text-transform: uppercase;
   background-color: var(--white);
   padding: 6px 12px;
-  border: 1px solid var(--light-gray);
+  border: 1px solid var(--default-border-color);
   font-size: 12px;
   box-shadow: 0 2px 8px 0 var(--black-10);
 }

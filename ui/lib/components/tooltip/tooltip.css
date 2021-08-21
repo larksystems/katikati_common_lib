@@ -7,7 +7,7 @@
 .tooltip .tooltip-text {
   visibility: hidden;
   position: absolute;
-  background-color: var(--extra-dark-gray);
+  background-color: var(--darkest-gray);
   color: var(--white);
   font-size: 0.8rem;
   padding: 3px 6px;

@@ -8,7 +8,8 @@
   padding-left: 6px;
   padding-right: 6px;
   border-radius: 2px;
-  border: 1px dashed var(--gray);
+  border: 0.5px solid var(--gray);
+  color: var(--dark-gray);
   text-overflow: ellipsis;
   font-style: italic;
   position: relative;
@@ -18,11 +19,11 @@
 
 .tag .tag__text:empty::before {
   content:attr(data-placeholder);
-  color:var(--gray);
+  color:var(--dark-gray);
 }
 
 .tag.tag--editing .tag__text {
-  border: 1px solid var(--black);
+  border: 1px solid var(--selection-color);
   cursor: auto;
   min-width: 64px;
   font-style: normal;
@@ -36,11 +37,12 @@
   position: absolute;
   top: -8px;
   right: -8px;
+  color: var(--selection-color);
 }
 
 .tag.tag--selectable:hover .tag__text {
   border-color: var(--dark-gray);
-  background-color: var(--extra-light-gray);
+  background-color: var(--default-background-color);
   cursor: default;
 }
 
@@ -70,7 +72,8 @@
 }
 
 .tag.tag--suggested .tag__text {
-  border: 1px dotted var(--dark-gray);
+  color: var(--selection-color);
+  border: 0.5px solid var(--selection-color);
 }
 
 @keyframes tagUnsavedAnimation {
@@ -95,16 +98,17 @@
 }
 
 .tag.tag--highlighted .tag__text {
-  background-color: var(--extra-light-gray);
-  border-color: var(--black);
+  background-color: var(--lighter-background-color);
+  border-color: var(--selection-color);
+  color: var(--darkest-gray);
 }
 
 /* tag styles */
 .tag.tag-style--green .tag__text {
-  color:  var(--dark-green);
+  color:  var(--green);
 }
 .tag.tag-style--yellow .tag__text {
-  color: var(--dark-orange);
+  color: var(--orange);
 }
 .tag.tag-style--red .tag__text {
   color: var(--red);
@@ -117,6 +121,5 @@
 
 .tag.tag-style--important:hover .tag__text {
   border-color: var(--red);
-  background-color: var(--dark-red);
-  color: var(--white);
+  background-color: var(--light-red);
 }
