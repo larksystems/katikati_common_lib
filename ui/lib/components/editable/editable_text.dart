@@ -30,6 +30,7 @@ class TextEdit {
   void Function() onSelect = () {};
   void Function() onAccept = () {};
   void Function() onCancel = () {};
+  bool Function(String) testInput = (_) => true;
 
   TextEdit(this._text, {bool removable = false}) {
     _removable = removable;
@@ -43,15 +44,24 @@ class TextEdit {
         if (!_isEditing) return;
         e.stopPropagation();
       })
-      ..onKeyDown.listen((event) {
+      ..onKeyUp.listen((event) {
         if (!_isEditing) return;
+
+        if (event.keyCode == KeyCode.ESC) {
+          event.preventDefault();
+          _showInputNotAcceptableWarning(false);
+          _cancelEditing();
+        }
+
+        if (!testInput(_textSpan.innerText)) {
+          _showInputNotAcceptableWarning(true);
+          return;
+        }
+        _showInputNotAcceptableWarning(false);
+
         if (event.keyCode == KeyCode.ENTER) {
           event.preventDefault();
           _confirmEdit();
-        }
-        if (event.keyCode == KeyCode.ESC) {
-          event.preventDefault();
-          _cancelEditing();
         }
       });
     _textSpan.innerText = this._text;
@@ -61,10 +71,12 @@ class TextEdit {
       beginEdit();
     });
     _confirmButton = Button(ButtonType.confirm, onClick: (e) {
+      if (!testInput(_textSpan.innerText)) return;
       e.stopPropagation();
       _confirmEdit();
     });
     _cancelButton = Button(ButtonType.cancel, onClick: (e) {
+      _showInputNotAcceptableWarning(false);
       e.stopPropagation();
       _cancelEditing();
     });
@@ -125,5 +137,9 @@ class TextEdit {
     if (_removable) {
       _textActions.append(_deleteButton.renderElement);
     }
+  }
+
+  void _showInputNotAcceptableWarning(bool showWarning) {
+    renderElement.classes.toggle("text-edit--warning", showWarning);
   }
 }
