@@ -56,3 +56,8 @@
     box-shadow: inset 0 0 3px 3px var(--light-red);
   }
 }
+
+.text-edit.text-edit--warning .text-edit__text {
+  border: 1px solid var(--light-red);
+  background: var(--light-red);
+}
