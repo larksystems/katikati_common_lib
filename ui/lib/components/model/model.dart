@@ -27,7 +27,9 @@ extension UserConfigurationUtil on g.UserConfiguration {
       ..conversationalTurnsEnabled = this.conversationalTurnsEnabled ?? defaults.conversationalTurnsEnabled
       ..tagsPanelVisibility = this.tagsPanelVisibility ?? defaults.tagsPanelVisibility
       ..repliesPanelVisibility = this.repliesPanelVisibility ?? defaults.repliesPanelVisibility
-      ..suggestedRepliesGroupsEnabled = this.suggestedRepliesGroupsEnabled ?? defaults.suggestedRepliesGroupsEnabled;
+      ..suggestedRepliesGroupsEnabled = this.suggestedRepliesGroupsEnabled ?? defaults.suggestedRepliesGroupsEnabled
+      ..mandatoryIncludeTagIds = this.mandatoryIncludeTagIds ?? defaults.mandatoryIncludeTagIds
+      ..mandatoryExcludeTagIds = this.mandatoryExcludeTagIds ?? defaults.mandatoryExcludeTagIds;
 }
 
 extension ConversationListShardUtil on g.ConversationListShard {
