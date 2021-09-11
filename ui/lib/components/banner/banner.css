@@ -10,8 +10,8 @@
   justify-content: center;
 
   text-align: center;
-  color: var(--black);
-  background: var(--default-background-color);
+  color: var(--white);
+  background: var(--darkest-gray);
 
   /* A little animation on hide and show */
   visibility: visible;
