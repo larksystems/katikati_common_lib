@@ -27,6 +27,14 @@
   color: var(--light-red);
 }
 
+.button--icon .fas.fa-check {
+  color: var(--green);
+}
+
+.button--icon .fas.fa-times {
+  color: var(--light-red);
+}
+
 .button--outline {
   padding: 8px;
   border: 1px solid var(--primary-variant-accent-color);
