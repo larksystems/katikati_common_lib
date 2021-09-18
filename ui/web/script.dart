@@ -229,8 +229,7 @@ void main() {
 
   // Conversation items
   var conversationItem = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
-      ConversationItemStatus.normal, ConversationReadStatus.read,
-      defaultSelected: true)
+      DateTime.now(), ConversationItemStatus.normal, ConversationReadStatus.read, defaultSelected: true)
     ..onSelect.listen((id) {
       logger.debug("Choosing conversation $id");
     })
@@ -243,20 +242,21 @@ void main() {
   conversationItemsContainer.append(conversationItem.renderElement);
 
   var conversationDraft = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
-      ConversationItemStatus.draft, ConversationReadStatus.read);
+      DateTime.now(), ConversationItemStatus.draft, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationDraft.renderElement);
 
   var conversationPending = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
-      ConversationItemStatus.pending, ConversationReadStatus.read);
+      DateTime.now(), ConversationItemStatus.pending, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationPending.renderElement);
 
   var conversationFailed = ConversationItemView("000cbc0c", "Hello, this is an example preview message that is long",
-      ConversationItemStatus.failed, ConversationReadStatus.read);
+      DateTime.now(), ConversationItemStatus.failed, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationFailed.renderElement);
 
   var conversationSimulateItem = ConversationItemView(
       "simulate_id",
       "Hello, this is an example preview message that is long",
+      DateTime.now(),
       ConversationItemStatus.normal,
       ConversationReadStatus.read,
       checkEnabled: true,
