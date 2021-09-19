@@ -94,7 +94,7 @@ class TextEdit {
     renderElement..append(_textSpan)..append(_textActions);
   }
 
-  void beginEdit() {
+  void beginEdit({bool selectAllOnFocus = false}) {
     _isEditing = true;
     _textSpan.contentEditable = "true";
     renderElement.classes.toggle("text-edit--editing", true);
@@ -102,6 +102,14 @@ class TextEdit {
     _textActions.children.clear();
     _textActions..append(_confirmButton.renderElement)..append(_cancelButton.renderElement);
     focus();
+
+    if(selectAllOnFocus) {
+      var range = document.createRange();
+      range.selectNodeContents(_textSpan);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
   }
 
   void focus() {
