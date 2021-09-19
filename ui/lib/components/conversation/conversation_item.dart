@@ -273,4 +273,15 @@ class ConversationItemView {
   void toggleDateSeparator(bool show) {
     _dateSeparator.hidden = !show;
   }
+
+  void updateMessage(String text) {
+    _message = text;
+    _messageTextElement.innerText = text;
+  }
+
+  void updateDateTime(DateTime dateTime) {
+    _dateTime = dateTime;
+    _dateTimeElement.innerText = _dateTime == null ? '' : dateFormatter.format(_dateTime);
+    _dateSeparator.innerText = dateStringForSeparator(dateTime);
+  }
 }
