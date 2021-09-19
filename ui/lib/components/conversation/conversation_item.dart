@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:async';
 import 'package:intl/intl.dart';
-import 'package:katikati_ui_lib/utils/date_time.dart';
+import 'package:katikati_ui_lib/utils/datetime.dart';
 import 'package:katikati_ui_lib/components/tooltip/tooltip.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 

@@ -1,6 +1,5 @@
 import 'package:intl/intl.dart';
 
-// for commit
 String dateStringForSeparator(DateTime dateTime) {
     final date = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
