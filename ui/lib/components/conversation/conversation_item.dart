@@ -1,7 +1,5 @@
 import 'dart:html';
 import 'dart:async';
-import 'package:intl/intl.dart';
-import 'package:katikati_ui_lib/utils/datetime.dart';
 import 'package:katikati_ui_lib/components/tooltip/tooltip.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
@@ -11,8 +9,6 @@ enum ConversationItemStatus { normal, failed, pending, draft }
 enum ConversationReadStatus { read, unread }
 enum ConversationWarning { notInFilterResults }
 
-final DateFormat dateFormatter = DateFormat("d MMM,").add_jm();
-
 class ConversationItemView {
   DivElement renderElement;
 
@@ -21,17 +17,12 @@ class ConversationItemView {
   Set<ConversationWarning> _warnings;
   String _id;
   String _message;
-  DateTime _dateTime;
   bool _selected;
   bool _checked;
   bool _checkEnabled;
 
-  DivElement _conversationWrapper;
-  DivElement _dateSeparator;
   CheckboxInputElement _checkboxElement;
-  DivElement _messageTextElement;
   DivElement _messageStatusElement;
-  SpanElement _dateTimeElement;
   DivElement _checkboxWrapper;
   SpanElement _warningWrapper;
 
@@ -47,7 +38,7 @@ class ConversationItemView {
   StreamController<String> _onUncheckController;
   Stream<String> get onUncheck => _onUncheck;
 
-  ConversationItemView(this._id, this._message, this._dateTime, this._status, this._readStatus,
+  ConversationItemView(this._id, this._message, this._status, this._readStatus,
       {bool defaultSelected = false,
       bool defaultChecked = false,
       Set<ConversationWarning> warnings,
@@ -57,15 +48,7 @@ class ConversationItemView {
     _warnings = warnings ?? {};
     _checkEnabled = checkEnabled;
 
-    renderElement = DivElement();
-
-    _dateSeparator = DivElement()
-      ..className = "conversation-list__date-separator"
-      ..text = dateStringForSeparator(_dateTime)
-      ..hidden = true;
-    renderElement.append(_dateSeparator);
-
-    _conversationWrapper = DivElement()
+    renderElement = DivElement()
       ..className = "conversation-item"
       ..onClick.listen((event) {
         if (_onSelectController.hasListener) {
@@ -75,12 +58,11 @@ class ConversationItemView {
         }
       });
     if (_selected) {
-      _conversationWrapper.classes.add("conversation-item--selected");
+      renderElement.classes.add("conversation-item--selected");
     }
     if (_readStatus == ConversationReadStatus.unread) {
-      _conversationWrapper.classes.add("conversation-item--unread");
+      renderElement.classes.add("conversation-item--unread");
     }
-    renderElement.append(_conversationWrapper);
 
     _checkboxWrapper = DivElement()..className = "conversation-item__checkbox";
     _checkboxElement = CheckboxInputElement()
@@ -121,21 +103,16 @@ class ConversationItemView {
     });
     headerElement..append(_warningWrapper)..append(idWrapper);
 
-    _dateTimeElement = SpanElement()
-      ..className = "conversation-item__date-time"
-      ..text = _dateTime == null ? '' : dateFormatter.format(_dateTime);
-    headerElement.append(_dateTimeElement);
-
     var messageElement = DivElement()..className = "conversation-item__message";
-    _messageTextElement = DivElement()
+    var messageTextElement = DivElement()
       ..className = "conversation-item__message__text"
       ..innerText = _message;
     _messageStatusElement = DivElement()..className = "conversation-item__status";
     _updateStatus(_status);
 
-    messageElement..append(_messageTextElement)..append(_messageStatusElement);
+    messageElement..append(messageTextElement)..append(_messageStatusElement);
     contentWrapper..append(headerElement)..append(messageElement);
-    _conversationWrapper..append(_checkboxWrapper)..append(contentWrapper);
+    renderElement..append(_checkboxWrapper)..append(contentWrapper);
 
     if (!_checkEnabled) {
       _checkboxWrapper.classes.toggle("hidden", true);
@@ -152,32 +129,32 @@ class ConversationItemView {
 
   void _updateStatus(ConversationItemStatus status) {
     _messageStatusElement.classes..removeWhere((className) => className.startsWith("converversation-item__status--"));
-    _conversationWrapper.classes
+    renderElement.classes
       ..removeWhere((classname) =>
           !classname.startsWith("conversation-item--selected") &&
           !classname.startsWith("conversation-item--unread") &&
           classname.startsWith("conversation-item--"));
     switch (status) {
       case ConversationItemStatus.draft:
-        _conversationWrapper.classes.add("conversation-item--draft");
+        renderElement.classes.add("conversation-item--draft");
         _messageStatusElement
           ..classes.add("converversation-item__status--draft")
           ..innerText = "[draft]";
         break;
       case ConversationItemStatus.failed:
-        _conversationWrapper.classes.add("conversation-item--failed");
+        renderElement.classes.add("conversation-item--failed");
         _messageStatusElement
           ..classes.add("converversation-item__status--failed")
           ..innerText = "[delivery failure]";
         break;
       case ConversationItemStatus.pending:
-        _conversationWrapper.classes.add("conversation-item--pending");
+        renderElement.classes.add("conversation-item--pending");
         _messageStatusElement
           ..classes.add("converversation-item__status--pending")
           ..innerText = "[pending]";
         break;
       default:
-        _conversationWrapper.classes.add("conversation-item--normal");
+        renderElement.classes.add("conversation-item--normal");
         _messageStatusElement
           ..classes.add("converversation-item__status--normal")
           ..innerText = "";
@@ -234,22 +211,22 @@ class ConversationItemView {
 
   void select() {
     _selected = true;
-    _conversationWrapper.classes.toggle('conversation-item--selected', true);
+    renderElement.classes.toggle('conversation-item--selected', true);
   }
 
   void unselect() {
     _selected = false;
-    _conversationWrapper.classes.toggle('conversation-item--selected', false);
+    renderElement.classes.toggle('conversation-item--selected', false);
   }
 
   void markAsRead() {
     _readStatus = ConversationReadStatus.read;
-    _conversationWrapper.classes.toggle('conversation-item--unread', false);
+    renderElement.classes.toggle('conversation-item--unread', false);
   }
 
   void markAsUnread() {
     _readStatus = ConversationReadStatus.unread;
-    _conversationWrapper.classes.toggle('conversation-item--unread', true);
+    renderElement.classes.toggle('conversation-item--unread', true);
   }
 
   void setWarnings(Set<ConversationWarning> warnings) {
@@ -268,20 +245,5 @@ class ConversationItemView {
 
   void updateStatus(ConversationItemStatus status) {
     _updateStatus(status);
-  }
-
-  void toggleDateSeparator(bool show) {
-    _dateSeparator.hidden = !show;
-  }
-
-  void updateMessage(String text) {
-    _message = text;
-    _messageTextElement.innerText = text;
-  }
-
-  void updateDateTime(DateTime dateTime) {
-    _dateTime = dateTime;
-    _dateTimeElement.innerText = _dateTime == null ? '' : dateFormatter.format(_dateTime);
-    _dateSeparator.innerText = dateStringForSeparator(dateTime);
   }
 }

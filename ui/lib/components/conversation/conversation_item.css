@@ -66,15 +66,10 @@
   width: 100%;
 }
 
-.conversation-item__id,
-.conversation-item__date-time {
+.conversation-item__id {
   color: var(--dark-gray);
   margin-bottom: 6px;
   font-size: 0.75rem;
-}
-
-.conversation-item__date-time {
-  float: right;
 }
 
 .conversation-item__warnings {
@@ -104,11 +99,4 @@
 
 .conversation-item__status.converversation-item__status--failed {
   color: var(--light-red);
-}
-
-.conversation-list__date-separator {
-  border-bottom: 1px solid var(--default-border-color);
-  background-color: var(--default-background-color);
-  font-size: 0.8em;
-  padding: 2px 12px;
 }
