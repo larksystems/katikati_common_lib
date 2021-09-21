@@ -121,6 +121,11 @@ class Accordion {
     renderElement.append(item.renderElement);
   }
 
+  void insertItem(AccordionItem item, int index) {
+    _accordionItems.insert(index, item);
+    renderElement.insertBefore(item.renderElement, renderElement.children[index]);
+  }
+
   void removeItem(String id) {
     _accordionItems.removeWhere((item) => item._id == id);
     renderElement.children.removeWhere((item) => item.dataset['id'] == 'accordion-item-${id}');
