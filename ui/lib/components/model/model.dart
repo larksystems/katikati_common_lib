@@ -118,7 +118,7 @@ extension MessageUtil on g.Message {
   /// Callers should catch and handle IOException.
   Future<void> addTagId(g.DocPubSubUpdate pubSubClient, g.Conversation conversation, String tagId, {bool wasSuggested = false}) async {
     if (tagIds.contains(tagId)) return;
-    if (this.id == null) {
+    if (this.id.startsWith('pending-')) {
       throw AssertionError('Cannot add tag to a pending message - please try again in a few seconds');
     }
     tagIds.add(tagId);
@@ -134,7 +134,7 @@ extension MessageUtil on g.Message {
   /// Callers should catch and handle IOException.
   Future<void> removeTagId(g.DocPubSubUpdate pubSubClient, g.Conversation conversation, String tagId, {bool wasSuggested = false}) async {
     if (!tagIds.contains(tagId) && !suggestedTagIds.contains(tagId)) return;
-    if (this.id == null) {
+    if (this.id.startsWith('pending-')) {
       throw AssertionError('Cannot remove a tag from a pending message - please try again in a few seconds');
     }
     tagIds.remove(tagId);
@@ -149,7 +149,7 @@ extension MessageUtil on g.Message {
 
   Future<void> setTranslation(g.DocPubSubUpdate pubSubClient, g.Conversation conversation, String newTranslation) async {
     if (translation == newTranslation) return;
-    if (this.id == null) {
+    if (this.id.startsWith('pending-')) {
       throw AssertionError('Cannot add translation of a pending message - please try again in a few seconds');
     }
     translation = newTranslation;
@@ -181,3 +181,4 @@ final uuid.Uuid uuidGenerator = new uuid.Uuid();
 String generateTagId() => 'tag-${uuidGenerator.v4().substring(0, 8)}';
 String generateStandardMessageId() => 'standard-message-${uuidGenerator.v4().substring(0, 8)}';
 String generateStandardMessageGroupId() => 'standard-message-group-${uuidGenerator.v4().substring(0, 8)}';
+String generatePendingMessageId(g.Conversation conversation) => 'pending-nook-message-${conversation.docId}-${conversation.messages.length}';
