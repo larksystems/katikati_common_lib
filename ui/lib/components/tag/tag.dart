@@ -66,7 +66,8 @@ class TagView {
       bool acceptable = false,
       bool suggested = false,
       TagStyle tagStyle = TagStyle.None,
-      bool doubleClickToEdit = true}) {
+      bool doubleClickToEdit = true,
+      bool actionsBeforeText = false}) {
     _category = category;
     _selectable = selectable;
     _editable = editable;
@@ -121,7 +122,12 @@ class TagView {
       _tagActions.append(_deleteButton.renderElement);
     }
 
-    renderElement..append(_tagText)..append(_tagActions);
+    if (actionsBeforeText) {
+      renderElement..append(_tagActions)..append(_tagText);
+    } else {
+      renderElement..append(_tagText)..append(_tagActions);
+    }
+
     setTagStyle(tagStyle);
   }
 
