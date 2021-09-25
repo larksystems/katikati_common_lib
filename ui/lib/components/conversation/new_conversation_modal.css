@@ -1,0 +1,57 @@
+.new-conversation-modal {
+  position: relative;
+  display: inline-block;
+  margin-left: var(--spacer-mid);
+  margin-right: var(--spacer-mid);
+}
+
+.new-conversation-modal .fas.fa-plus-square {
+  cursor: pointer;
+}
+
+.new-conversation-modal .fas.fa-plus-square:hover {
+  color: var(--darker-gray);
+}
+
+.new-conversation-modal .new-conversation-modal--wrapper {
+  padding: var(--spacer-mid);
+  border-radius: 3px;
+  box-shadow: 0 2px 8px 0 var(--black-30);
+  border: 1px solid var(--default-border-color);
+  background-color: white;
+  z-index: 10;
+  max-width: 200px;
+  position: absolute;
+}
+
+.new-conversation-modal .new-conversation-modal--wrapper label,
+.new-conversation-modal .new-conversation-modal--wrapper input {
+  display: block;
+  max-width: 100%;
+}
+
+.new-conversation-modal .new-conversation-modal--wrapper label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7em;
+  color: var(--darkest-gray);
+}
+
+.new-conversation-modal .new-conversation-modal--wrapper input {
+  margin-bottom: var(--spacer-small);
+  border: 1px solid var(--default-border-color);
+  padding: 4px 6px;
+}
+
+.new-conversation-modal .reset-button {
+  color: var(--dark-gray);
+}
+
+.new-conversation--backdrop {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9;
+}
