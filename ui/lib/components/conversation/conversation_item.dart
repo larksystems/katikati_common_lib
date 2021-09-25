@@ -140,7 +140,7 @@ class ConversationItemView {
     _contentWrapper..append(headerElement)..append(messageElement);
     _conversationWrapper..append(_checkboxWrapper)..append(_contentWrapper);
 
-    toggleCheckbox(_checkEnabled);
+    enableCheckbox(_checkEnabled);
 
     this._onSelectController = StreamController();
     this._onSelect = _onSelectController.stream;
@@ -222,7 +222,7 @@ class ConversationItemView {
     _checkboxElement.checked = false;
   }
 
-  void toggleCheckbox(bool enabled) {
+  void enableCheckbox(bool enabled) {
     _checkEnabled = enabled;
     _checkboxWrapper.classes.toggle("hidden", !_checkEnabled);
     _contentWrapper.classes.toggle("full-width", !_checkEnabled);
