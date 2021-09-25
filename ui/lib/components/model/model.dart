@@ -60,6 +60,17 @@ extension ConversationUtil on g.Conversation {
     return null;
   }
 
+  /// Return the most recent inbound message's tags or `[]`
+  List<String> get lastInboundMessageTags {
+    for (int index = messages.length - 1; index >= 0; --index) {
+      var message = messages[index];
+      if (message.direction == g.MessageDirection.In) {
+        return message.tagIds ?? [];
+      }
+    }
+    return [];
+  }
+
   static int mostRecentInboundFirst(g.Conversation c1, g.Conversation c2) {
     var m1 = c1.mostRecentMessageInbound;
     var m2 = c2.mostRecentMessageInbound;
