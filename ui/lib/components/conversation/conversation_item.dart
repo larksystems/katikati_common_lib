@@ -1,5 +1,7 @@
 import 'dart:html';
 import 'dart:async';
+import 'package:intl/intl.dart';
+import 'package:katikati_ui_lib/utils/datetime.dart';
 import 'package:katikati_ui_lib/components/tooltip/tooltip.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 
@@ -9,6 +11,8 @@ enum ConversationItemStatus { normal, failed, pending, draft }
 enum ConversationReadStatus { read, unread }
 enum ConversationWarning { notInFilterResults }
 
+final DateFormat dateFormatter = DateFormat("d MMM,").add_jm();
+
 class ConversationItemView {
   DivElement renderElement;
 
@@ -17,12 +21,18 @@ class ConversationItemView {
   Set<ConversationWarning> _warnings;
   String _id;
   String _message;
+  DateTime _dateTime;
   bool _selected;
   bool _checked;
   bool _checkEnabled;
 
+  DivElement _conversationWrapper;
+  DivElement _contentWrapper;
+  DivElement _dateSeparator;
   CheckboxInputElement _checkboxElement;
+  DivElement _messageTextElement;
   DivElement _messageStatusElement;
+  SpanElement _dateTimeElement;
   DivElement _checkboxWrapper;
   SpanElement _warningWrapper;
 
@@ -39,7 +49,8 @@ class ConversationItemView {
   Stream<String> get onUncheck => _onUncheck;
 
   ConversationItemView(this._id, this._message, this._status, this._readStatus,
-      {bool defaultSelected = false,
+      {DateTime dateTime,
+      bool defaultSelected = false,
       bool defaultChecked = false,
       Set<ConversationWarning> warnings,
       bool checkEnabled = false}) {
@@ -47,8 +58,17 @@ class ConversationItemView {
     _checked = defaultChecked;
     _warnings = warnings ?? {};
     _checkEnabled = checkEnabled;
+    _dateTime = dateTime;
 
-    renderElement = DivElement()
+    renderElement = DivElement();
+
+    _dateSeparator = DivElement()
+      ..className = "conversation-list__date-separator"
+      ..text = dateStringForSeparator(_dateTime)
+      ..hidden = true;
+    renderElement.append(_dateSeparator);
+
+    _conversationWrapper = DivElement()
       ..className = "conversation-item"
       ..onClick.listen((event) {
         if (_onSelectController.hasListener) {
@@ -58,11 +78,12 @@ class ConversationItemView {
         }
       });
     if (_selected) {
-      renderElement.classes.add("conversation-item--selected");
+      _conversationWrapper.classes.add("conversation-item--selected");
     }
     if (_readStatus == ConversationReadStatus.unread) {
-      renderElement.classes.add("conversation-item--unread");
+      _conversationWrapper.classes.add("conversation-item--unread");
     }
+    renderElement.append(_conversationWrapper);
 
     _checkboxWrapper = DivElement()..className = "conversation-item__checkbox";
     _checkboxElement = CheckboxInputElement()
@@ -90,7 +111,7 @@ class ConversationItemView {
     }
     _checkboxWrapper.append(_checkboxElement);
 
-    var contentWrapper = DivElement()..className = "conversation-item__content";
+    _contentWrapper = DivElement()..className = "conversation-item__content";
 
     var headerElement = DivElement()..className = "conversation-item__header";
     _warningWrapper = SpanElement()..className = "conversation-item__warnings";
@@ -103,21 +124,23 @@ class ConversationItemView {
     });
     headerElement..append(_warningWrapper)..append(idWrapper);
 
+    _dateTimeElement = SpanElement()
+      ..className = "conversation-item__date-time"
+      ..text = _dateTime == null ? '' : dateFormatter.format(_dateTime);
+    headerElement.append(_dateTimeElement);
+
     var messageElement = DivElement()..className = "conversation-item__message";
-    var messageTextElement = DivElement()
+    _messageTextElement = DivElement()
       ..className = "conversation-item__message__text"
       ..innerText = _message;
     _messageStatusElement = DivElement()..className = "conversation-item__status";
     _updateStatus(_status);
 
-    messageElement..append(messageTextElement)..append(_messageStatusElement);
-    contentWrapper..append(headerElement)..append(messageElement);
-    renderElement..append(_checkboxWrapper)..append(contentWrapper);
+    messageElement..append(_messageTextElement)..append(_messageStatusElement);
+    _contentWrapper..append(headerElement)..append(messageElement);
+    _conversationWrapper..append(_checkboxWrapper)..append(_contentWrapper);
 
-    if (!_checkEnabled) {
-      _checkboxWrapper.classes.toggle("hidden", true);
-      contentWrapper.classes.toggle("full-width", true);
-    }
+    enableCheckbox(_checkEnabled);
 
     this._onSelectController = StreamController();
     this._onSelect = _onSelectController.stream;
@@ -129,32 +152,32 @@ class ConversationItemView {
 
   void _updateStatus(ConversationItemStatus status) {
     _messageStatusElement.classes..removeWhere((className) => className.startsWith("converversation-item__status--"));
-    renderElement.classes
+    _conversationWrapper.classes
       ..removeWhere((classname) =>
           !classname.startsWith("conversation-item--selected") &&
           !classname.startsWith("conversation-item--unread") &&
           classname.startsWith("conversation-item--"));
     switch (status) {
       case ConversationItemStatus.draft:
-        renderElement.classes.add("conversation-item--draft");
+        _conversationWrapper.classes.add("conversation-item--draft");
         _messageStatusElement
           ..classes.add("converversation-item__status--draft")
           ..innerText = "[draft]";
         break;
       case ConversationItemStatus.failed:
-        renderElement.classes.add("conversation-item--failed");
+        _conversationWrapper.classes.add("conversation-item--failed");
         _messageStatusElement
           ..classes.add("converversation-item__status--failed")
           ..innerText = "[delivery failure]";
         break;
       case ConversationItemStatus.pending:
-        renderElement.classes.add("conversation-item--pending");
+        _conversationWrapper.classes.add("conversation-item--pending");
         _messageStatusElement
           ..classes.add("converversation-item__status--pending")
           ..innerText = "[pending]";
         break;
       default:
-        renderElement.classes.add("conversation-item--normal");
+        _conversationWrapper.classes.add("conversation-item--normal");
         _messageStatusElement
           ..classes.add("converversation-item__status--normal")
           ..innerText = "";
@@ -199,34 +222,30 @@ class ConversationItemView {
     _checkboxElement.checked = false;
   }
 
-  void enableCheckbox() {
-    _checkEnabled = true;
-    _checkboxWrapper.classes.toggle("hidden", false);
-  }
-
-  void disableCheckbox() {
-    _checkEnabled = false;
-    _checkboxWrapper.classes.toggle("hidden", true);
+  void enableCheckbox(bool enabled) {
+    _checkEnabled = enabled;
+    _checkboxWrapper.classes.toggle("hidden", !_checkEnabled);
+    _contentWrapper.classes.toggle("full-width", !_checkEnabled);
   }
 
   void select() {
     _selected = true;
-    renderElement.classes.toggle('conversation-item--selected', true);
+    _conversationWrapper.classes.toggle('conversation-item--selected', true);
   }
 
   void unselect() {
     _selected = false;
-    renderElement.classes.toggle('conversation-item--selected', false);
+    _conversationWrapper.classes.toggle('conversation-item--selected', false);
   }
 
   void markAsRead() {
     _readStatus = ConversationReadStatus.read;
-    renderElement.classes.toggle('conversation-item--unread', false);
+    _conversationWrapper.classes.toggle('conversation-item--unread', false);
   }
 
   void markAsUnread() {
     _readStatus = ConversationReadStatus.unread;
-    renderElement.classes.toggle('conversation-item--unread', true);
+    _conversationWrapper.classes.toggle('conversation-item--unread', true);
   }
 
   void setWarnings(Set<ConversationWarning> warnings) {
@@ -245,5 +264,20 @@ class ConversationItemView {
 
   void updateStatus(ConversationItemStatus status) {
     _updateStatus(status);
+  }
+
+  void toggleDateSeparator(bool show) {
+    _dateSeparator.hidden = !show;
+  }
+
+  void updateMessage(String text) {
+    _message = text;
+    _messageTextElement.innerText = text;
+  }
+
+  void updateDateTime(DateTime dateTime) {
+    _dateTime = dateTime;
+    _dateTimeElement.innerText = _dateTime == null ? '' : dateFormatter.format(_dateTime);
+    _dateSeparator.innerText = dateStringForSeparator(dateTime);
   }
 }
