@@ -86,11 +86,26 @@ class TagView {
 
     _tagText.innerText = this._text;
 
-    _acceptButton = Button(ButtonType.confirm, onClick: (_) => _acceptTag());
-    _editButton = Button(ButtonType.edit, onClick: (_) => beginEdit());
-    _confirmButton = Button(ButtonType.confirm, onClick: (_) => _confirmEdit());
-    _cancelButton = Button(ButtonType.cancel, onClick: (_) => _cancelEditing());
-    _deleteButton = Button(ButtonType.remove, onClick: (_) => _deleteTag());
+    _acceptButton = Button(ButtonType.confirm, onClick: (e) {
+      e.stopPropagation();
+      _acceptTag();
+    });
+    _editButton = Button(ButtonType.edit, onClick: (e) {
+      e.stopPropagation();
+      beginEdit();
+    });
+    _confirmButton = Button(ButtonType.confirm, onClick: (e) {
+      e.stopPropagation();
+      _confirmEdit();
+    });
+    _cancelButton = Button(ButtonType.cancel, onClick: (e) {
+      e.stopPropagation();
+      _cancelEditing();
+    });
+    _deleteButton = Button(ButtonType.remove, onClick: (e) {
+      e.stopPropagation();
+      _deleteTag();
+    });
 
     if (suggested) {
       var suggestedIcon = SpanElement()..className = 'fas fa-robot tag--suggested__icon';
@@ -100,7 +115,10 @@ class TagView {
 
     if (_selectable) {
       renderElement.classes.add('tag--selectable');
-      _tagText.onClick.listen((_) => onSelect());
+      _tagText.onClick.listen((e) {
+        e.stopPropagation();
+        onSelect();
+      });
       _tagText.onMouseEnter.listen((_) => onMouseEnter());
       _tagText.onMouseLeave.listen((_) => onMouseLeave());
     }
