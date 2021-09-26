@@ -27,6 +27,7 @@ class ConversationItemView {
   bool _checkEnabled;
 
   DivElement _conversationWrapper;
+  DivElement _contentWrapper;
   DivElement _dateSeparator;
   CheckboxInputElement _checkboxElement;
   DivElement _messageTextElement;
@@ -110,7 +111,7 @@ class ConversationItemView {
     }
     _checkboxWrapper.append(_checkboxElement);
 
-    var contentWrapper = DivElement()..className = "conversation-item__content";
+    _contentWrapper = DivElement()..className = "conversation-item__content";
 
     var headerElement = DivElement()..className = "conversation-item__header";
     _warningWrapper = SpanElement()..className = "conversation-item__warnings";
@@ -136,13 +137,10 @@ class ConversationItemView {
     _updateStatus(_status);
 
     messageElement..append(_messageTextElement)..append(_messageStatusElement);
-    contentWrapper..append(headerElement)..append(messageElement);
-    _conversationWrapper..append(_checkboxWrapper)..append(contentWrapper);
+    _contentWrapper..append(headerElement)..append(messageElement);
+    _conversationWrapper..append(_checkboxWrapper)..append(_contentWrapper);
 
-    if (!_checkEnabled) {
-      _checkboxWrapper.classes.toggle("hidden", true);
-      contentWrapper.classes.toggle("full-width", true);
-    }
+    enableCheckbox(_checkEnabled);
 
     this._onSelectController = StreamController();
     this._onSelect = _onSelectController.stream;
@@ -224,14 +222,10 @@ class ConversationItemView {
     _checkboxElement.checked = false;
   }
 
-  void enableCheckbox() {
-    _checkEnabled = true;
-    _checkboxWrapper.classes.toggle("hidden", false);
-  }
-
-  void disableCheckbox() {
-    _checkEnabled = false;
-    _checkboxWrapper.classes.toggle("hidden", true);
+  void enableCheckbox(bool enabled) {
+    _checkEnabled = enabled;
+    _checkboxWrapper.classes.toggle("hidden", !_checkEnabled);
+    _contentWrapper.classes.toggle("full-width", !_checkEnabled);
   }
 
   void select() {
