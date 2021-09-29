@@ -48,7 +48,7 @@
 }
 
 .conversation-item.conversation-item--pending {
-  background-color: var(--default-border-color);
+  background-color: var(--lightest-gray);
 }
 
 .conversation-item.conversation-item--failed::before {
