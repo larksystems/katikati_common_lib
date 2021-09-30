@@ -150,6 +150,8 @@ class ConversationItemView {
     this._onUncheck = _onUncheckController.stream;
   }
 
+  DivElement get conversationItem => _conversationWrapper;
+
   void _updateStatus(ConversationItemStatus status) {
     _messageStatusElement.classes..removeWhere((className) => className.startsWith("converversation-item__status--"));
     _conversationWrapper.classes
