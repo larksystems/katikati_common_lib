@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:katikati_ui_lib/components/accordion/accordion.dart';
 import 'package:katikati_ui_lib/components/button/button.dart';
+import 'package:katikati_ui_lib/components/tag/tag.dart';
 
 
 class Turnline {
@@ -28,8 +29,8 @@ class Turnline {
 
 }
 
-const STEP_MESSAGES_TEXT = 'Standard messages set';
-const STEP_TAGS_TEXT = 'Tags group';
+const STEP_MESSAGES_TEXT = 'Standard messages';
+const STEP_TAGS_TEXT = 'Tags';
 
 class TurnlineStep {
   Turnline turnline;
@@ -37,6 +38,8 @@ class TurnlineStep {
   DivElement _checkboxElement;
   DivElement _nodeElement;
   DivElement _infoElement;
+  DivElement _messagesContainer;
+  DivElement _tagsContainer;
   String _text;
   bool _open;
   bool _checked;
@@ -85,9 +88,29 @@ class TurnlineStep {
       ..classes.add('step__description')
       ..text = _text;
 
-    var stepInfo = new DivElement();
-    stepInfo.append(new DivElement()..classes.add('step__messages')..text = STEP_MESSAGES_TEXT);
-    stepInfo.append(new DivElement()..classes.add('step__tags')..text = STEP_TAGS_TEXT);
+    var stepInfo = DivElement();
+
+    _messagesContainer = DivElement();
+    var messagesContainer = AccordionItem(
+      null,
+      DivElement()..text = STEP_MESSAGES_TEXT,
+      _messagesContainer,
+      true);
+    messagesContainer.renderElement.classes.add('step__messages');
+    messagesContainer.onToggle = () => reflowTurnlinesCascade(this.turnline);
+
+    _tagsContainer = DivElement()..classes.add('step__tags__container');
+    var tagsContainer = AccordionItem(
+      null,
+      DivElement()..text = STEP_TAGS_TEXT,
+      _tagsContainer,
+      true);
+    tagsContainer.renderElement.classes.add('step__tags');
+    tagsContainer.onToggle = () => reflowTurnlinesCascade(this.turnline);
+
+    stepInfo
+      ..append(messagesContainer.renderElement)
+      ..append(tagsContainer.renderElement);
 
     var item = AccordionItem(null, stepTitle, stepInfo, false);
     item.onToggle = () {
@@ -96,6 +119,20 @@ class TurnlineStep {
       reflowTurnlinesCascade(this.turnline);
     };
     _infoElement.append(item.renderElement);
+  }
+
+  void setTags(List<TagView> tags) {
+    _tagsContainer.children.clear();
+    for (var tag in tags) {
+      _tagsContainer.append(tag.renderElement);
+    }
+  }
+
+  void setMessages(List<DivElement> messages) {
+    _messagesContainer.children.clear();
+    for (var message in messages) {
+      _messagesContainer.append(message);
+    }
   }
 }
 
