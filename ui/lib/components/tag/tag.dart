@@ -153,6 +153,9 @@ class TagView {
     _tagText
       ..contentEditable = "true"
       ..onKeyDown.listen((event) {
+        if (event.keyCode == KeyCode.ENTER || event.keyCode == KeyCode.ESC) event.preventDefault();
+      })
+      ..onKeyUp.listen((event) {
         if (event.keyCode == KeyCode.ENTER) {
           event.preventDefault();
           _confirmEdit();

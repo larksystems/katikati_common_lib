@@ -32,9 +32,6 @@ class FreetextMessageSendView {
     _textArea = TextAreaElement()
       ..defaultValue = _text
       ..placeholder = "Type your message..."
-      ..onKeyDown.listen((e) {
-        e.stopPropagation();
-      })
       ..onInput.listen((e) {
         _text = _textArea.value;
         _enableOrDisableButtons();
