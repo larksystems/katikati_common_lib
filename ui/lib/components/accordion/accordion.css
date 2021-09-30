@@ -19,7 +19,7 @@
 
 .accordion-item__indicator {
   display: inline-block;
-  font-size: 18px;
+  font-size: 1.4em;
   width: 12px;
   margin-right: 6px;
   cursor: pointer;

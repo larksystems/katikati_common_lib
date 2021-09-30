@@ -90,6 +90,16 @@
   font-size: 0.8em;
   color: #666;
   margin: 2px 0;
-  text-decoration: underline;
+  /* text-decoration: underline; */
   cursor: pointer;
+}
+
+.step__tags__container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.turnline .accordion-body__wrapper {
+  padding: 0;
+  margin-left: 0;
 }
