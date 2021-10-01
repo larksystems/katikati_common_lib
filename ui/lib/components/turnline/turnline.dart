@@ -37,6 +37,7 @@ class TurnlineStep {
   DivElement renderElement;
   DivElement _checkboxElement;
   DivElement _nodeElement;
+  AccordionItem _node;
   DivElement _infoElement;
   DivElement _messagesContainer;
   DivElement _tagsContainer;
@@ -112,13 +113,13 @@ class TurnlineStep {
       ..append(messagesContainer.renderElement)
       ..append(tagsContainer.renderElement);
 
-    var item = AccordionItem(null, stepTitle, stepInfo, false);
-    item.onToggle = () {
-      renderElement.classes.toggle('step--folded', !item.isOpen);
-      renderElement.classes.toggle('step--unfolded', item.isOpen);
+    _node = AccordionItem(null, stepTitle, stepInfo, false);
+    _node.onToggle = () {
+      renderElement.classes.toggle('step--folded', !_node.isOpen);
+      renderElement.classes.toggle('step--unfolded', _node.isOpen);
       reflowTurnlinesCascade(this.turnline);
     };
-    _infoElement.append(item.renderElement);
+    _infoElement.append(_node.renderElement);
   }
 
   void setTags(List<TagView> tags) {
@@ -133,6 +134,13 @@ class TurnlineStep {
     for (var message in messages) {
       _messagesContainer.append(message);
     }
+  }
+
+  void open() {
+    _node.expand();
+    renderElement.classes.toggle('step--folded', !_node.isOpen);
+    renderElement.classes.toggle('step--unfolded', _node.isOpen);
+    reflowTurnlinesCascade(this.turnline);
   }
 }
 
