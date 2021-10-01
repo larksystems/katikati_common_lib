@@ -44,6 +44,9 @@ class TextEdit {
         if (!_isEditing) return;
         e.stopPropagation();
       })
+      ..onKeyDown.listen((event) {
+        if (event.keyCode == KeyCode.ENTER) event.preventDefault();
+      })
       ..onKeyUp.listen((event) {
         if (!_isEditing) return;
 
