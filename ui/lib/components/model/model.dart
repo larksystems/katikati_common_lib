@@ -75,28 +75,40 @@ extension ConversationUtil on g.Conversation {
     var d1 = c1.mostRecentMessageInbound?.datetime;
     var d2 = c2.mostRecentMessageInbound?.datetime;
 
+    if (c1.docId == c2.docId) {
+      return 0;
+    }
+    if (d1 == d2) {
+      return c2.docId.compareTo(c1.docId);
+    }
+    if (d1 == null) {
+      return 1;
+    }
     if (d2 == null) {
       return -1;
-    } else if (d1 == null) {
-      return 1;
-    } else {
-      var result = d2.compareTo(d1);
-      return result != 0 ? result : c2.hashCode.compareTo(c1.hashCode);
     }
+
+    return d2.compareTo(d1);
   }
 
   static int mostRecentMessageFirst(g.Conversation c1, g.Conversation c2) {
     var d1 = c1.messages.isNotEmpty ? c1.messages.last.datetime : null;
     var d2 = c2.messages.isNotEmpty ? c2.messages.last.datetime : null;
 
+    if (c1.docId == c2.docId) {
+      return 0;
+    }
+    if (d1 == d2) {
+      return c2.docId.compareTo(c1.docId);
+    }
+    if (d1 == null) {
+      return 1;
+    }
     if (d2 == null) {
       return -1;
-    } else if (d1 == null) {
-      return 1;
-    } else {
-      var result = d2.compareTo(d1);
-      return result != 0 ? result : c2.hashCode.compareTo(c1.hashCode);
     }
+
+    return d2.compareTo(d1);
   }
 
   static int alphabeticalById(g.Conversation c1, g.Conversation c2) {
