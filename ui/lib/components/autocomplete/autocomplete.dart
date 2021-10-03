@@ -42,7 +42,7 @@ class AutocompleteList {
   void Function() onFocus = () {};
   void Function() onBlur = () {};
 
-  AutocompleteList(this._allSuggestions, this._inputText, {emptyPlaceholder: DivElement}) {
+  AutocompleteList(this._allSuggestions, this._inputText, {DivElement emptyPlaceholder}) {
     _emptyPlaceholder = emptyPlaceholder ?? DivElement();
 
     renderElement = DivElement()..classes.add("autocomplete__wrapper");
