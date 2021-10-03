@@ -58,7 +58,7 @@ class AutocompleteList {
     switch (event.key) {
       case "ArrowUp":
         event.preventDefault(); // to prevent page scrolling
-        _listFocusIndex = _listFocusIndex == null ? activeSuggestions.length - 1 : _listFocusIndex + 1;
+        _listFocusIndex = _listFocusIndex == null ? activeSuggestions.length - 1 : _listFocusIndex - 1;
         break;
       case "ArrowDown":
         event.preventDefault(); // to prevent page scrolling
