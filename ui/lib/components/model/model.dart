@@ -79,7 +79,7 @@ extension ConversationUtil on g.Conversation {
       return 0;
     }
     if (d1 == d2) {
-      return c1.docId.compareTo(c2.docId);
+      return mostRecentMessageFirst(c1, c2);
     }
     if (d1 == null) {
       return 1;
