@@ -99,7 +99,7 @@ extension ConversationUtil on g.Conversation {
       return 0;
     }
     if (d1 == d2) {
-      return c2.docId.compareTo(c1.docId);
+      return c1.docId.compareTo(c2.docId);
     }
     if (d1 == null) {
       return 1;
