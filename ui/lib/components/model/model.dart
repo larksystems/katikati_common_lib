@@ -72,41 +72,43 @@ extension ConversationUtil on g.Conversation {
   }
 
   static int mostRecentInboundFirst(g.Conversation c1, g.Conversation c2) {
-    var m1 = c1.mostRecentMessageInbound;
-    var m2 = c2.mostRecentMessageInbound;
-    if (m1 == null) {
-      if (m2 == null) {
-        return ConversationUtil.mostRecentMessageFirst(c1, c2);
-      } else {
-        return -1;
-      }
-    } else {
-      if (m2 == null) {
-        return 1;
-      } else {
-        // fall through
-      }
+    var d1 = c1.mostRecentMessageInbound?.datetime;
+    var d2 = c2.mostRecentMessageInbound?.datetime;
+
+    if (c1.docId == c2.docId) {
+      return 0;
     }
-    var result = m2.datetime.compareTo(m1.datetime);
-    return result != 0 ? result : c2.hashCode.compareTo(c1.hashCode);
+    if (d1 == d2) {
+      return c1.docId.compareTo(c2.docId);
+    }
+    if (d1 == null) {
+      return 1;
+    }
+    if (d2 == null) {
+      return -1;
+    }
+
+    return d2.compareTo(d1);
   }
 
   static int mostRecentMessageFirst(g.Conversation c1, g.Conversation c2) {
-    if (c1.messages.isEmpty) {
-      if (c2.messages.isEmpty) {
-        return c1.docId.compareTo(c2.docId);
-      } else {
-        return -1;
-      }
-    } else {
-      if (c2.messages.isEmpty) {
-        return 1;
-      } else {
-        // fall through
-      }
+    var d1 = c1.messages.isNotEmpty ? c1.messages.last.datetime : null;
+    var d2 = c2.messages.isNotEmpty ? c2.messages.last.datetime : null;
+
+    if (c1.docId == c2.docId) {
+      return 0;
     }
-    var result = c2.messages.last.datetime.compareTo(c1.messages.last.datetime);
-    return result != 0 ? result : c2.hashCode.compareTo(c1.hashCode);
+    if (d1 == d2) {
+      return c1.docId.compareTo(c2.docId);
+    }
+    if (d1 == null) {
+      return 1;
+    }
+    if (d2 == null) {
+      return -1;
+    }
+
+    return d2.compareTo(d1);
   }
 
   static int alphabeticalById(g.Conversation c1, g.Conversation c2) {
