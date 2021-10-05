@@ -1,5 +1,6 @@
 import 'dart:html';
 import "dart:math";
+import 'package:katikati_ui_lib/components/autocomplete/autocomplete.dart';
 import 'package:katikati_ui_lib/components/button/button.dart';
 import 'package:katikati_ui_lib/components/nav/button_links.dart';
 import 'package:katikati_ui_lib/components/turnline/turnline.dart';
@@ -156,6 +157,33 @@ void main() {
     urlView.setPageUrlFilterAfterDate(TagFilterType.exclude, DateTime(2020, 2, 3, 16, 20));
   });
 
+  // autocomplete list
+  var autocompleteWrapper = DivElement();
+  var richDisplaySuggestion = DivElement()
+    ..append(SpanElement()..append(SpanElement()..innerText = "Vaccination"))
+    ..append(SpanElement()
+      ..innerText = "Important"
+      ..style.color = "red"
+      ..style.fontStyle = "italic"
+      ..style.fontSize = "0.8em");
+  var suggestionsList = [
+    SuggestionItem("no_escalate_id_937443", "noescalate", DivElement()..innerText = "No escalate"),
+    SuggestionItem("needs_reply_id_521398", "anysearch", DivElement()..innerText = "Needs reply"),
+    SuggestionItem("vaccination_id_732491", "vaccination", richDisplaySuggestion),
+    SuggestionItem("pushback_id_918234", "pushback", DivElement()..innerText = "Push back"),
+  ];
+  var emptySuggestionsPlaceholder = DivElement()
+    ..classes.add("autocomplete__suggestion-item")
+    ..classes.toggle("autocomplete__suggestion-item--disabled")
+    ..innerText = "No suggestions";
+  var autocompleteList = AutocompleteList(suggestionsList, "", emptyPlaceholder: emptySuggestionsPlaceholder)
+    ..onSelect = (suggestionItem) {
+      window.alert("To select item: ${suggestionItem.value}");
+    }
+    ..onRequestClose = () {
+      autocompleteWrapper.children.clear();
+    };
+
   // editable text
   var textEditable = TextEdit("text", removable: true)
     ..onEdit = (value) {
@@ -166,14 +194,32 @@ void main() {
     };
   editableTextContainer.append(textEditable.renderElement);
   var textEditableDefault = TextEdit("", removable: true)
+    ..onChange = (value) {
+      autocompleteList.inputText = value;
+    }
     ..onEdit = (value) {
       window.alert("New text: ${value}");
     }
     ..onDelete = () {
       window.alert("Requesting delete...");
+    }
+    ..onFocus = () {
+      autocompleteWrapper.append(autocompleteList.renderElement);
+    }
+    ..onBlur = () {
+      autocompleteList.onRequestClose();
     };
   editableTextContainer.append(textEditableDefault.renderElement);
   textEditableDefault.beginEdit();
+  editableTextContainer.append(autocompleteWrapper);
+
+  autocompleteList
+    ..onFocus = () {
+      textEditableDefault.keyboardShortcutEnabled = false;
+    }
+    ..onBlur = () {
+      textEditableDefault.keyboardShortcutEnabled = true;
+    };
 
   // Button links
   var links = [Link("Dashboard", "#dashboard"), Link("Converse", "#converse")];

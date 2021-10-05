@@ -24,13 +24,21 @@ class TextEdit {
   Button _cancelButton;
 
   bool _isEditing = false;
+  bool _keyboardShortcutsEnabled = true;
 
   void Function(String) onEdit = (_) {};
+  void Function(String) onChange = (_) {};
+  void Function() onFocus = () {};
+  void Function() onBlur = () {};
   void Function() onDelete = () {};
   void Function() onSelect = () {};
   void Function() onAccept = () {};
   void Function() onCancel = () {};
   bool Function(String) testInput = (_) => true;
+
+  void set keyboardShortcutEnabled(bool enabled) {
+    _keyboardShortcutsEnabled = enabled;
+  }
 
   TextEdit(this._text, {bool removable = false}) {
     _removable = removable;
@@ -47,8 +55,18 @@ class TextEdit {
       ..onKeyDown.listen((event) {
         if (event.keyCode == KeyCode.ENTER) event.preventDefault();
       })
+      ..onInput.listen((event) {
+        var value = (event.currentTarget as SpanElement).innerText;
+        onChange(value);
+      })
+      ..onBlur.listen((_) {
+        onBlur();
+      })
+      ..onFocus.listen((_) {
+        onFocus();
+      })
       ..onKeyUp.listen((event) {
-        if (!_isEditing) return;
+        if (!_isEditing || !_keyboardShortcutsEnabled) return;
 
         if (event.keyCode == KeyCode.ESC) {
           event.preventDefault();
@@ -106,7 +124,7 @@ class TextEdit {
     _textActions..append(_confirmButton.renderElement)..append(_cancelButton.renderElement);
     focus();
 
-    if(selectAllOnFocus) {
+    if (selectAllOnFocus) {
       var range = document.createRange();
       range.selectNodeContents(_textSpan);
       var selection = window.getSelection();
@@ -117,6 +135,7 @@ class TextEdit {
 
   void focus() {
     _textSpan.focus();
+    onFocus();
   }
 
   void _confirmEdit() {
