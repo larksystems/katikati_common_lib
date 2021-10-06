@@ -18,6 +18,8 @@
 }
 
 .nav__project_title {
+  flex-grow: 1;
+  text-align: center;
   padding-right: var(--spacer-small);
 }
 
@@ -27,7 +29,6 @@
 }
 
 .nav__contents {
-  flex-grow: 1;
   padding-left: var(--spacer-mid);
   padding-right: var(--spacer-mid);
 }

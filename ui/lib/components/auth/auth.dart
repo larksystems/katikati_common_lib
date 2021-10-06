@@ -16,35 +16,53 @@ class SignInDomainInfo {
 class AuthMainView {
   DivElement authElement;
 
-  BrandInfo brand;
-  String title;
-  String description;
-  List<SignInDomainInfo> domainsInfo;
-  void Function(SignInDomainInfo) onSigninClick;
+  DivElement _logos;
+  DivElement _title;
+  DivElement _description;
 
-  AuthMainView(this.brand, this.title, this.description, this.domainsInfo, this.onSigninClick) {
+  void Function(SignInDomainInfo) _onSigninClick;
+
+  AuthMainView(BrandInfo brand, List<SignInDomainInfo> domainsInfo, this._onSigninClick, [String title, String description]) {
     authElement = new DivElement()..classes.add('auth-main');
 
-    var logosContainer = new DivElement();
-    authElement.append(logosContainer);
+    _logos = new DivElement();
+    brands = [brand];
 
-    var avfLogo = brand.logo(className: 'partner-logo');
-    logosContainer.append(avfLogo);
-
-    var projectTitle = new DivElement()
+    _title = new DivElement()
       ..classes.add('project-title')
-      ..append(new HeadingElement.h1()..text = title);
-    authElement.append(projectTitle);
+      ..append(new HeadingElement.h1());
 
-    var projectDescription = new DivElement()
+    _description = new DivElement()
       ..classes.add('project-description')
-      ..append(new ParagraphElement()..text = description);
-    authElement.append(projectDescription);
+      ..append(new ParagraphElement());
 
-    for (var domain in domainsInfo) {
+    authElement.append(_logos);
+    authElement.append(_title);
+    authElement.append(_description);
+  }
+
+  void set brands(List<BrandInfo> values) {
+    for (var logo in _logos.querySelectorAll('.partner-logo')) {
+      logo.remove();
+    }
+    for (var brand in values) {
+      _logos.append(brand.logo(className: 'partner-logo'));
+    }
+  }
+
+  void set title(String value) => _title.querySelector('h1').text = value;
+
+  void set description(String value) => _description.querySelector('p').text = value;
+
+  void set domainsInfo(List<SignInDomainInfo> values) {
+    for (var button in authElement.querySelectorAll('button')) {
+      button.remove();
+    }
+
+    for (var domain in values) {
       var signInButton = new ButtonElement()
         ..text = "Sign in with ${domain.displayName}"
-        ..onClick.listen((_) => onSigninClick(domain));
+        ..onClick.listen((_) => _onSigninClick(domain));
       authElement.append(signInButton);
     }
   }
