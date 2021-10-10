@@ -20,9 +20,9 @@ class NavHeaderView {
     _authHeader = DivElement()..classes.add('nav__auth_header');
 
     navViewElement.append(_appLogos);
+    navViewElement.append(_navContent);
     navViewElement.append(_projectTitle);
     navViewElement.append(_projectSubtitle);
-    navViewElement.append(_navContent);
     navViewElement.append(_authHeader);
   }
 
