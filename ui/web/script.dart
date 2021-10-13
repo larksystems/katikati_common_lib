@@ -2,6 +2,7 @@ import 'dart:html';
 import "dart:math";
 import 'package:katikati_ui_lib/components/autocomplete/autocomplete.dart';
 import 'package:katikati_ui_lib/components/button/button.dart';
+import 'package:katikati_ui_lib/components/menu/menu.dart';
 import 'package:katikati_ui_lib/components/nav/button_links.dart';
 import 'package:katikati_ui_lib/components/turnline/turnline.dart';
 import 'package:uuid/uuid.dart';
@@ -16,6 +17,7 @@ import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart' as bran
 import 'package:katikati_ui_lib/components/url_view/url_view.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
 import 'package:katikati_ui_lib/components/tabs/tabs.dart';
+import 'package:katikati_ui_lib/components/tooltip/tooltip.dart';
 import 'package:katikati_ui_lib/components/conversation/conversation_item.dart';
 import 'package:katikati_ui_lib/components/messages/freetext_message_send.dart';
 import 'package:katikati_ui_lib/components/tag/tag.dart';
@@ -59,6 +61,7 @@ ButtonElement conversationAddWarning = querySelector("#conversation-item-add-war
 ButtonElement conversationRemoveWarning = querySelector("#conversation-item-remove-warning");
 DivElement tagContainer = querySelector('#tag--wrapper');
 DivElement turnlinesContainer = querySelector('#turnlines');
+DivElement menusContainer = querySelector('#menus');
 
 Map<String, ButtonElement> setURLParamsButton = {
   "conversation-id": querySelector('#set-url-params--conversation-id') as ButtonElement,
@@ -94,7 +97,7 @@ void main() {
 
   // auth view
   var authMainView = auth.AuthMainView(
-      brand.AVF, "Title", "Description appear here", [auth.GMAIL_DOMAIN_INFO, auth.LARK_DOMAIN_INFO], (domain) {
+      brand.AVF, [auth.GMAIL_DOMAIN_INFO, auth.LARK_DOMAIN_INFO], (domain) {
     window.alert("Trying to login with domain: $domain");
   });
   authViewContainer.append(authMainView.authElement);
@@ -228,10 +231,30 @@ void main() {
 
   // tabs
   var allTabs = [
-    TabView("a", "Tab A", DivElement()..style.padding = "30px"..innerText = "Content A"),
-    TabView("b", "Tab B", DivElement()..style.padding = "30px"..innerText = "Content B"),
-    TabView("c", "Tab C", DivElement()..style.padding = "30px"..innerText = "Content C"),
-    TabView("d", "Tab D", DivElement()..style.padding = "30px"..innerText = "Content D"),
+    TabView(
+        "a",
+        "Tab A",
+        DivElement()
+          ..style.padding = "30px"
+          ..innerText = "Content A"),
+    TabView(
+        "b",
+        "Tab B",
+        DivElement()
+          ..style.padding = "30px"
+          ..innerText = "Content B"),
+    TabView(
+        "c",
+        "Tab C",
+        DivElement()
+          ..style.padding = "30px"
+          ..innerText = "Content C"),
+    TabView(
+        "d",
+        "Tab D",
+        DivElement()
+          ..style.padding = "30px"
+          ..innerText = "Content D"),
   ];
   var tabsView = TabsView(allTabs, defaultSelectedID: "b");
   tabsContainer.append(tabsView.renderElement);
@@ -421,9 +444,8 @@ void main() {
     ..innerText = 'Add edit on add'
     ..className = "mono light");
   var editAddContainer = DivElement();
-  var editAddButton = Button(ButtonType.add, onClick: (_){
-    var editOnAddTag =
-      TagView('', 'edit-on-add-tag', editable: true, deletable: true);
+  var editAddButton = Button(ButtonType.add, onClick: (_) {
+    var editOnAddTag = TagView('', 'edit-on-add-tag', editable: true, deletable: true);
     editOnAddTag.onEdit = (value) {
       window.alert('Added new tag with value: $value');
     };
@@ -437,9 +459,7 @@ void main() {
     editAddContainer.append(editOnAddTag.renderElement);
     editOnAddTag.beginEdit();
   });
-  tagContainer
-    ..append(editAddButton.renderElement)
-    ..append(editAddContainer);
+  tagContainer..append(editAddButton.renderElement)..append(editAddContainer);
 
   Turnline turnline1 = new Turnline('Demog survey');
   turnline1.addStep(new TurnlineStep('Consent step', true, true));
@@ -460,6 +480,34 @@ void main() {
   turnlinesContainer.append(turnline3.renderElement);
 
   reflowTurnlinesCascade(turnline1);
+
+  // Menu
+  var menuActionItems = [
+    MenuActionItem(DivElement()..innerHtml = "<span class='fas fa-info'></span> View info", () {
+      window.alert("View info clicked");
+    }),
+    MenuActionItem(
+        DivElement()..innerHtml = "<div style='color: red'><span class='fas fa-trash-alt'></span> Delete</div>", () {
+      window.alert("Delete clicked");
+    })
+  ];
+  var duplicatedMenuActionsItems = [
+    MenuActionItem(DivElement()..innerHtml = "<span class='fas fa-info'></span> View info", () {
+      window.alert("View info clicked");
+    }),
+    MenuActionItem(
+        DivElement()..innerHtml = "<div style='color: red'><span class='fas fa-trash-alt'></span> Delete</div>", () {
+      window.alert("Delete clicked");
+    })
+  ];
+  var rightMenu = Menu(menuActionItems);
+  var topMenu = Menu(duplicatedMenuActionsItems, menuPosition: TooltipPosition.top);
+  menusContainer
+    ..append(rightMenu.renderElement)
+    ..append(SpanElement()
+      ..style.width = "120px"
+      ..style.display = "inline-block")
+    ..append(topMenu.renderElement);
 }
 
 void printURLViewParams(UrlView urlView) {

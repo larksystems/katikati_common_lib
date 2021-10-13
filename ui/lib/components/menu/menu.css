@@ -1,0 +1,76 @@
+.menu-wrapper {
+  position: relative;
+}
+
+.menu-icon-wrapper {
+  font-size: 12px;
+    background-color: white;
+    box-shadow: var(--shadow-standard);
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    padding-top: 4px;
+    border-radius: 2px;
+    z-index: 1;
+}
+
+.menu-wrapper:hover .menu-icon-wrapper {
+  background-color: black;
+  color: white;
+}
+
+.menu-items-wrapper {
+  background-color: white;
+  padding: 3px;
+  box-shadow: var(--shadow-standard);
+  border-radius: 4px;
+  display: inline-block;
+  position: absolute;
+  white-space: nowrap;
+  visibility: hidden;
+  z-index: 10;
+}
+
+.menu-wrapper:hover .menu-items-wrapper {
+  visibility: visible;
+}
+
+.menu-items-wrapper.top {
+  bottom: 18px;
+  left: 0;
+}
+
+.menu-items-wrapper.bottom {
+  top: 18px;
+  left: 0;
+}
+
+.menu-items-wrapper.left {
+  top: 0;
+  right: 18px;
+}
+
+.menu-items-wrapper.right {
+  top: 0;
+  left: 18px;
+}
+
+.menu-items-wrapper .menu-item {
+  padding: 6px 8px 6px 3px;
+  border-radius: 2px;
+  font-size: 12px;
+}
+
+.menu-items-wrapper .menu-item:hover {
+  cursor: pointer;
+  background-color: var(--default-background-color);
+}
+
+.menu-items-wrapper .menu-item .fas,
+.menu-items-wrapper .menu-item .far {
+  width: 16px;
+  text-align: center;
+  margin-right: 3px;
+  display: inline-block;
+}
