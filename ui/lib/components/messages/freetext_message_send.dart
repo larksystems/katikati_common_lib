@@ -5,7 +5,7 @@ import 'package:katikati_ui_lib/components/logger.dart';
 
 var logger = Logger('FreetextMessageSendView');
 
-const MAX_LENGTH = 1000;
+const MAX_LENGTH = 50000;
 
 class FreetextMessageSendView {
   String _text;
