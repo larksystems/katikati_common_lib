@@ -94,9 +94,11 @@ void main() {
 
   // auth view
   var authMainView = auth.AuthMainView(
-      brand.AVF, "Title", "Description appear here", [auth.GMAIL_DOMAIN_INFO, auth.LARK_DOMAIN_INFO], (domain) {
-    window.alert("Trying to login with domain: $domain");
-  });
+      brand.KATIKATI,
+      "Title",
+      "Description appear here",
+      [auth.GMAIL_DOMAIN_INFO, auth.LARK_DOMAIN_INFO],
+      (domain) => window.alert("Trying to login with domain: $domain"));
   authViewContainer.append(authMainView.authElement);
 
   // auth inside header

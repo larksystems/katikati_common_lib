@@ -22,7 +22,7 @@ class AuthMainView {
 
   void Function(SignInDomainInfo) _onSigninClick;
 
-  AuthMainView(BrandInfo brand, List<SignInDomainInfo> domainsInfo, this._onSigninClick, [String title, String description]) {
+  AuthMainView(BrandInfo brand, String title, String description, List<SignInDomainInfo> domainsInfo, this._onSigninClick) {
     authElement = new DivElement()..classes.add('auth-main');
 
     _logos = new DivElement();
