@@ -26,7 +26,6 @@ class AuthMainView {
     authElement = new DivElement()..classes.add('auth-main');
 
     _logos = new DivElement();
-    brands = [brand];
 
     _title = new DivElement()
       ..classes.add('project-title')
@@ -39,6 +38,10 @@ class AuthMainView {
     authElement.append(_logos);
     authElement.append(_title);
     authElement.append(_description);
+
+    this.brands = [brand];
+    this.title = title;
+    this.domainsInfo = domainsInfo;
   }
 
   void set brands(List<BrandInfo> values) {
