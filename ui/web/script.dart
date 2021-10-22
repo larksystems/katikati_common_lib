@@ -485,19 +485,19 @@ void main() {
 
   // Menu
   var menuActionItems = [
-    MenuActionItem(DivElement()..innerHtml = "<span class='fas fa-info'></span> View info", () {
+    MenuItem(DivElement()..innerHtml = "<span class='fas fa-info'></span> View info", () {
       window.alert("View info clicked");
     }),
-    MenuActionItem(
+    MenuItem(
         DivElement()..innerHtml = "<div style='color: red'><span class='fas fa-trash-alt'></span> Delete</div>", () {
       window.alert("Delete clicked");
     })
   ];
   var duplicatedMenuActionsItems = [
-    MenuActionItem(DivElement()..innerHtml = "<span class='fas fa-info'></span> View info", () {
+    MenuItem(DivElement()..innerHtml = "<span class='fas fa-info'></span> View info", () {
       window.alert("View info clicked");
     }),
-    MenuActionItem(
+    MenuItem(
         DivElement()..innerHtml = "<div style='color: red'><span class='fas fa-trash-alt'></span> Delete</div>", () {
       window.alert("Delete clicked");
     })
