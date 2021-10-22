@@ -200,6 +200,10 @@ class TagView {
     onAccept();
   }
 
+  void markSelected(bool selected) {
+    renderElement.classes.toggle("tag--selected", selected);
+  }
+
   void _resetActions() {
     renderElement.classes.toggle("tag--editing", false);
     _tagText..contentEditable = "false";
