@@ -97,6 +97,10 @@
   background-color: inherit;
 }
 
+.tag.tag--selected .tag__text {
+  border: 1px dashed var(--selection-color);
+}
+
 .tag.tag--highlighted .tag__text {
   background-color: var(--lighter-background-color);
   border-color: var(--selection-color);
