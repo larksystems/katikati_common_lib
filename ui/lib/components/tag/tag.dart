@@ -184,10 +184,8 @@ class TagView {
 
   void _confirmEdit() {
     _resetActions();
-    if (_text != _tagText.innerText) {
-      _text = _tagText.innerText;
-      onEdit(_text);
-    }
+    _text = _tagText.innerText;
+    onEdit(_text);
   }
 
   void _deleteTag() {
