@@ -1,6 +1,8 @@
 import 'dart:html';
 import 'package:katikati_ui_lib/components/button/button.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
+import 'package:katikati_ui_lib/components/autocomplete/autocomplete.dart';
+import 'package:katikati_ui_lib/components/editable/editable_text.dart';
 
 var logger = Logger('tag.dart');
 
@@ -245,5 +247,92 @@ class TagView {
         break;
       default:
     }
+  }
+}
+
+class TagSuggestion {
+  String id;
+  String text;
+
+  TagSuggestion(this.id, this.text);
+}
+
+class NewTagViewWithSuggestions {
+  SpanElement renderElement;
+  TextEdit _tagText;
+
+  String _text;
+  List<TagSuggestion> _tagSuggestions;
+
+  void Function(String) onNewTag = (_) {};
+  void Function(String) onAcceptSuggestion = (_) {};
+  void Function() onCancel = () {};
+
+  NewTagViewWithSuggestions(this._tagSuggestions) {
+    renderElement = SpanElement()
+      ..classes.add("tag")
+      ..classes.add("tag--editing")
+      ..dataset['id'] = "__new_tag";
+
+    var autocompleteWrapper = DivElement()..className = "tag__suggestions";
+
+    var suggestionsList = _tagSuggestions.map((suggestion) {
+      return SuggestionItem(suggestion.id, suggestion.text, DivElement()..innerText = suggestion.text);
+    }).toList();
+
+    var emptySuggestionsPlaceholder = DivElement()
+      ..classes.add("autocomplete__suggestion-item")
+      ..classes.toggle("autocomplete__suggestion-item--disabled")
+      ..innerText = "No suggestions";
+    var autocompleteList = AutocompleteList(suggestionsList, "", emptyPlaceholder: emptySuggestionsPlaceholder)
+      ..onSelect = (suggestionItem) {
+        onAcceptSuggestion(suggestionItem.value);
+      }
+      ..onRequestClose = () {
+        autocompleteWrapper.children.clear();
+      };
+
+    _tagText = TextEdit("", placeholder: "tag", classname: 'tag__text')
+      ..onChange = (value) {
+        _text = value;
+        autocompleteList.inputText = value;
+      }
+      ..onEdit = (_) {
+        _confirmEdit();
+      }
+      ..onCancel = () {
+        _cancelEditing();
+      }
+      ..onFocus = () {
+        autocompleteWrapper.append(autocompleteList.renderElement);
+        autocompleteList.activate();
+      };
+
+    renderElement.onBlur.listen((_) {
+      autocompleteList.onRequestClose();
+      autocompleteList.deactivate();
+    });
+
+    autocompleteList
+      ..onFocus = () {
+        _tagText.keyboardShortcutEnabled = false;
+      }
+      ..onBlur = () {
+        _tagText.keyboardShortcutEnabled = true;
+      };
+
+    renderElement..append(_tagText.renderElement)..append(autocompleteWrapper);
+  }
+
+  void focus() {
+    _tagText.beginEdit();
+  }
+
+  void _cancelEditing() {
+    onCancel();
+  }
+
+  void _confirmEdit() {
+    onNewTag(_text);
   }
 }

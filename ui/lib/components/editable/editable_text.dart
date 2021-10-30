@@ -40,20 +40,20 @@ class TextEdit {
     _keyboardShortcutsEnabled = enabled;
   }
 
-  TextEdit(this._text, {bool removable = false}) {
+  TextEdit(this._text, {bool removable = false, String placeholder = "untitled", String classname = 'text-edit__text'}) {
     _removable = removable;
 
     renderElement = SpanElement()..classes.add('text-edit');
 
     _textSpan = SpanElement()
-      ..classes.add('text-edit__text')
-      ..dataset['placeholder'] = "untitled"
+      ..className = classname
+      ..dataset['placeholder'] = placeholder
       ..onClick.listen((e) {
         if (!_isEditing) return;
         e.stopPropagation();
       })
       ..onKeyDown.listen((event) {
-        if (event.keyCode == KeyCode.ENTER) event.preventDefault();
+        if (event.keyCode == KeyCode.ENTER || event.keyCode == KeyCode.DOWN || event.keyCode == KeyCode.UP) event.preventDefault();
       })
       ..onInput.listen((event) {
         var value = (event.currentTarget as SpanElement).innerText;

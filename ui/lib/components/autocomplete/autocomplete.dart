@@ -17,6 +17,7 @@ class AutocompleteList {
   DivElement _emptyPlaceholder;
 
   int _listFocusIndex;
+  bool _active = false;
 
   List<SuggestionItem> _allSuggestions;
   List<SuggestionItem> get activeSuggestions {
@@ -54,6 +55,7 @@ class AutocompleteList {
   }
 
   void _handleKeyboardInteraction(KeyboardEvent event) {
+    if (!_active) return;
     if (activeSuggestions.isEmpty) return;
     switch (event.key) {
       case "ArrowUp":
@@ -67,10 +69,12 @@ class AutocompleteList {
       case "Escape":
         _listFocusIndex = null;
         onRequestClose();
+        deactivate();
         break;
       case "Enter":
         if (_listFocusIndex != null && _listFocusIndex >= 0 && _listFocusIndex < activeSuggestions.length) {
           _onChoose(activeSuggestions[_listFocusIndex]);
+          deactivate();
         }
         break;
       default:
@@ -101,6 +105,7 @@ class AutocompleteList {
         ..append(suggestion._display)
         ..onClick.listen((_) {
           _onChoose(suggestion);
+          deactivate();
         });
       if (count == _listFocusIndex) {
         suggestionItem.focus();
@@ -119,5 +124,14 @@ class AutocompleteList {
     _listFocusIndex = null;
     onSelect(suggestionItem);
     onRequestClose();
+    deactivate();
+  }
+
+  void activate() {
+    _active = true;
+  }
+
+  void deactivate() {
+    _active = false;
   }
 }
