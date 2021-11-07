@@ -306,6 +306,9 @@ class NewTagViewWithSuggestions {
       ..onFocus = () {
         autocompleteWrapper.append(autocompleteList.renderElement);
         autocompleteList.activate();
+      }
+      ..onBlur = () {
+        autocompleteList.deactivate();
       };
 
     renderElement.onBlur.listen((_) {

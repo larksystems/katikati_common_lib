@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:async';
 
 class SuggestionItem {
   String _value;
@@ -17,8 +18,6 @@ class AutocompleteList {
   DivElement _emptyPlaceholder;
 
   int _listFocusIndex;
-  bool _active = false;
-
   List<SuggestionItem> _allSuggestions;
   List<SuggestionItem> get activeSuggestions {
     if (_inputText == "") return _allSuggestions;
@@ -43,6 +42,8 @@ class AutocompleteList {
   void Function() onFocus = () {};
   void Function() onBlur = () {};
 
+  StreamSubscription<KeyboardEvent> _keyboardShortcutListener;
+
   AutocompleteList(this._allSuggestions, this._inputText, {DivElement emptyPlaceholder}) {
     _emptyPlaceholder = emptyPlaceholder ?? DivElement();
 
@@ -51,11 +52,10 @@ class AutocompleteList {
     renderElement.append(_suggestionsList);
     _updateSuggestionListRender();
 
-    document.onKeyUp.listen(_handleKeyboardInteraction);
+    _keyboardShortcutListener = document.onKeyUp.listen(_handleKeyboardInteraction);
   }
 
   void _handleKeyboardInteraction(KeyboardEvent event) {
-    if (!_active) return;
     if (activeSuggestions.isEmpty) return;
     switch (event.key) {
       case "ArrowUp":
@@ -95,6 +95,7 @@ class AutocompleteList {
   void _updateSuggestionListRender() {
     _suggestionsList.children.clear();
     var count = 0;
+    DivElement activeElement;
     for (var suggestion in activeSuggestions) {
       var suggestionItem = DivElement()
         ..classes.add("autocomplete__suggestion-item")
@@ -108,6 +109,7 @@ class AutocompleteList {
           deactivate();
         });
       if (count == _listFocusIndex) {
+        activeElement = suggestionItem;
         suggestionItem.focus();
         onFocus();
       }
@@ -118,6 +120,8 @@ class AutocompleteList {
     if (activeSuggestions.length == 0) {
       _suggestionsList.append(_emptyPlaceholder);
     }
+
+    activeElement?.scrollIntoView();
   }
 
   void _onChoose(SuggestionItem suggestionItem) {
@@ -128,10 +132,11 @@ class AutocompleteList {
   }
 
   void activate() {
-    _active = true;
+    deactivate();
+    _keyboardShortcutListener = document.onKeyUp.listen(_handleKeyboardInteraction);
   }
 
   void deactivate() {
-    _active = false;
+    _keyboardShortcutListener?.cancel();
   }
 }

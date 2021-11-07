@@ -1,6 +1,6 @@
 .autocomplete__wrapper {
   max-width: 240px;
-  max-height: 360px;
+  max-height: 145px; /* 5 suggestion items visible, but scrollable */
   overflow-y: scroll;
   background-color: white;
   border-radius: 3px;
@@ -20,7 +20,8 @@
   background-color: var(--lighter-background-color);
 }
 
-.autocomplete__suggestion-item--focussed {
+.autocomplete__suggestion-item--focussed,
+.autocomplete__suggestion-item--focussed:hover {
   background-color: var(--default-background-color);
 }
 
