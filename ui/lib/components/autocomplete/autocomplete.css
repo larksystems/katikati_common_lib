@@ -1,12 +1,13 @@
 .autocomplete__wrapper {
   max-width: 240px;
-  max-height: 145px; /* 5 suggestion items visible, but scrollable */
+  max-height: 160px; /* 5 suggestion items fully visible, 1 item partially visible but scrollable */
   overflow-y: scroll;
   background-color: white;
   border-radius: 3px;
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid var(--default-boder-color);
   position: absolute;
+  z-index: 10;
 }
 
 .autocomplete__suggestion-item {

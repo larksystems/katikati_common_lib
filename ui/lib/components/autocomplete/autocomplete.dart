@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:math';
 import 'dart:async';
 
 class SuggestionItem {
@@ -16,6 +17,8 @@ class AutocompleteList {
   DivElement renderElement;
   DivElement _suggestionsList;
   DivElement _emptyPlaceholder;
+  DivElement _boundingElement;
+  bool _displayAtTop;
 
   int _listFocusIndex;
   List<SuggestionItem> _allSuggestions;
@@ -44,8 +47,9 @@ class AutocompleteList {
 
   StreamSubscription<KeyboardEvent> _keyboardShortcutListener;
 
-  AutocompleteList(this._allSuggestions, this._inputText, {DivElement emptyPlaceholder}) {
+  AutocompleteList(this._allSuggestions, this._inputText, {DivElement emptyPlaceholder, DivElement boundingElement}) {
     _emptyPlaceholder = emptyPlaceholder ?? DivElement();
+    _boundingElement = boundingElement;
 
     renderElement = DivElement()..classes.add("autocomplete__wrapper");
     _suggestionsList = DivElement()..classes.add("autocomplete__suggestions");
@@ -122,6 +126,21 @@ class AutocompleteList {
     }
 
     activeElement?.scrollIntoView();
+    _adjustTopHeight();
+  }
+
+  bool _boundingContainsElement(DivElement element, DivElement bounding) {
+    var boundingRect = bounding.getBoundingClientRect();
+    var elementRect = element.getBoundingClientRect();
+
+    if (boundingRect.topLeft.x <= elementRect.topLeft.x &&
+        boundingRect.topLeft.y <= elementRect.topLeft.y &&
+        boundingRect.bottomRight.x >= elementRect.bottomRight.x &&
+        boundingRect.bottomRight.y >= elementRect.bottomRight.y) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void _onChoose(SuggestionItem suggestionItem) {
@@ -134,6 +153,24 @@ class AutocompleteList {
   void activate() {
     deactivate();
     _keyboardShortcutListener = document.onKeyUp.listen(_handleKeyboardInteraction);
+  }
+
+  void adjustAutocompletePosition() {
+    if (_boundingElement == null) return;
+
+    _displayAtTop = !_boundingContainsElement(renderElement, _boundingElement);
+    _adjustTopHeight();
+  }
+
+  void _adjustTopHeight() {
+    if (_displayAtTop != true) return;
+
+    // TODO: EB: compute height of each of the childern
+    var allSuggestionsCount = max(activeSuggestions.length, 1); // to account for "No suggestions"
+    var height = min(min(allSuggestionsCount, 5.5) * 29, 160);
+    // TODO: EB: pass these as param from the parent
+    var offset = 22;
+    renderElement.style.top = "${-height - offset}px";
   }
 
   void deactivate() {

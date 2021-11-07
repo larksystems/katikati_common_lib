@@ -260,15 +260,18 @@ class TagSuggestion {
 class NewTagViewWithSuggestions {
   SpanElement renderElement;
   TextEdit _tagText;
+  DivElement _boundingElement;
 
   String _text;
   List<TagSuggestion> _tagSuggestions;
+  AutocompleteList _autocompleteList;
 
   void Function(String) onNewTag = (_) {};
   void Function(String) onAcceptSuggestion = (_) {};
   void Function() onCancel = () {};
 
-  NewTagViewWithSuggestions(this._tagSuggestions) {
+  NewTagViewWithSuggestions(this._tagSuggestions, {DivElement boundingElement}) {
+    _boundingElement = boundingElement;
     renderElement = SpanElement()
       ..classes.add("tag")
       ..classes.add("tag--editing")
@@ -284,7 +287,8 @@ class NewTagViewWithSuggestions {
       ..classes.add("autocomplete__suggestion-item")
       ..classes.toggle("autocomplete__suggestion-item--disabled")
       ..innerText = "No suggestions";
-    var autocompleteList = AutocompleteList(suggestionsList, "", emptyPlaceholder: emptySuggestionsPlaceholder)
+    _autocompleteList = AutocompleteList(suggestionsList, "",
+        emptyPlaceholder: emptySuggestionsPlaceholder, boundingElement: _boundingElement)
       ..onSelect = (suggestionItem) {
         onAcceptSuggestion(suggestionItem.value);
       }
@@ -295,7 +299,7 @@ class NewTagViewWithSuggestions {
     _tagText = TextEdit("", placeholder: "tag", classname: 'tag__text')
       ..onChange = (value) {
         _text = value;
-        autocompleteList.inputText = value;
+        _autocompleteList.inputText = value;
       }
       ..onEdit = (_) {
         _confirmEdit();
@@ -304,19 +308,19 @@ class NewTagViewWithSuggestions {
         _cancelEditing();
       }
       ..onFocus = () {
-        autocompleteWrapper.append(autocompleteList.renderElement);
-        autocompleteList.activate();
+        autocompleteWrapper.append(_autocompleteList.renderElement);
+        _autocompleteList.activate();
       }
       ..onBlur = () {
-        autocompleteList.deactivate();
+        _autocompleteList.deactivate();
       };
 
     renderElement.onBlur.listen((_) {
-      autocompleteList.onRequestClose();
-      autocompleteList.deactivate();
+      _autocompleteList.onRequestClose();
+      _autocompleteList.deactivate();
     });
 
-    autocompleteList
+    _autocompleteList
       ..onFocus = () {
         _tagText.keyboardShortcutEnabled = false;
       }
@@ -329,6 +333,7 @@ class NewTagViewWithSuggestions {
 
   void focus() {
     _tagText.beginEdit();
+    _autocompleteList.adjustAutocompletePosition();
   }
 
   void _cancelEditing() {
