@@ -57,6 +57,10 @@ class TagView {
   void Function() onMouseEnter = () {};
   void Function() onMouseLeave = () {};
 
+  void set text(String text) {
+    _tagText.innerText = text;
+  }
+
   TagView(this._text, this._tagId,
       {String groupId,
       String category,
