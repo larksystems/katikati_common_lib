@@ -279,7 +279,7 @@ class ConversationItemView {
 
   void updateDateTime(DateTime dateTime) {
     _dateTime = dateTime;
-    _dateTimeElement.innerText = _dateTime == null ? '' : dateFormatter.format(_dateTime);
+    _dateTimeElement.innerText = _dateTime == null ? '' : dateFormatter.format(_dateTime.toLocal());
     _dateSeparator.innerText = dateStringForSeparator(dateTime);
   }
 }
