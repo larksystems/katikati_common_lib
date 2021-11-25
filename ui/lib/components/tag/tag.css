@@ -127,3 +127,8 @@
   border-color: var(--red);
   background-color: var(--light-red);
 }
+
+.tag__suggestions {
+  position: relative;
+  width: 240px;
+}

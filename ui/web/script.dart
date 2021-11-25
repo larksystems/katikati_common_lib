@@ -210,9 +210,11 @@ void main() {
     }
     ..onFocus = () {
       autocompleteWrapper.append(autocompleteList.renderElement);
+      autocompleteList.activate();
     }
     ..onBlur = () {
       autocompleteList.onRequestClose();
+      autocompleteList.deactivate();
     };
   editableTextContainer.append(textEditableDefault.renderElement);
   textEditableDefault.beginEdit();
