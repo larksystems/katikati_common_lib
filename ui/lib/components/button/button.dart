@@ -16,6 +16,8 @@ class ButtonType {
   static const edit = ButtonType("button--icon", iconClassName: "fas fa-pen");
   static const confirm = ButtonType("button--icon", iconClassName: "fas fa-check");
   static const cancel = ButtonType("button--icon", iconClassName: "fas fa-times");
+  static const expand = ButtonType("button--icon", iconClassName: "far fa-plus-square");
+  static const collapse = ButtonType("button--icon", iconClassName: "far fa-minus-square");
 }
 
 class ButtonAction {
