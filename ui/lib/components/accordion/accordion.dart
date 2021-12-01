@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'package:katikati_ui_lib/components/button/button.dart';
 
 /*
 <div class="accordion">
@@ -94,13 +95,22 @@ class AccordionItem {
 class Accordion {
   List<AccordionItem> _accordionItems;
   bool _onlyOneOpen;
+  DivElement _actionWrapper;
   DivElement renderElement;
 
   List<AccordionItem> get items => _accordionItems;
 
   Accordion(this._accordionItems, {collapseAtStart: true, expandAtStart: false, onlyOneOpen: false}) {
     _onlyOneOpen = onlyOneOpen;
+    var expandButton = Button(ButtonType.expand, hoverText: "Expand all", onClick: (_) => expandAllItems());
+    var collapseButton = Button(ButtonType.collapse, hoverText: "Collapse all", onClick: (_) => collapseAllItems());
+
+    _actionWrapper = DivElement()
+      ..classes.add('accordion-actions')
+      ..append(expandButton.renderElement)
+      ..append(collapseButton.renderElement);
     renderElement = DivElement()..className = "accordion";
+    renderElement.append(_actionWrapper);
     for (var item in _accordionItems) {
       renderElement.append(item.renderElement);
       if (collapseAtStart) {

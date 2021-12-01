@@ -3,6 +3,18 @@
   margin-bottom: 24px;
 }
 
+.accordion-actions {
+  text-align: right;
+}
+
+.accordion-actions .button {
+  color: var(--dark-gray);
+}
+
+.accordion-actions .button:hover {
+  color: var(--black);
+}
+
 .accordion-item {
   border-bottom: 1px solid var(--default-border-color);
   position: relative;
