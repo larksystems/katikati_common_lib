@@ -3,6 +3,7 @@ import 'package:katikati_ui_lib/components/button/button.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 import 'package:katikati_ui_lib/components/autocomplete/autocomplete.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
+import 'package:katikati_ui_lib/components/menu/menu.dart';
 
 var logger = Logger('tag.dart');
 
@@ -45,6 +46,8 @@ class TagView {
   bool _suggested;
 
   TagStyle _tagStyle;
+  Menu _menu;
+  List<MenuItem> _menuItems;
 
   Button _editButton;
   Button _deleteButton;
@@ -76,13 +79,15 @@ class TagView {
       bool suggested = false,
       TagStyle tagStyle = TagStyle.None,
       bool doubleClickToEdit = true,
-      bool actionsBeforeText = false}) {
+      bool actionsBeforeText = false,
+      List<MenuItem> menuItems}) {
     _category = category;
     _selectable = selectable;
     _editable = editable;
     _deletable = deletable;
     _acceptable = acceptable;
     _suggested = suggested;
+    _menuItems = menuItems;
 
     renderElement = SpanElement()
       ..dataset['id'] = _tagId
@@ -165,6 +170,11 @@ class TagView {
     }
 
     setTagStyle(tagStyle);
+
+    if (menuItems != null) {
+      _menu = Menu(menuItems);
+      _tagActions.append(_menu.renderElement);
+    }
   }
 
   void beginEdit() {
@@ -232,6 +242,11 @@ class TagView {
     }
     if (_deletable) {
       _tagActions.append(_deleteButton.renderElement);
+    }
+
+    if (_menuItems != null) {
+      _menu = Menu(_menuItems);
+      _tagActions.append(_menu.renderElement);
     }
   }
 
