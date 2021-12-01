@@ -63,6 +63,7 @@
   --spacer-mid: 12px;
   --spacer-small: 6px;
   --spacer-6: calc(6 * var(--spacer));
+  --spacer-2: calc(2 * var(--spacer));
 
   --login-img-height: 60px;
   --header-logo-height: 30px;

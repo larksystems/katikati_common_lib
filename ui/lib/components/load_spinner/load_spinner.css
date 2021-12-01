@@ -4,13 +4,8 @@
   margin-top: var(--spacer);
   margin-left: auto;
   margin-right: auto;
-  border: var(--spacer) solid var(--default-background-color);
-  border-radius: 50%;
-  border-top: var(--spacer) solid var(--teal);
-  width: var(--spacer-6);
-  height: var(--spacer-6);
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
+  width: var(--spacer-2);
+  height: var(--spacer-2);
 }
 
 @-webkit-keyframes spin {
