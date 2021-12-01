@@ -3,6 +3,7 @@ import 'package:katikati_ui_lib/components/button/button.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
 import 'package:katikati_ui_lib/components/autocomplete/autocomplete.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
+import 'package:katikati_ui_lib/components/menu/menu.dart';
 
 var logger = Logger('tag.dart');
 
@@ -29,7 +30,9 @@ enum TagStyle {
 
 class TagView {
   SpanElement renderElement;
+  SpanElement _tagTextWrapper;
   SpanElement _tagText;
+  SpanElement _tagShortcut;
   SpanElement _tagActions;
 
   String _text;
@@ -43,6 +46,8 @@ class TagView {
   bool _suggested;
 
   TagStyle _tagStyle;
+  Menu _menu;
+  List<MenuItem> _menuItems;
 
   Button _editButton;
   Button _deleteButton;
@@ -66,6 +71,7 @@ class TagView {
   TagView(this._text, this._tagId,
       {String groupId,
       String category,
+      String shortcut = "",
       bool selectable = true,
       bool editable = false,
       bool deletable = false,
@@ -73,22 +79,33 @@ class TagView {
       bool suggested = false,
       TagStyle tagStyle = TagStyle.None,
       bool doubleClickToEdit = true,
-      bool actionsBeforeText = false}) {
+      bool actionsBeforeText = false,
+      List<MenuItem> menuItems}) {
     _category = category;
     _selectable = selectable;
     _editable = editable;
     _deletable = deletable;
     _acceptable = acceptable;
     _suggested = suggested;
+    _menuItems = menuItems;
 
     renderElement = SpanElement()
       ..dataset['id'] = _tagId
       ..dataset['group-id'] = groupId ?? ''
       ..classes.add('tag');
 
+    _tagTextWrapper = SpanElement();
     _tagText = SpanElement()
       ..classes.add('tag__text')
       ..dataset['placeholder'] = "untitled tag";
+    _tagShortcut = SpanElement()..classes.add('tag__shortcut');
+    _tagTextWrapper.append(_tagText);
+    if (shortcut != "") {
+      _tagShortcut
+        ..title = "Shortcut"
+        ..append(SpanElement()..innerText = shortcut);
+      _tagTextWrapper.append(_tagShortcut);
+    }
     _tagActions = SpanElement()..classes.add('tag__actions');
 
     _tagText.innerText = this._text;
@@ -122,12 +139,12 @@ class TagView {
 
     if (_selectable) {
       renderElement.classes.add('tag--selectable');
-      _tagText.onClick.listen((e) {
+      _tagTextWrapper.onClick.listen((e) {
         e.stopPropagation();
         onSelect();
       });
-      _tagText.onMouseEnter.listen((_) => onMouseEnter());
-      _tagText.onMouseLeave.listen((_) => onMouseLeave());
+      _tagTextWrapper.onMouseEnter.listen((_) => onMouseEnter());
+      _tagTextWrapper.onMouseLeave.listen((_) => onMouseLeave());
     }
 
     if (_acceptable) {
@@ -147,12 +164,17 @@ class TagView {
     }
 
     if (actionsBeforeText) {
-      renderElement..append(_tagActions)..append(_tagText);
+      renderElement..append(_tagActions)..append(_tagTextWrapper);
     } else {
-      renderElement..append(_tagText)..append(_tagActions);
+      renderElement..append(_tagTextWrapper)..append(_tagActions);
     }
 
     setTagStyle(tagStyle);
+
+    if (menuItems != null) {
+      _menu = Menu(menuItems);
+      _tagActions.append(_menu.renderElement);
+    }
   }
 
   void beginEdit() {
@@ -220,6 +242,11 @@ class TagView {
     }
     if (_deletable) {
       _tagActions.append(_deleteButton.renderElement);
+    }
+
+    if (_menuItems != null) {
+      _menu = Menu(_menuItems);
+      _tagActions.append(_menu.renderElement);
     }
   }
 
