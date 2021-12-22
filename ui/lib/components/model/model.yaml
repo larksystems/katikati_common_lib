@@ -1,7 +1,3 @@
-ConversationListShard:
-  firebaseCollectionName: 'nook_conversation_shards'
-  name: 'string'
-
 Conversation:
   firebaseCollectionName: 'nook_conversations'
   namespace:              'nook_conversations'
