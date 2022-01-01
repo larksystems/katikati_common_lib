@@ -4,12 +4,41 @@ import 'dart:html';
 /// Katikati URLs look like this
 /// <domain-name>/<path-to-page>?<query-list>
 class UrlView {
+  static const _PROJECT_QUERY_KEY = 'project';
   static const _CONVERSATION_LIST_QUERY_KEY = 'conversation-list';
   static const _CONVERSATION_ID_QUERY_KEY = 'conversation-id';
   static const _CONVERSATION_ID_FILTER_QUERY_KEY = 'conversation-id-filter';
 
   TagFilterUrlView _tagFilterUrlView = TagFilterUrlView();
   TagFilterUrlView get tagsFilter => _tagFilterUrlView;
+
+  String get project {
+    var uri = Uri.parse(window.location.href);
+    if (uri.pathSegments.contains(_PROJECT_QUERY_KEY)) {
+      try {
+        return uri.pathSegments[uri.pathSegments.indexOf('project') + 1];
+      } catch (e) {
+        print('Unable to read the project name, returning none');
+        return null;
+      }
+    }
+    return null;
+  }
+
+  void set project(String projectId) {
+    var uri = Uri.parse(window.location.href);
+    var pathSegments = uri.pathSegments;
+    if (projectId == null) {
+      var i = pathSegments.indexOf('project');
+      pathSegments.removeAt(i); // project keyword
+      pathSegments.removeAt(i); // project name
+    } else {
+      pathSegments.insert(0, 'project');
+      pathSegments.insert(1, projectId);
+    }
+    uri = uri.replace(pathSegments: pathSegments);
+    window.history.pushState('', '', uri.toString());
+  }
 
   String get conversationList {
     var uri = Uri.parse(window.location.href);
