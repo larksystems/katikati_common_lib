@@ -1,5 +1,5 @@
 .scroll-indicator-container {
-  overflow-y: scroll;
+  overflow-y: auto;
   position: relative;
 }
 
