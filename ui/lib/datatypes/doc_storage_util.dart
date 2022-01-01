@@ -8,7 +8,7 @@ enum DocChangeType { added, modified, removed }
 /// See [FirebaseDocStorage] for a firebase specific version of this.
 abstract class DocStorage {
   /// Return a stream of document snapshots
-  Stream<List<DocSnapshot>> onChange(String collectionRoot);
+  Stream<List<DocSnapshot>> onChange(String collectionRoot, List<DocQuery> queryList);
 
   /// Return a object for batching document updates.
   /// Call [DocBatchUpdate.commit] after the changes have been made.
@@ -39,17 +39,27 @@ abstract class DocBatchUpdate {
   void update(String documentPath, {Map<String, dynamic> data});
 }
 
+/// A query for filtering document snapshots.
+class DocQuery {
+  final String field;
+  final String op;
+  final String value;
+
+  DocQuery(this.field, this.op, this.value);
+}
+
 StreamSubscription<List<DocSnapshot>> listenForUpdates<T>(
   Logger log,
   DocStorage docStorage,
   void Function(List<T> added, List<T> modified, List<T> removed) listener,
   String collectionRoot,
   T Function(DocSnapshot doc) createModel, {
+  List<DocQuery> queryList = const <DocQuery>[],
   OnErrorListener onError,
 }) {
   log.verbose('Loading from $collectionRoot');
   log.verbose('Query root: $collectionRoot');
-  return docStorage.onChange(collectionRoot).listen((List<DocSnapshot> snapshots) {
+  return docStorage.onChange(collectionRoot, queryList).listen((List<DocSnapshot> snapshots) {
     var added = <T>[];
     var modified = <T>[];
     var removed = <T>[];
