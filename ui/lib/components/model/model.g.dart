@@ -4,7 +4,7 @@
 import 'dart:async';
 
 import 'package:katikati_ui_lib/components/logger.dart';
-import 'package:katikati_ui_lib/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
+import 'package:katikati_ui_lib/datatypes/doc_storage_util.dart' show DocChangeType, DocSnapshot, DocStorage, DocQuery;
 import 'package:katikati_ui_lib/datatypes/turnline.dart';
 
 Logger log = Logger('model.g.dart');
@@ -730,11 +730,12 @@ StreamSubscription<List<DocSnapshot>> listenForUpdates<T>(
     void Function(List<T> added, List<T> modified, List<T> removed) listener,
     String collectionRoot,
     T Function(DocSnapshot doc) createModel,
-    [OnErrorListener onErrorListener]
+    [OnErrorListener onErrorListener,
+    List<DocQuery> queryList = const <DocQuery>[]]
     ) {
   log.verbose('Loading from $collectionRoot');
   log.verbose('Query root: $collectionRoot');
-  return docStorage.onChange(collectionRoot).listen((List<DocSnapshot> snapshots) {
+  return docStorage.onChange(collectionRoot, queryList).listen((List<DocSnapshot> snapshots) {
     var added = <T>[];
     var modified = <T>[];
     var removed = <T>[];
