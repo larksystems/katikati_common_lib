@@ -9,54 +9,6 @@ import 'package:katikati_ui_lib/datatypes/turnline.dart';
 
 Logger log = Logger('model.g.dart');
 
-class ConversationListShard {
-  static const collectionName = 'nook_conversation_shards';
-
-  String docId;
-  String name;
-
-  static ConversationListShard fromSnapshot(DocSnapshot doc, [ConversationListShard modelObj]) =>
-      fromData(doc.data, modelObj)..docId = doc.id;
-
-  static ConversationListShard fromData(data, [ConversationListShard modelObj]) {
-    if (data == null) return null;
-    return (modelObj ?? ConversationListShard())
-      ..name = String_fromData(data['name']);
-  }
-
-  static ConversationListShard required(Map data, String fieldName, String className) {
-    var value = fromData(data[fieldName]);
-    if (value == null && !data.containsKey(fieldName))
-      throw ValueException("$className.$fieldName is missing");
-    return value;
-  }
-
-  static ConversationListShard notNull(Map data, String fieldName, String className) {
-    var value = required(data, fieldName, className);
-    if (value == null)
-      throw ValueException("$className.$fieldName must not be null");
-    return value;
-  }
-
-  static StreamSubscription listen(DocStorage docStorage, ConversationListShardCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onErrorListener}) =>
-      listenForUpdates<ConversationListShard>(docStorage, listener, collectionRoot, ConversationListShard.fromSnapshot, onErrorListener);
-
-  Map<String, dynamic> toData() {
-    return {
-      if (name != null) 'name': name,
-    };
-  }
-
-  @override
-  String toString() => 'ConversationListShard [$docId]: ${toData().toString()}';
-}
-typedef ConversationListShardCollectionListener = void Function(
-  List<ConversationListShard> added,
-  List<ConversationListShard> modified,
-  List<ConversationListShard> removed,
-);
-
 class Conversation {
   static const collectionName = 'nook_conversations';
 
