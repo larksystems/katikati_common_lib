@@ -141,25 +141,19 @@ void main() {
     printURLViewParams(urlView);
   });
   setURLParamsButton["conversation-id"].onClick.listen((_) {
-    urlView.setPageUrlConversationId("conv-id");
+    urlView.conversationId = "conv-id";
   });
   setURLParamsButton["conversation-list-id"].onClick.listen((_) {
-    urlView.setPageUrlConversationList("conv-list-id");
+    urlView.conversationList = "conv-list-id";
   });
   setURLParamsButton["conversation-id-filter"].onClick.listen((_) {
-    urlView.setPageUrlFilterConversationId("filter-a");
+    urlView.conversationIdFilter = "filter-a";
   });
   setURLParamsButton["include-filter"].onClick.listen((_) {
-    urlView.setPageUrlFilterTags(TagFilterType.include, Set()..add("hello")..add("world"));
+    urlView.tagsFilter[TagFilterType.include] = Set()..add("hello")..add("world");
   });
   setURLParamsButton["exclude-filter"].onClick.listen((_) {
-    urlView.setPageUrlFilterTags(TagFilterType.exclude, Set()..add("welcome")..add("home"));
-  });
-  setURLParamsButton["include-after-date"].onClick.listen((_) {
-    urlView.setPageUrlFilterAfterDate(TagFilterType.include, DateTime(2020, 1, 1, 3, 5));
-  });
-  setURLParamsButton["exclude-after-date"].onClick.listen((_) {
-    urlView.setPageUrlFilterAfterDate(TagFilterType.exclude, DateTime(2020, 2, 3, 16, 20));
+    urlView.tagsFilter[TagFilterType.exclude] = Set()..add("welcome")..add("home");
   });
 
   // autocomplete list
@@ -515,11 +509,9 @@ void main() {
 }
 
 void printURLViewParams(UrlView urlView) {
-  logger.debug("Conversation ID: ${urlView.getPageUrlConversationId()}");
-  logger.debug("Conversation list ID: ${urlView.getPageUrlConversationList()}");
-  logger.debug("Conversation ID filter: ${urlView.getPageUrlFilterConversationId()}");
-  logger.debug("Include filter: ${urlView.getPageUrlFilterTags(TagFilterType.include)}");
-  logger.debug("Exclude filter: ${urlView.getPageUrlFilterTags(TagFilterType.exclude)}");
-  logger.debug("Include after date: ${urlView.getPageUrlFilterAfterDate(TagFilterType.include)}");
-  logger.debug("Exclude after date: ${urlView.getPageUrlFilterAfterDate(TagFilterType.exclude)}");
+  logger.debug("Conversation ID: ${urlView.conversationId}");
+  logger.debug("Conversation list ID: ${urlView.conversationList}");
+  logger.debug("Conversation ID filter: ${urlView.conversationIdFilter}");
+  logger.debug("Include filter: ${urlView.tagsFilter[TagFilterType.include]}");
+  logger.debug("Exclude filter: ${urlView.tagsFilter[TagFilterType.exclude]}");
 }

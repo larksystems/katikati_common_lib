@@ -1,149 +1,133 @@
+import 'dart:collection';
 import 'dart:html';
-import 'package:intl/intl.dart';
 
-DateFormat afterDateFilterFormat = DateFormat('yyyy.MM.dd HH:mm');
-enum TagFilterType { include, exclude, lastInboundTurn }
-
+/// Katikati URLs look like this
+/// <domain-name>/<path-to-page>?<query-list>
 class UrlView {
-  static const String queryConversationListKey = 'conversation-list';
-  static const String queryConversationIdKey = 'conversation-id';
-  static const String queryConversationIdFilterKey = 'conversation-id-filter';
+  static const _CONVERSATION_LIST_QUERY_KEY = 'conversation-list';
+  static const _CONVERSATION_ID_QUERY_KEY = 'conversation-id';
+  static const _CONVERSATION_ID_FILTER_QUERY_KEY = 'conversation-id-filter';
 
-  String getQueryTagFilterKey(TagFilterType type) {
-    switch (type) {
-      case TagFilterType.include:
-        return 'include-filter';
-      case TagFilterType.exclude:
-        return 'exclude-filter';
-      case TagFilterType.lastInboundTurn:
-        return 'last-inbound-turn-filter';
+  TagFilterUrlView _tagFilterUrlView = TagFilterUrlView();
+  TagFilterUrlView get tagsFilter => _tagFilterUrlView;
+
+  String get conversationList {
+    var uri = Uri.parse(window.location.href);
+    if (uri.queryParameters.containsKey(_CONVERSATION_LIST_QUERY_KEY)) {
+      return uri.queryParameters[_CONVERSATION_LIST_QUERY_KEY];
     }
-    throw 'Trying to read an unknown filter type: $type';
+    return null;
   }
 
-  String getQueryAfterDateFilterKey(TagFilterType type) {
-    switch (type) {
-      case TagFilterType.include:
-        return 'include-after-date';
-      case TagFilterType.exclude:
-        return 'exclude-after-date';
-      default:
-        throw 'Trying to read an unknown filter type: $type';
+  void set conversationList(String conversationListId) {
+    var uri = Uri.parse(window.location.href);
+    Map<String, String> queryParameters = new Map.from(uri.queryParameters);
+    if (conversationListId == null) {
+      queryParameters.remove(_CONVERSATION_LIST_QUERY_KEY);
+    } else {
+      queryParameters[_CONVERSATION_LIST_QUERY_KEY] = conversationListId;
     }
+    uri = uri.replace(queryParameters: queryParameters);
+    window.history.pushState('', '', uri.toString());
   }
 
-  Set<String> getPageUrlFilterTags(TagFilterType type) {
-    var queryFilterKey = getQueryTagFilterKey(type);
+  String get conversationId {
+    var uri = Uri.parse(window.location.href);
+    if (uri.queryParameters.containsKey(_CONVERSATION_ID_QUERY_KEY)) {
+      return uri.queryParameters[_CONVERSATION_ID_QUERY_KEY];
+    }
+    return null;
+  }
+
+  void set conversationId(String conversationId) {
+    var uri = Uri.parse(window.location.href);
+    Map<String, String> queryParameters = new Map.from(uri.queryParameters);
+    if (conversationId == null) {
+      queryParameters.remove(_CONVERSATION_ID_QUERY_KEY);
+    } else {
+      queryParameters[_CONVERSATION_ID_QUERY_KEY] = conversationId;
+    }
+    uri = uri.replace(queryParameters: queryParameters);
+    window.history.pushState('', '', uri.toString());
+  }
+
+  String get conversationIdFilter {
+    var uri = Uri.parse(window.location.href);
+    if (uri.queryParameters.containsKey(_CONVERSATION_ID_FILTER_QUERY_KEY)) {
+      return uri.queryParameters[_CONVERSATION_ID_FILTER_QUERY_KEY];
+    }
+    return null;
+  }
+
+  void set conversationIdFilter(String conversationId) {
+    var uri = Uri.parse(window.location.href);
+    Map<String, String> queryParameters = new Map.from(uri.queryParameters);
+    if (conversationId == null) {
+      queryParameters.remove(_CONVERSATION_ID_FILTER_QUERY_KEY);
+    } else {
+      queryParameters[_CONVERSATION_ID_FILTER_QUERY_KEY] = conversationId;
+    }
+    uri = uri.replace(queryParameters: queryParameters);
+    window.history.pushState('', '', uri.toString());
+  }
+}
+
+// NOTE: Must be kept in sync with the TagFilterUrlView.TAG_FILTER_QUERY_KEYS map.
+enum TagFilterType {
+  include,
+  exclude,
+  lastInboundTurn,
+}
+
+class TagFilterUrlView with MapMixin<TagFilterType, Set<String>> {
+  // NOTE: Must be kept in sync with the TagFilterType enum definition.
+  static const TAG_FILTER_QUERY_KEYS = {
+    TagFilterType.include: 'include-filter',
+    TagFilterType.exclude: 'exclude-filter',
+    TagFilterType.lastInboundTurn: 'last-inbound-turn-filter',
+  };
+
+  @override
+  Set<String> operator [](Object key) {
+    if (key == null) return Set<String>();
+    var queryFilterKey = TAG_FILTER_QUERY_KEYS[key];
     var uri = Uri.parse(window.location.href);
     if (uri.queryParameters.containsKey(queryFilterKey)) {
       List<String> filterTags = uri.queryParameters[queryFilterKey].split(' ');
       filterTags.removeWhere((tag) => tag == "");
       return filterTags.toSet();
     }
-    return Set();
+    return Set<String>();
   }
 
-  void setPageUrlFilterTags(TagFilterType type, Set<String> filterTags) {
-    var queryFilterKey = getQueryTagFilterKey(type);
+  @override
+  void operator []=(TagFilterType key, Set<String> value) {
+    if (key == null) return;
+    var queryFilterKey = TAG_FILTER_QUERY_KEYS[key];
     var uri = Uri.parse(window.location.href);
     Map<String, String> queryParameters = new Map.from(uri.queryParameters);
-    if (filterTags == null || filterTags.isEmpty) {
+    if (value == null || value.isEmpty) {
       queryParameters.remove(queryFilterKey);
     } else {
-      queryParameters[queryFilterKey] = filterTags.join(' ');
+      queryParameters[queryFilterKey] = value.join(' ');
     }
     uri = uri.replace(queryParameters: queryParameters);
     window.history.pushState('', '', uri.toString());
   }
 
-  String getPageUrlConversationList() {
-    var uri = Uri.parse(window.location.href);
-    if (uri.queryParameters.containsKey(queryConversationListKey)) {
-      return uri.queryParameters[queryConversationListKey];
-    }
-    return null;
+  @override
+  Iterable<TagFilterType> get keys => TagFilterType.values;
+
+  @override
+  /// Operation unsupported - nothing will happen.
+  void clear() {
+    // Operation usupported
   }
 
-  void setPageUrlConversationList(String conversationListId) {
-    var uri = Uri.parse(window.location.href);
-    Map<String, String> queryParameters = new Map.from(uri.queryParameters);
-    if (conversationListId == null) {
-      queryParameters.remove(queryConversationListKey);
-    } else {
-      queryParameters[queryConversationListKey] = conversationListId;
-    }
-    uri = uri.replace(queryParameters: queryParameters);
-    window.history.pushState('', '', uri.toString());
-  }
-
-  String getPageUrlConversationId() {
-    var uri = Uri.parse(window.location.href);
-    if (uri.queryParameters.containsKey(queryConversationIdKey)) {
-      return uri.queryParameters[queryConversationIdKey];
-    }
-    return null;
-  }
-
-  void setPageUrlConversationId(String conversationId) {
-    var uri = Uri.parse(window.location.href);
-    Map<String, String> queryParameters = new Map.from(uri.queryParameters);
-    if (conversationId == null) {
-      queryParameters.remove(queryConversationIdKey);
-    } else {
-      queryParameters[queryConversationIdKey] = conversationId;
-    }
-    uri = uri.replace(queryParameters: queryParameters);
-    window.history.pushState('', '', uri.toString());
-  }
-
-  // TODO: More specific Function parameter
-  DateTime getPageUrlFilterAfterDate(TagFilterType type, {void Function(Exception) onError}) {
-    var queryFilterKey = getQueryAfterDateFilterKey(type);
-    var uri = Uri.parse(window.location.href);
-    if (uri.queryParameters.containsKey(queryFilterKey)) {
-      String afterDateFilter = uri.queryParameters[queryFilterKey];
-      try {
-        return afterDateFilterFormat.parse(afterDateFilter);
-      } on FormatException catch (e) {
-        if (onError != null) {
-          onError(e);
-        }
-        return null;
-      }
-    }
-    return null;
-  }
-
-  void setPageUrlFilterAfterDate(TagFilterType type, DateTime afterDateFilter) {
-    var queryFilterKey = getQueryAfterDateFilterKey(type);
-    var uri = Uri.parse(window.location.href);
-    Map<String, String> queryParameters = new Map.from(uri.queryParameters);
-    if (afterDateFilter == null) {
-      queryParameters.remove(queryFilterKey);
-    } else {
-      queryParameters[queryFilterKey] = afterDateFilterFormat.format(afterDateFilter);
-    }
-    uri = uri.replace(queryParameters: queryParameters);
-    window.history.pushState('', '', uri.toString());
-  }
-
-  String getPageUrlFilterConversationId() {
-    var uri = Uri.parse(window.location.href);
-    if (uri.queryParameters.containsKey(queryConversationIdFilterKey)) {
-      return uri.queryParameters[queryConversationIdFilterKey];
-    }
-    return null;
-  }
-
-  void setPageUrlFilterConversationId(String conversationIdFilter) {
-    var uri = Uri.parse(window.location.href);
-    Map<String, String> queryParameters = new Map.from(uri.queryParameters);
-    if (conversationIdFilter == null) {
-      queryParameters.remove(queryConversationIdFilterKey);
-    } else {
-      queryParameters[queryConversationIdFilterKey] = conversationIdFilter;
-    }
-    uri = uri.replace(queryParameters: queryParameters);
-    window.history.pushState('', '', uri.toString());
+  @override
+  /// Operation unsupported - nothing will happen.
+  Set<String> remove(Object key) {
+    // Operation usupported
+    return Set<String>();
   }
 }
