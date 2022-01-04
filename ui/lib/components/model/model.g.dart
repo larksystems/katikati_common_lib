@@ -4,58 +4,10 @@
 import 'dart:async';
 
 import 'package:katikati_ui_lib/components/logger.dart';
-import 'package:katikati_ui_lib/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
+import 'package:katikati_ui_lib/datatypes/doc_storage_util.dart' show DocChangeType, DocSnapshot, DocStorage, DocQuery;
 import 'package:katikati_ui_lib/datatypes/turnline.dart';
 
 Logger log = Logger('model.g.dart');
-
-class ConversationListShard {
-  static const collectionName = 'nook_conversation_shards';
-
-  String docId;
-  String name;
-
-  static ConversationListShard fromSnapshot(DocSnapshot doc, [ConversationListShard modelObj]) =>
-      fromData(doc.data, modelObj)..docId = doc.id;
-
-  static ConversationListShard fromData(data, [ConversationListShard modelObj]) {
-    if (data == null) return null;
-    return (modelObj ?? ConversationListShard())
-      ..name = String_fromData(data['name']);
-  }
-
-  static ConversationListShard required(Map data, String fieldName, String className) {
-    var value = fromData(data[fieldName]);
-    if (value == null && !data.containsKey(fieldName))
-      throw ValueException("$className.$fieldName is missing");
-    return value;
-  }
-
-  static ConversationListShard notNull(Map data, String fieldName, String className) {
-    var value = required(data, fieldName, className);
-    if (value == null)
-      throw ValueException("$className.$fieldName must not be null");
-    return value;
-  }
-
-  static StreamSubscription listen(DocStorage docStorage, ConversationListShardCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onErrorListener}) =>
-      listenForUpdates<ConversationListShard>(docStorage, listener, collectionRoot, ConversationListShard.fromSnapshot, onErrorListener);
-
-  Map<String, dynamic> toData() {
-    return {
-      if (name != null) 'name': name,
-    };
-  }
-
-  @override
-  String toString() => 'ConversationListShard [$docId]: ${toData().toString()}';
-}
-typedef ConversationListShardCollectionListener = void Function(
-  List<ConversationListShard> added,
-  List<ConversationListShard> modified,
-  List<ConversationListShard> removed,
-);
 
 class Conversation {
   static const collectionName = 'nook_conversations';
@@ -730,11 +682,12 @@ StreamSubscription<List<DocSnapshot>> listenForUpdates<T>(
     void Function(List<T> added, List<T> modified, List<T> removed) listener,
     String collectionRoot,
     T Function(DocSnapshot doc) createModel,
-    [OnErrorListener onErrorListener]
+    [OnErrorListener onErrorListener,
+    List<DocQuery> queryList = const <DocQuery>[]]
     ) {
   log.verbose('Loading from $collectionRoot');
   log.verbose('Query root: $collectionRoot');
-  return docStorage.onChange(collectionRoot).listen((List<DocSnapshot> snapshots) {
+  return docStorage.onChange(collectionRoot, queryList).listen((List<DocSnapshot> snapshots) {
     var added = <T>[];
     var modified = <T>[];
     var removed = <T>[];

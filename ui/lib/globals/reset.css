@@ -85,3 +85,27 @@ code {
 textarea {
   font-family: sans-serif;
 }
+
+/* custom scrollbars */
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-left: 1px solid var(--default-border-color);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--darker-background-color);
+  border: 1px solid var(--darker-border-color);
+  border-right: none;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--black-30);
+}
