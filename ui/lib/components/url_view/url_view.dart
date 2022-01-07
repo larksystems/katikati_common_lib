@@ -14,29 +14,23 @@ class UrlView {
 
   String get project {
     var uri = Uri.parse(window.location.href);
-    if (uri.pathSegments.contains(_PROJECT_QUERY_KEY)) {
-      try {
-        return uri.pathSegments[uri.pathSegments.indexOf('project') + 1];
-      } catch (e) {
-        print('Unable to read the project name, returning none');
-        return null;
-      }
+    // TODO(mariana): We should have the project part of the URL path, not the query
+    // but that adds complexity to the deployment process, so we keep as a query key for now
+    if (uri.queryParameters.containsKey(_PROJECT_QUERY_KEY)) {
+      return uri.queryParameters[_PROJECT_QUERY_KEY];
     }
     return null;
   }
 
   void set project(String projectId) {
     var uri = Uri.parse(window.location.href);
-    var pathSegments = uri.pathSegments;
+    Map<String, String> queryParameters = new Map.from(uri.queryParameters);
     if (projectId == null) {
-      var i = pathSegments.indexOf('project');
-      pathSegments.removeAt(i); // project keyword
-      pathSegments.removeAt(i); // project name
+      queryParameters.remove(_PROJECT_QUERY_KEY);
     } else {
-      pathSegments.insert(0, 'project');
-      pathSegments.insert(1, projectId);
+      queryParameters[_PROJECT_QUERY_KEY] = projectId;
     }
-    uri = uri.replace(pathSegments: pathSegments);
+    uri = uri.replace(queryParameters: queryParameters);
     window.history.pushState('', '', uri.toString());
   }
 

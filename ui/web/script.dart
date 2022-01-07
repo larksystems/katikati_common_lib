@@ -122,7 +122,7 @@ void main() {
   NavHeaderView navHeaderView = NavHeaderView();
   navHeaderViewContainer.append(navHeaderView.navViewElement);
   navHeaderView.projectLogos = ["packages/katikati_ui_lib/globals/assets/logo.png"];
-  navHeaderView.projectTitle = "Project name";
+  navHeaderView.projectTitle = DivElement()..text = "Project name";
   navHeaderView.projectSubtitle = "Subtitle";
   navHeaderView.navContent = DivElement()..appendText("Some content like links, dropdown");
   navHeaderView.authHeader = authHeaderView;
