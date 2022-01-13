@@ -105,6 +105,7 @@ DateTime DateTime_fromData(Logger log, String key, dynamic data) {
   if (data == null) return null;
   var value = data[key];
   if (value == null) return null;
+  if (value is DateTime) return value;
   var datetime = DateTime.tryParse(value);
   if (datetime != null) return datetime;
   log.warning('Expected DateTime at "$key", but found "$value" in $data');
