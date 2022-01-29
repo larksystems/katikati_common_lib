@@ -130,6 +130,7 @@ double double_fromData(Logger log, String key, dynamic data) {
   var value = data[key];
   if (value == null) return null;
   if (value is double) return value;
+  if (value is int) return value.toDouble();
   if (value is String) {
     var result = double.tryParse(value);
     if (result is double) return result;
