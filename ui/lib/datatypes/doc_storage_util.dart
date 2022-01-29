@@ -177,3 +177,62 @@ Set<T> Set_fromData<T>(Logger log, String key, dynamic data, [T Function(dynamic
   log.warning('Expected Set or List at "$key", but found $value in $data');
   return null;
 }
+
+// ======================================================================
+// `require` functions equivalent to `assert`.
+// `assert` is stripped out of production code but `require` is not.
+
+void require(bool expression, [String message]) {
+  if (expression != true) throw RequirementError(message);
+}
+
+void requireNotNull(value, {String fieldName, container}) {
+  if (value == null) throw fieldRequirementError('should not be null', fieldName, container);
+}
+
+void requireNotEmpty(value, {String fieldName, container}) {
+  requireNotNull(value, fieldName: fieldName, container: container);
+  if (value.isEmpty) throw fieldRequirementError('should not be empty', fieldName, container);
+}
+
+void requireGreaterThan(num value, num other, {String fieldName, container}) {
+  requireNotNull(value, fieldName: fieldName, container: container);
+  if (value <= other) throw fieldRequirementError('should be > $other', fieldName, container);
+}
+
+void requireGreaterThanZero(num value, {String fieldName, container}) => requireGreaterThan(value, 0, fieldName: fieldName, container: container);
+
+void requireGreaterThanOrEqualTo(num value, num other, {String fieldName, container}) {
+  requireNotNull(value, fieldName: fieldName, container: container);
+  if (value < other) throw fieldRequirementError('should be >= $other', fieldName, container);
+}
+
+void requireGreaterThanOrEqualToZero(num value, {String fieldName, container}) =>
+    requireGreaterThanOrEqualTo(value, 0, fieldName: fieldName, container: container);
+
+void requireLessThan(num value, num other, {String fieldName, container}) {
+  requireNotNull(value, fieldName: fieldName, container: container);
+  if (value >= other) throw fieldRequirementError('should be < $other', fieldName, container);
+}
+
+/// Return a [RequirementError] indicating an invalid field value
+RequirementError fieldRequirementError(String message, String fieldName, dynamic container) {
+  try {
+    if (fieldName != null) message = '"$fieldName" $message';
+    if (container != null) message += ' in $container';
+  } catch (error) {
+    // ignored
+  }
+  return RequirementError(message);
+}
+
+/// [RequirementError] indicates an invalid value was detected.
+class RequirementError extends Error {
+  /// Message describing the assertion error.
+  final Object message;
+
+  RequirementError([this.message]);
+
+  @override
+  String toString() => message == null ? 'Assertion failed' : 'Assertion failed: $message';
+}
