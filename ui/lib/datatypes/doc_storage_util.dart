@@ -97,8 +97,7 @@ bool bool_fromData(Logger log, String key, dynamic data) {
     if (boolStr == 'true') return true;
     if (boolStr == 'false') return false;
   }
-  log.warning('Expected bool at "$key", but found "$value" in $data');
-  return null;
+  throw RequirementError('Expected bool at "$key", but found "$value" in $data');
 }
 
 DateTime DateTime_fromData(Logger log, String key, dynamic data) {
@@ -108,8 +107,7 @@ DateTime DateTime_fromData(Logger log, String key, dynamic data) {
   if (value is DateTime) return value;
   var datetime = DateTime.tryParse(value);
   if (datetime != null) return datetime;
-  log.warning('Expected DateTime at "$key", but found "$value" in $data');
-  return null;
+  throw RequirementError('Expected DateTime at "$key", but found "$value" in $data');
 }
 
 int int_fromData(Logger log, String key, dynamic data) {
@@ -121,8 +119,7 @@ int int_fromData(Logger log, String key, dynamic data) {
     var result = int.tryParse(value);
     if (result is int) return result;
   }
-  log.warning('Expected int at "$key", but found "$value" in $data');
-  return null;
+  throw RequirementError('Expected int at "$key", but found "$value" in $data');
 }
 
 double double_fromData(Logger log, String key, dynamic data) {
@@ -135,8 +132,7 @@ double double_fromData(Logger log, String key, dynamic data) {
     var result = double.tryParse(value);
     if (result is double) return result;
   }
-  log.warning('Expected double at "$key", but found "$value" in $data');
-  return null;
+  throw RequirementError('Expected double at "$key", but found "$value" in $data');
 }
 
 List<T> List_fromData<T>(Logger log, String key, dynamic data, [T Function(dynamic) fromData]) {
@@ -148,8 +144,7 @@ List<T> List_fromData<T>(Logger log, String key, dynamic data, [T Function(dynam
     if (fromData != null) return value.map((elem) => fromData(elem)).toList();
     return List<T>.from(value);
   }
-  log.warning('Expected List or Set at "$key", but found $value in $data');
-  return null;
+  throw RequirementError('Expected List or Set at "$key", but found $value in $data');
 }
 
 Map<String, T> Map_fromData<T>(Logger log, String key, dynamic data, [T Function(dynamic) fromData]) {
@@ -161,8 +156,7 @@ Map<String, T> Map_fromData<T>(Logger log, String key, dynamic data, [T Function
     if (fromData != null) return value.map<String, T>((key, value) => MapEntry(key, fromData(value)));
     return Map<String, T>.from(value);
   }
-  log.warning('Expected Map at "$key", but found $value in $data');
-  return null;
+  throw RequirementError('Expected Map at "$key", but found $value in $data');
 }
 
 Set<T> Set_fromData<T>(Logger log, String key, dynamic data, [T Function(dynamic) fromData]) {
@@ -174,8 +168,7 @@ Set<T> Set_fromData<T>(Logger log, String key, dynamic data, [T Function(dynamic
     if (fromData != null) return value.map((elem) => fromData(elem)).toSet();
     return Set<T>.from(value);
   }
-  log.warning('Expected Set or List at "$key", but found $value in $data');
-  return null;
+  throw RequirementError('Expected Set or List at "$key", but found $value in $data');
 }
 
 // ======================================================================
