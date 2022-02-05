@@ -115,6 +115,10 @@ class TextEdit {
     renderElement..append(_textSpan)..append(_textActions);
   }
 
+  void updateText(String text) {
+    _textSpan.text = text;
+  }
+
   void beginEdit({bool selectAllOnFocus = false}) {
     _isEditing = true;
     _textSpan.contentEditable = "true";
