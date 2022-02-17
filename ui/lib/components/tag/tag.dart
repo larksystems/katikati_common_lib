@@ -65,6 +65,7 @@ class TagView {
   void Function() onMouseLeave = () {};
 
   void set text(String text) {
+    _text = text;
     _tagText.innerText = text;
   }
 
