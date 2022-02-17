@@ -48,7 +48,7 @@ class ConversationItemView {
   StreamController<String> _onUncheckController;
   Stream<String> get onUncheck => _onUncheck;
 
-  ConversationItemView(String deidentifiedNumber, this._id, this._message, this._status, this._readStatus,
+  ConversationItemView(String conversationId, this._id, this._message, this._status, this._readStatus,
       {DateTime dateTime,
       bool defaultSelected = false,
       bool defaultChecked = false,
@@ -69,7 +69,7 @@ class ConversationItemView {
     renderElement.append(_dateSeparator);
 
     _conversationWrapper = DivElement()
-      ..dataset['conversation-id'] = deidentifiedNumber
+      ..dataset['conversation-id'] = conversationId
       ..className = "conversation-item"
       ..onClick.listen((event) {
         if (_onSelectController.hasListener) {
@@ -115,7 +115,7 @@ class ConversationItemView {
     _contentWrapper = DivElement()..className = "conversation-item__content";
 
     var headerElement = DivElement()
-      ..dataset['conversation-id'] = deidentifiedNumber
+      ..dataset['conversation-id'] = conversationId
       ..className = "conversation-item__header";
     _warningWrapper = SpanElement()..className = "conversation-item__warnings";
     var idWrapper = SpanElement()
@@ -133,10 +133,10 @@ class ConversationItemView {
     headerElement.append(_dateTimeElement);
 
     var messageElement = DivElement()
-      ..dataset['conversation-id'] = deidentifiedNumber
+      ..dataset['conversation-id'] = conversationId
       ..className = "conversation-item__message";
     _messageTextElement = DivElement()
-      ..dataset['conversation-id'] = deidentifiedNumber
+      ..dataset['conversation-id'] = conversationId
       ..className = "conversation-item__message__text"
       ..innerText = _message;
     _messageStatusElement = DivElement()..className = "conversation-item__status";

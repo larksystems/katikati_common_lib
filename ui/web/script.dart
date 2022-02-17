@@ -295,7 +295,7 @@ void main() {
   toggleIconButtonsContainer.append(toggleTagsButton.renderElement);
 
   // Conversation items
-  var conversationItem = ConversationItemView("long_id", "000cbc0c", "Hello, this is an example preview message that is long",
+  var conversationItem = ConversationItemView("conversation-id-000cbc0c", "000cbc0c", "Hello, this is an example preview message that is long",
       ConversationItemStatus.normal, ConversationReadStatus.read,
       defaultSelected: true)
     ..onSelect.listen((id) {
@@ -309,20 +309,20 @@ void main() {
     });
   conversationItemsContainer.append(conversationItem.renderElement);
 
-  var conversationDraft = ConversationItemView("long_id", "000cbc0c", "Hello, this is an example preview message that is long",
+  var conversationDraft = ConversationItemView("conversation-id-000cbc0c", "000cbc0c", "Hello, this is an example preview message that is long",
       ConversationItemStatus.draft, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationDraft.renderElement);
 
-  var conversationPending = ConversationItemView("long_id", "000cbc0c", "Hello, this is an example preview message that is long",
+  var conversationPending = ConversationItemView("conversation-id-000cbc0c", "000cbc0c", "Hello, this is an example preview message that is long",
       ConversationItemStatus.pending, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationPending.renderElement);
 
-  var conversationFailed = ConversationItemView("long_id", "000cbc0c", "Hello, this is an example preview message that is long",
+  var conversationFailed = ConversationItemView("conversation-id-000cbc0c", "000cbc0c", "Hello, this is an example preview message that is long",
       ConversationItemStatus.failed, ConversationReadStatus.read);
   conversationItemsContainer.append(conversationFailed.renderElement);
 
   var conversationSimulateItem = ConversationItemView(
-      "long_id", 
+      "conversation-id-000cbc0c", 
       "simulate_id",
       "Hello, this is an example preview message that is long",
       ConversationItemStatus.normal,
