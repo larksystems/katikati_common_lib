@@ -81,7 +81,8 @@ class TagView {
       TagStyle tagStyle = TagStyle.None,
       bool doubleClickToEdit = true,
       bool actionsBeforeText = false,
-      List<MenuItem> menuItems}) {
+      List<MenuItem> menuItems,
+      String placeholder}) {
     _category = category;
     _selectable = selectable;
     _editable = editable;
@@ -98,7 +99,10 @@ class TagView {
     _tagTextWrapper = SpanElement();
     _tagText = SpanElement()
       ..classes.add('tag__text')
-      ..dataset['placeholder'] = "untitled tag";
+      ..dataset['tag-id'] = _tagId;
+    if (placeholder != null) {
+      _tagText.dataset['placeholder'] = placeholder;
+    }
     _tagShortcut = SpanElement()..classes.add('tag__shortcut');
     _tagTextWrapper.append(_tagText);
     if (shortcut != "") {
