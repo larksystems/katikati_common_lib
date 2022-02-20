@@ -64,7 +64,7 @@ class ConversationItemView {
 
     _dateSeparator = DivElement()
       ..className = "conversation-list__date-separator"
-      ..text = dateStringForSeparator(_dateTime)
+      ..text = dateStringForSeparator(_dateTime.toLocal())
       ..hidden = true;
     renderElement.append(_dateSeparator);
 
@@ -129,7 +129,7 @@ class ConversationItemView {
 
     _dateTimeElement = SpanElement()
       ..className = "conversation-item__date-time"
-      ..text = _dateTime == null ? '' : dateFormatter.format(_dateTime);
+      ..text = _dateTime == null ? '' : dateFormatter.format(_dateTime.toLocal());
     headerElement.append(_dateTimeElement);
 
     var messageElement = DivElement()
