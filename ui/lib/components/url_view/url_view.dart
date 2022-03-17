@@ -4,12 +4,35 @@ import 'dart:html';
 /// Katikati URLs look like this
 /// <domain-name>/<path-to-page>?<query-list>
 class UrlView {
+  static const _PROJECT_QUERY_KEY = 'project';
   static const _CONVERSATION_LIST_QUERY_KEY = 'conversation-list';
   static const _CONVERSATION_ID_QUERY_KEY = 'conversation-id';
   static const _CONVERSATION_ID_FILTER_QUERY_KEY = 'conversation-id-filter';
 
   TagFilterUrlView _tagFilterUrlView = TagFilterUrlView();
   TagFilterUrlView get tagsFilter => _tagFilterUrlView;
+
+  String get project {
+    var uri = Uri.parse(window.location.href);
+    // TODO(mariana): We should have the project part of the URL path, not the query
+    // but that adds complexity to the deployment process, so we keep as a query key for now
+    if (uri.queryParameters.containsKey(_PROJECT_QUERY_KEY)) {
+      return uri.queryParameters[_PROJECT_QUERY_KEY];
+    }
+    return null;
+  }
+
+  void set project(String projectId) {
+    var uri = Uri.parse(window.location.href);
+    Map<String, String> queryParameters = new Map.from(uri.queryParameters);
+    if (projectId == null) {
+      queryParameters.remove(_PROJECT_QUERY_KEY);
+    } else {
+      queryParameters[_PROJECT_QUERY_KEY] = projectId;
+    }
+    uri = uri.replace(queryParameters: queryParameters);
+    window.history.pushState('', '', uri.toString());
+  }
 
   String get conversationList {
     var uri = Uri.parse(window.location.href);
