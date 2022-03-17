@@ -26,12 +26,40 @@ extension UserConfigurationUtil on g.UserConfiguration {
       ..tagConversationsEnabled = this.tagConversationsEnabled ?? defaults.tagConversationsEnabled
       ..editTranslationsEnabled = this.editTranslationsEnabled ?? defaults.editTranslationsEnabled
       ..editNotesEnabled = this.editNotesEnabled ?? defaults.editNotesEnabled
+      ..editTagsEnabled = this.editTagsEnabled ?? defaults.editTagsEnabled
+      ..editStandardMessagesEnabled = this.editStandardMessagesEnabled ?? defaults.editStandardMessagesEnabled
       ..conversationalTurnsEnabled = this.conversationalTurnsEnabled ?? defaults.conversationalTurnsEnabled
       ..tagsPanelVisibility = this.tagsPanelVisibility ?? defaults.tagsPanelVisibility
       ..repliesPanelVisibility = this.repliesPanelVisibility ?? defaults.repliesPanelVisibility
       ..suggestedRepliesGroupsEnabled = this.suggestedRepliesGroupsEnabled ?? defaults.suggestedRepliesGroupsEnabled
+      ..sampleMessagesEnabled = this.sampleMessagesEnabled ?? defaults.sampleMessagesEnabled
       ..mandatoryIncludeTagIds = this.mandatoryIncludeTagIds ?? defaults.mandatoryIncludeTagIds
-      ..mandatoryExcludeTagIds = this.mandatoryExcludeTagIds ?? defaults.mandatoryExcludeTagIds;
+      ..mandatoryExcludeTagIds = this.mandatoryExcludeTagIds ?? defaults.mandatoryExcludeTagIds
+      ..consoleLoggingLevel = this.consoleLoggingLevel ?? defaults.consoleLoggingLevel;
+
+  static g.UserConfiguration get baseUserConfiguration => new g.UserConfiguration()
+      ..repliesKeyboardShortcutsEnabled = false
+      ..tagsKeyboardShortcutsEnabled = false
+      ..sendMessagesEnabled = false
+      ..sendCustomMessagesEnabled = false
+      ..sendMultiMessageEnabled = false
+      ..tagMessagesEnabled = false
+      ..tagConversationsEnabled = false
+      ..editTranslationsEnabled = false
+      ..editNotesEnabled = false
+      ..editTagsEnabled = false
+      ..editStandardMessagesEnabled = false
+      ..conversationalTurnsEnabled = false
+      ..tagsPanelVisibility = false
+      ..repliesPanelVisibility = false
+      ..suggestedRepliesGroupsEnabled = false
+      ..sampleMessagesEnabled = false
+      ..mandatoryIncludeTagIds = {}
+      ..mandatoryExcludeTagIds = {}
+      ..consoleLoggingLevel = 'verbose';
+
+  static g.UserConfiguration get emptyUserConfiguration => new g.UserConfiguration();
+
 }
 
 extension ConversationListShardUtil on g.ConversationListShard {
