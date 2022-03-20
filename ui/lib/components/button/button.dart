@@ -49,7 +49,7 @@ class Button {
       _element.append(icon);
     }
 
-    if (hoverText != '') {
+    if (hoverText.isNotEmpty) {
       _tooltip = Tooltip(_element, hoverText);
       _renderElement.append(_tooltip.renderElement);
     }
