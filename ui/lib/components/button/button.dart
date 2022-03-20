@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'package:katikati_ui_lib/components/tooltip/tooltip.dart';
 
 typedef void OnEventCallback(Event e);
 
@@ -18,6 +19,7 @@ class ButtonType {
   static const cancel = ButtonType("button--icon", iconClassName: "fas fa-times");
   static const expand = ButtonType("button--icon", iconClassName: "far fa-plus-square");
   static const collapse = ButtonType("button--icon", iconClassName: "far fa-minus-square");
+  static const reset = ButtonType("button--icon", iconClassName: "fas fa-undo");
 }
 
 class ButtonAction {
@@ -28,33 +30,43 @@ class ButtonAction {
 }
 
 class Button {
+  SpanElement _renderElement;
+  Tooltip _tooltip;
   ButtonElement _element;
 
   Button(ButtonType buttonType, {String buttonText = '', String hoverText = '', OnEventCallback onClick}) {
+    _renderElement = SpanElement()..className = "button-wrapper";
     _element = new ButtonElement()
       ..classes.add('button')
       ..classes.add(buttonType.className)
       ..title = hoverText
       ..text = buttonText;
 
+    _renderElement.append(_element);
+
     if (buttonType.iconClassName != null) {
       var icon = SpanElement()..className = buttonType.iconClassName;
       _element.append(icon);
+    }
+
+    if (hoverText.isNotEmpty) {
+      _tooltip = Tooltip(_element, hoverText);
+      _renderElement.append(_tooltip.renderElement);
     }
 
     onClick = onClick ?? (_) {};
     _element.onClick.listen(onClick);
   }
 
-  Element get renderElement => _element;
+  Element get renderElement => _renderElement;
 
   void set visible(bool value) {
-    _element.classes.toggle('hidden', !value);
+    _renderElement.classes.toggle('hidden', !value);
   }
 
-  void set parent(Element value) => value.append(_element);
-  void remove() => _element.remove();
+  void set parent(Element value) => value.append(_renderElement);
+  void remove() => _renderElement.remove();
 
-  void hide() => _element.setAttribute('hidden', 'true');
-  void show() => _element.removeAttribute('hidden');
+  void hide() => _renderElement.setAttribute('hidden', 'true');
+  void show() => _renderElement.removeAttribute('hidden');
 }

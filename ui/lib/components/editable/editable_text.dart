@@ -20,6 +20,7 @@ class TextEdit {
   SpanElement _textActions;
   Button _editButton;
   Button _deleteButton;
+  Button _resetButton;
   Button _confirmButton;
   Button _cancelButton;
 
@@ -34,6 +35,7 @@ class TextEdit {
   void Function() onSelect = () {};
   void Function() onAccept = () {};
   void Function() onCancel = () {};
+  void Function() onReset = () {};
   bool Function(String) testInput = (_) => true;
 
   void set keyboardShortcutEnabled(bool enabled) {
@@ -105,6 +107,10 @@ class TextEdit {
       e.stopPropagation();
       _delete();
     });
+    _resetButton = Button(ButtonType.reset, hoverText: "Original: $_text", onClick: (e) {
+      e.stopPropagation();
+      _reset();
+    });
 
     _textActions = SpanElement()..classes.add('text-edit__actions');
     _textActions.append(_editButton.renderElement);
@@ -137,6 +143,14 @@ class TextEdit {
     }
   }
 
+  void showReset(bool show) {
+    if (show) {
+      _textActions.append(_resetButton.renderElement);
+    } else {
+      _resetButton.remove();
+    }
+  }
+
   void focus() {
     _textSpan.focus();
     onFocus();
@@ -159,6 +173,10 @@ class TextEdit {
   void _delete() {
     _resetActions();
     onDelete();
+  }
+
+  void _reset() {
+    onReset();
   }
 
   void _resetActions() {
