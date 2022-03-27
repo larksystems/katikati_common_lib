@@ -36,6 +36,8 @@ class AutocompleteList {
       _listFocusIndex = null;
     } else if (_listFocusIndex != null) {
       _listFocusIndex = 0;
+    } else if (input == activeSuggestions.first?._searchString) {
+      _listFocusIndex = 0;
     }
     _updateSuggestionListRender();
   }

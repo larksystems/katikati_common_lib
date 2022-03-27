@@ -375,6 +375,10 @@ class NewTagViewWithSuggestions {
   }
 
   void _confirmEdit() {
-    onNewTag(_text);
+    if (_autocompleteList.activeSuggestions.first?.searchString == _text) {
+      onAcceptSuggestion(_autocompleteList.activeSuggestions.first.value);
+    } else {
+      onNewTag(_text);
+    }
   }
 }
