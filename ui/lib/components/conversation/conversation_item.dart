@@ -64,7 +64,7 @@ class ConversationItemView {
 
     _dateSeparator = DivElement()
       ..className = "conversation-list__date-separator"
-      ..text = dateStringForSeparator(_dateTime.toLocal())
+      ..text = dateStringForSeparator(_dateTime?.toLocal())
       ..hidden = true;
     renderElement.append(_dateSeparator);
 
