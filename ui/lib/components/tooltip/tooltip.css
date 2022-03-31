@@ -20,26 +20,26 @@
 }
 
 .tooltip .tooltip-text.right {
-  width: 120px;
+  max-width: 120px;
   top: -1rem;
   left: 105%;
 }
 
 .tooltip .tooltip-text.left {
-  width: 120px;
+  max-width: 120px;
   top: -1rem;
   right: 105%;
 }
 
 .tooltip .tooltip-text.top {
-  width: 120px;
+  max-width: 120px;
   bottom: 100%;
   left: 50%;
   margin-left: -60px;
 }
 
 .tooltip .tooltip-text.bottom {
-  width: 120px;
+  max-width: 120px;
   top: 100%;
   left: 50%;
   margin-left: -60px;

@@ -50,7 +50,7 @@ class Button {
     }
 
     if (hoverText.isNotEmpty) {
-      _tooltip = Tooltip(_element, hoverText);
+      _tooltip = Tooltip(_element, hoverText, position: TooltipPosition.bottom);
       _renderElement.append(_tooltip.renderElement);
     }
 
