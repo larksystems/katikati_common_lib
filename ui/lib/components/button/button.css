@@ -55,6 +55,7 @@
   background-color: var(--primary-variant-accent-color);
   color: var(--text-on-primary-accent-color);
   font-weight: lighter;
+  width: 100%;
 }
 
 .button--contained:hover, .button--contained:active {
