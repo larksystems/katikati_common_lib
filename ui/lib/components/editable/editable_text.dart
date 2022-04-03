@@ -122,6 +122,7 @@ class TextEdit {
   }
 
   void updateText(String text) {
+    _text = text;
     _textSpan.text = text;
   }
 
