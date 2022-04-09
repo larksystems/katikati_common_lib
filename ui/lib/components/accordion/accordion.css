@@ -26,7 +26,7 @@
 
 .accordion-item__header {
   padding: 6px 12px;
-  cursor: pointer;
+  background-color: white;
 }
 
 .accordion-item__indicator {
@@ -39,7 +39,7 @@
 
 .accordion-item__title {
   display: inline-block;
-  width: calc(100% - 30px);
+  width: calc(100% - 45px);
   line-height: 16px;
 }
 
@@ -54,4 +54,50 @@
   margin-left: 18px;
   margin-bottom: 12px;
   position: relative;
+}
+
+.accordion .accordion-item__sort-handle {
+  display: inline-block;
+  margin-right: var(--spacer);
+  color: var(--gray);
+  cursor: grab;
+  opacity: 0;
+}
+
+.accordion .accordion-item__header:hover .accordion-item__sort-handle {
+  opacity: 1;
+}
+
+.accordion .dnd-dragging {
+  display: none;
+}
+
+.accordion .dnd-drag-occurring {
+  cursor: default;
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.accordion .drag--over::before {
+  border: 1px dashed var(--dark-gray);
+  height: var(--spacer);
+  width: 100%;
+  position: absolute;
+  top: 0;
+  content: '';
+  background-color: var(--default-background-color);
+}
+
+.accordion .drag--over {
+  padding-top: var(--spacer);
+}
+
+.accordion .drag-element {
+  border: 1px solid var(--light-gray);
+  opacity: 0.8;
+  display: inline-block;
+}
+
+.accordion .drag-element .accordion-body__wrapper {
+  display: none;
 }
