@@ -23,7 +23,7 @@ class ButtonLinksView {
       var linkElement = AnchorElement(href: link.url)
         ..append(linkContent)
         ..className = "button-link";
-      if (link.url == _selected) {
+      if (Uri.parse(link.url).path == _selected) {
         linkElement.classes.add("button-link--selected");
       }
       if (_openInNewTab) {

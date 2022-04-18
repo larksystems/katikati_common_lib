@@ -3,7 +3,7 @@ import 'dart:html';
 
 /// Katikati URLs look like this
 /// <domain-name>/<path-to-page>?<query-list>
-class UrlView {
+class UrlManager {
   static const _PROJECT_QUERY_KEY = 'project';
   static const _CONVERSATION_LIST_QUERY_KEY = 'conversation-list';
   static const _CONVERSATION_ID_QUERY_KEY = 'conversation-id';

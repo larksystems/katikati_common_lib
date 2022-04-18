@@ -14,7 +14,7 @@ import 'package:katikati_ui_lib/components/banner/banner.dart';
 import 'package:katikati_ui_lib/components/auth/auth.dart' as auth;
 import 'package:katikati_ui_lib/components/auth/auth_header.dart';
 import 'package:katikati_ui_lib/components/brand_asset/brand_asset.dart' as brand;
-import 'package:katikati_ui_lib/components/url_view/url_view.dart';
+import 'package:katikati_ui_lib/components/url_manager/url_manager.dart';
 import 'package:katikati_ui_lib/components/editable/editable_text.dart';
 import 'package:katikati_ui_lib/components/tabs/tabs.dart';
 import 'package:katikati_ui_lib/components/tooltip/tooltip.dart';
@@ -136,7 +136,7 @@ void main() {
   brandAssetsContainer.append(ifrcLogo);
 
   // url view
-  var urlView = UrlView();
+  var urlView = UrlManager();
   getURLParamsButton.onClick.listen((_) {
     printURLViewParams(urlView);
   });
@@ -322,7 +322,7 @@ void main() {
   conversationItemsContainer.append(conversationFailed.renderElement);
 
   var conversationSimulateItem = ConversationItemView(
-      "conversation-id-000cbc0c", 
+      "conversation-id-000cbc0c",
       "simulate_id",
       "Hello, this is an example preview message that is long",
       ConversationItemStatus.normal,
@@ -509,7 +509,7 @@ void main() {
     ..append(topMenu.renderElement);
 }
 
-void printURLViewParams(UrlView urlView) {
+void printURLViewParams(UrlManager urlView) {
   logger.debug("Conversation ID: ${urlView.conversationId}");
   logger.debug("Conversation list ID: ${urlView.conversationList}");
   logger.debug("Conversation ID filter: ${urlView.conversationIdFilter}");
