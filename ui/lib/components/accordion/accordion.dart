@@ -143,7 +143,13 @@ class Accordion {
 
   void updateItem(String id, AccordionItem item) {
     var index = _accordionItems.indexWhere((accordionItem) => accordionItem.id == id);
-    _accordionItems[index] = item;
+    if (_accordionItems[index].isOpen) {
+      item.expand();
+    }
+    
+    _accordionItems[index] = item;    
+    var childIndex = renderElement.children.indexWhere((item) => item.dataset['id'] == 'accordion-item-${id}');
+    renderElement.children[childIndex] = item.renderElement;
   }
 
   void collapseAllItems() {
