@@ -117,9 +117,10 @@ class Accordion {
   List<AccordionItem> _accordionItems;
   bool _onlyOneOpen;
   DivElement _actionWrapper;
+  DivElement _accordionsWrapper;
   DivElement renderElement;
   String _sortableId;
-  void Function(List<String>) onSort;
+  void Function(String, int) onSort;
 
   Draggable _draggable;
   Dropzone _dropzone;
@@ -134,14 +135,19 @@ class Accordion {
     var expandButton = Button(ButtonType.expand, hoverText: "Expand all", onClick: (_) => expandAllItems());
     var collapseButton = Button(ButtonType.collapse, hoverText: "Collapse all", onClick: (_) => collapseAllItems());
 
+    renderElement = DivElement()..className = "accordion";
+
     _actionWrapper = DivElement()
       ..classes.add('accordion-actions')
       ..append(expandButton.renderElement)
       ..append(collapseButton.renderElement);
-    renderElement = DivElement()..className = "accordion";
     renderElement.append(_actionWrapper);
+
+    _accordionsWrapper = DivElement();
+    renderElement.append(_accordionsWrapper);
+
     for (var item in _accordionItems) {
-      renderElement.append(item.renderElement);
+      _accordionsWrapper.append(item.renderElement);
       if (collapseAtStart) {
         item.collapse();
       }
@@ -184,8 +190,23 @@ class Accordion {
       }
     });
     _dropzone.onDrop.listen((DropzoneEvent event) {
-      if (_dragAllowed(event)) {
-        _rearrangeAccordionItems(event.draggableElement, event.dropzoneElement);
+      if (!_dragAllowed(event)) return;
+
+      String moveId;
+      int moveToIndex;
+      int index = 0;
+      _accordionItems.forEach((element) {
+        if (event.draggableElement.dataset["id"] == "accordion-item-${element._id}") {
+          moveId = element._id;
+        }
+        if (event.dropzoneElement.dataset["id"] == "accordion-item-${element._id}") {
+          moveToIndex = index;
+        }
+        ++index;
+      });
+
+      if (moveId != null && moveToIndex != null) {
+        onSort(moveId, moveToIndex);
       }
     });
   }
@@ -194,59 +215,33 @@ class Accordion {
     return event.draggableElement.dataset[SORTABLE_DATASET_KEY] == event.dropzoneElement.dataset[SORTABLE_DATASET_KEY];
   }
 
-  void _rearrangeAccordionItems(Element draggedElement, Element droppedElement) {
-    AccordionItem toRemove;
-    AccordionItem toAdd;
-
-    _accordionItems.forEach((element) {
-      if (draggedElement.dataset["id"] == "accordion-item-${element._id}") {
-        toRemove = element;
-      }
-      if (droppedElement.dataset["id"] == "accordion-item-${element._id}") {
-        toAdd = element;
-      }
-    });
-
-    if (toRemove == toAdd) return;
-    _accordionItems.remove(toRemove);
-    var insertIndex = _accordionItems.indexOf(toAdd);
-    _accordionItems.insert(insertIndex, toRemove);
-    refreshItemsInDOM(_accordionItems);
-
-    if (onSort != null) {
-      onSort(_accordionItems.map((accordionItem) => accordionItem.id).toList());
-    }
-  }
-
-  void refreshItemsInDOM(List<AccordionItem> items) {
-    renderElement.children.clear();
-    renderElement.append(_actionWrapper);
-    items.forEach((item) {
-      renderElement.append(item.renderElement);
-    });
-  }
-
   void appendItem(AccordionItem item) {
     _accordionItems.add(item);
-    renderElement.append(item.renderElement);
+    _accordionsWrapper.append(item.renderElement);
     _makeSortable();
   }
 
   void insertItem(AccordionItem item, int index) {
     _accordionItems.insert(index, item);
-    renderElement.insertBefore(item.renderElement, renderElement.children[index]);
+    _accordionsWrapper.insertBefore(item.renderElement, _accordionsWrapper.children[index]);
     _makeSortable();
   }
 
   void removeItem(String id) {
     _accordionItems.removeWhere((item) => item._id == id);
-    renderElement.children.removeWhere((item) => item.dataset['id'] == 'accordion-item-${id}');
+    _accordionsWrapper.children.removeWhere((item) => item.dataset['id'] == 'accordion-item-${id}');
   }
 
   void updateItem(String id, AccordionItem item) {
     var index = _accordionItems.indexWhere((accordionItem) => accordionItem.id == id);
     _accordionItems[index] = item;
     _makeSortable();
+  }
+
+  void reorderItem(AccordionItem item, int newIndex) {
+    var accordionToAdd = AccordionItem(item.id, item.headerElement, item.bodyElement, item.isOpen);
+    removeItem(item.id);
+    insertItem(accordionToAdd, newIndex);
   }
 
   void collapseAllItems() {
@@ -281,6 +276,6 @@ class Accordion {
 
   void clear() {
     _accordionItems = [];
-    renderElement.children.clear();
+    _accordionsWrapper.children.clear();
   }
 }
