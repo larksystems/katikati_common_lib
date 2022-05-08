@@ -180,14 +180,12 @@ class Accordion {
       event.avatarHandler.avatar?.classes?.toggle('drag-element', true);
     });
     _dropzone.onDragEnter.listen((event) {
-      if (_dragAllowed(event)) {
-        event.dropzoneElement.classes.toggle('drag--over', true);
-      }
+      if (!_dragAllowed(event)) return;
+      event.dropzoneElement.classes.toggle('drag--over', true);
     });
     _dropzone.onDragLeave.listen((event) {
-      if (_dragAllowed(event)) {
-        event.dropzoneElement.classes.toggle('drag--over', false);
-      }
+      if (!_dragAllowed(event)) return;
+      event.dropzoneElement.classes.toggle('drag--over', false);
     });
     _dropzone.onDrop.listen((DropzoneEvent event) {
       if (!_dragAllowed(event)) return;
