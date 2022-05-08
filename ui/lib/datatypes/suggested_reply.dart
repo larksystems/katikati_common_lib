@@ -10,4 +10,23 @@ extension SuggestedReplyUtils on g.SuggestedReply {
   g.SuggestedReply clone() {
     return g.SuggestedReply.fromData(this.toData())..docId = this.docId;
   }  
+
+  bool equals(g.SuggestedReply other) {
+    if (docId != other.docId
+      || text != other.text
+      || translation != other.translation
+      || shortcut != other.shortcut
+      || categoryId != other.categoryId
+      || categoryName != other.categoryName
+      || categoryIndex != other.categoryIndex
+      || groupId != other.groupId
+      || groupName != other.groupName
+      || groupIndexInCategory != other.groupIndexInCategory
+      || indexInGroup != other.indexInGroup
+      ) {
+      return false;
+    }
+
+    return true;
+  }
 }
