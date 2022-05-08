@@ -236,9 +236,9 @@ class Accordion {
       item.expand();
     }
     
-    _accordionItems[index] = item;    
-    var childIndex = renderElement.children.indexWhere((item) => item.dataset['id'] == 'accordion-item-${id}');
-    renderElement.children[childIndex] = item.renderElement;
+    _accordionItems[index] = item;
+    var childIndex = _accordionsWrapper.children.indexWhere((item) => item.dataset['id'] == 'accordion-item-${id}');
+    _accordionsWrapper.children[childIndex] = item.renderElement;
     _makeSortable();
   }
 
