@@ -225,6 +225,7 @@ final uuid.Uuid uuidGenerator = new uuid.Uuid();
 String generateRandomId() => uuidGenerator.v4().substring(0, 8);
 
 String generateTagId() => 'tag-${generateRandomId()}';
+String generateTagGroupId() => 'tag-group-${generateRandomId()}';
 String generateStandardMessageId() => 'standard-message-${generateRandomId()}';
 String generateStandardMessageGroupId() => 'standard-message-group-${generateRandomId()}';
 String generateStandardMessageCategoryId() => 'standard-message-category-${generateRandomId()}';
