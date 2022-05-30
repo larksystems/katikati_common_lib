@@ -22,10 +22,11 @@ class TabsView {
   DivElement _tabsHeader;
   DivElement _tabContent;
 
-  TabsView(this._tabs, {String defaultSelectedID}) {
-    _tabs = _tabs ?? [];
-    if (defaultSelectedID != null && _tabIds.contains(defaultSelectedID)) {
-      _selectedTabId = defaultSelectedID;
+
+  TabsView({List<TabView> tabList, String selectedTabId}) {
+    _tabs = tabList ?? [];
+    if (selectedTabId != null && _tabIds.contains(selectedTabId)) {
+      _selectedTabId = selectedTabId;
     }
     if (_selectedTabId == null && _tabs.isNotEmpty) {
       _selectedTabId = _tabIds.first;
@@ -34,7 +35,7 @@ class TabsView {
     _tabContent = DivElement()..classes.add("tab-content");
     _tabChoosers = [];
 
-    _setTabs(_tabs);
+    setTabs(_tabs);
     renderElement = DivElement()
       ..classes.add("tabs-container")
       ..append(_tabsHeader)
@@ -57,7 +58,7 @@ class TabsView {
       ..className = "tab-chooser"
       ..dataset['id'] = tab.id
       ..onClick.listen((_) {
-        _selectTab(tab.id);
+        selectTab(tab.id);
       });
     if (tab.id == _selectedTabId) {
       tabChooser.classes.add("tab-chooser--selected");
@@ -74,7 +75,7 @@ class TabsView {
     }
   }
 
-  void _selectTab(String id) {
+  void selectTab(String id) {
     _updateSelectedId(id);
     _tabChoosers.forEach((tabChooser) {
       tabChooser.classes.toggle("tab-chooser--selected", false);
@@ -86,11 +87,9 @@ class TabsView {
     _updateTabContent();
   }
 
-  void selectTab(String id) {
-    _selectTab(id);
-  }
+  String get selectedTab => _selectedTabId;
 
-  void _setTabs(List<TabView> tabs) {
+  void setTabs(List<TabView> tabs) {
     _tabs = tabs ?? [];
     _tabsHeader.children.clear();
     _tabChoosers.clear();
@@ -110,9 +109,5 @@ class TabsView {
     });
 
     _updateTabContent();
-  }
-
-  void setTabs(List<TabView> tabs) {
-    _setTabs(tabs);
   }
 }

@@ -254,7 +254,7 @@ void main() {
           ..style.padding = "30px"
           ..innerText = "Content D"),
   ];
-  var tabsView = TabsView(allTabs, defaultSelectedID: "b");
+  var tabsView = TabsView(tabList: allTabs, selectedTabId: "b");
   tabsContainer.append(tabsView.renderElement);
   var _tabIDs = ["a", "b", "c", "d"];
   removeTabButton.onClick.listen((_) {

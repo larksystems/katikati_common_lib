@@ -2,7 +2,6 @@ import 'package:uuid/uuid.dart' as uuid;
 
 import 'model.g.dart' as g;
 import 'package:katikati_ui_lib/datatypes/conversation_list_shard.dart' as g;
-import 'package:katikati_ui_lib/datatypes/user.dart' as g;
 
 export 'package:katikati_ui_lib/datatypes/conversation_list_shard.dart';
 export 'package:katikati_ui_lib/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
@@ -13,55 +12,6 @@ export 'package:katikati_ui_lib/datatypes/turnline.dart';
 export 'package:katikati_ui_lib/datatypes/user.dart';
 
 export 'model.g.dart';
-
-extension UserConfigurationUtil on g.UserConfiguration {
-  g.UserConfiguration applyDefaults(g.UserConfiguration defaults) =>
-    new g.UserConfiguration()
-      ..docId = null
-      ..tagsKeyboardShortcutsEnabled = this.tagsKeyboardShortcutsEnabled ?? defaults.tagsKeyboardShortcutsEnabled
-      ..repliesKeyboardShortcutsEnabled = this.repliesKeyboardShortcutsEnabled ?? defaults.repliesKeyboardShortcutsEnabled
-      ..sendMessagesEnabled = this.sendMessagesEnabled ?? defaults.sendMessagesEnabled
-      ..sendCustomMessagesEnabled = this.sendCustomMessagesEnabled ?? defaults.sendCustomMessagesEnabled
-      ..sendMultiMessageEnabled = this.sendMultiMessageEnabled ?? defaults.sendMultiMessageEnabled
-      ..tagMessagesEnabled = this.tagMessagesEnabled ?? defaults.tagMessagesEnabled
-      ..tagConversationsEnabled = this.tagConversationsEnabled ?? defaults.tagConversationsEnabled
-      ..editTranslationsEnabled = this.editTranslationsEnabled ?? defaults.editTranslationsEnabled
-      ..editNotesEnabled = this.editNotesEnabled ?? defaults.editNotesEnabled
-      ..editTagsEnabled = this.editTagsEnabled ?? defaults.editTagsEnabled
-      ..editStandardMessagesEnabled = this.editStandardMessagesEnabled ?? defaults.editStandardMessagesEnabled
-      ..conversationalTurnsEnabled = this.conversationalTurnsEnabled ?? defaults.conversationalTurnsEnabled
-      ..tagsPanelVisibility = this.tagsPanelVisibility ?? defaults.tagsPanelVisibility
-      ..repliesPanelVisibility = this.repliesPanelVisibility ?? defaults.repliesPanelVisibility
-      ..suggestedRepliesGroupsEnabled = this.suggestedRepliesGroupsEnabled ?? defaults.suggestedRepliesGroupsEnabled
-      ..sampleMessagesEnabled = this.sampleMessagesEnabled ?? defaults.sampleMessagesEnabled
-      ..mandatoryIncludeTagIds = this.mandatoryIncludeTagIds ?? defaults.mandatoryIncludeTagIds
-      ..mandatoryExcludeTagIds = this.mandatoryExcludeTagIds ?? defaults.mandatoryExcludeTagIds
-      ..consoleLoggingLevel = this.consoleLoggingLevel ?? defaults.consoleLoggingLevel;
-
-  static g.UserConfiguration get baseUserConfiguration => new g.UserConfiguration()
-      ..repliesKeyboardShortcutsEnabled = false
-      ..tagsKeyboardShortcutsEnabled = false
-      ..sendMessagesEnabled = false
-      ..sendCustomMessagesEnabled = false
-      ..sendMultiMessageEnabled = false
-      ..tagMessagesEnabled = false
-      ..tagConversationsEnabled = false
-      ..editTranslationsEnabled = false
-      ..editNotesEnabled = false
-      ..editTagsEnabled = false
-      ..editStandardMessagesEnabled = false
-      ..conversationalTurnsEnabled = false
-      ..tagsPanelVisibility = false
-      ..repliesPanelVisibility = false
-      ..suggestedRepliesGroupsEnabled = false
-      ..sampleMessagesEnabled = false
-      ..mandatoryIncludeTagIds = {}
-      ..mandatoryExcludeTagIds = {}
-      ..consoleLoggingLevel = 'verbose';
-
-  static g.UserConfiguration get emptyUserConfiguration => new g.UserConfiguration();
-
-}
 
 extension ConversationListShardUtil on g.ConversationListShard {
   String get conversationListRoot => docId != null
