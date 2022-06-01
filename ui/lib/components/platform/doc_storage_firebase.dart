@@ -10,12 +10,14 @@ Logger log = Logger('doc_storage_firebase.dart');
 /// Firebase specific document storage.
 class FirebaseDocStorage implements DocStorage {
   final firestore.Firestore fs;
+  final String collectionPathPrefix;
 
-  FirebaseDocStorage(this.fs);
+  FirebaseDocStorage(this.fs, {String collectionPathPrefix}) //
+      : collectionPathPrefix = collectionPathPrefix ?? '';
 
   @override
   Stream<List<DocSnapshot>> onChange(String collectionRoot, List<DocQuery> queryList) {
-    var collection = fs.collection(collectionRoot);
+    var collection = fs.collection('$collectionPathPrefix$collectionRoot');
     firestore.Query filteredCollection = collection;
     for (var query in queryList) {
       filteredCollection = filteredCollection.where(query.field, query.op, query.value);
@@ -44,21 +46,21 @@ class FirebaseDocStorage implements DocStorage {
   }
 
   @override
-  DocBatchUpdate batch() => _FirebaseBatchUpdate(fs, fs.batch());
+  DocBatchUpdate batch() => _FirebaseBatchUpdate(this, fs.batch());
 }
 
 /// A batch update for documents in firestore.
 class _FirebaseBatchUpdate implements DocBatchUpdate {
-  final firestore.Firestore _firestore;
+  final FirebaseDocStorage fsStorage;
   final firestore.WriteBatch _batch;
 
-  _FirebaseBatchUpdate(this._firestore, this._batch);
+  _FirebaseBatchUpdate(this.fsStorage, this._batch);
 
   @override
   Future<Null> commit() => _batch.commit();
 
   @override
   void update(String documentPath, {Map<String, dynamic> data}) {
-    _batch.update(_firestore.doc(documentPath), data: data);
+    _batch.update(fsStorage.fs.doc('${fsStorage.collectionPathPrefix}$documentPath'), data: data);
   }
 }
