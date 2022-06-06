@@ -46,6 +46,9 @@ class DocQuery {
   final String value;
 
   DocQuery(this.field, this.op, this.value);
+
+  @override
+  String toString() => 'DocQuery($field, $op, $value)';
 }
 
 StreamSubscription<List<DocSnapshot>> listenForUpdates<T>(

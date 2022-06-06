@@ -64,3 +64,19 @@ class _FirebaseBatchUpdate implements DocBatchUpdate {
     _batch.update(fsStorage.fs.doc('${fsStorage.collectionPathPrefix}$documentPath'), data: data);
   }
 }
+
+/// A query for filtering document snapshots.
+class FirebaseQuery extends DocQuery {
+  static const LESS_THAN = "<";
+  static const LESS_THAN_OR_EQUAL_TO = "<=";
+  static const EQUAL_TO = "==";
+  static const GREATER_THAN = ">";
+  static const GREATER_THAN_OR_EQUAL_TO = ">=";
+  static const NOT_EQUAL_TO = "!=";
+  static const ARRAY_CONTAINS = "array-contains";
+  static const ARRAY_CONTAINS_ANY = "array-contains-any";
+  static const IN = "in";
+  static const NOT_IN = "not-in";
+
+  FirebaseQuery(String field, String op, String value) : super(field, op, value);
+}
