@@ -32,6 +32,21 @@ class UrlManager {
     }
     uri = uri.replace(queryParameters: queryParameters);
     window.history.pushState('', '', uri.toString());
+    window.location.reload();
+  }
+
+  void clearProjectSpecificQueryParameters() {
+    var uri = Uri.parse(window.location.href);
+    Map<String, String> queryParameters = new Map.from(uri.queryParameters);
+    queryParameters
+      ..remove(_CONVERSATION_LIST_QUERY_KEY)
+      ..remove(_CONVERSATION_ID_QUERY_KEY)
+      ..remove(_CONVERSATION_ID_FILTER_QUERY_KEY)
+      ..remove(TagFilterUrlView.TAG_FILTER_QUERY_KEYS[TagFilterType.include])
+      ..remove(TagFilterUrlView.TAG_FILTER_QUERY_KEYS[TagFilterType.exclude])
+      ..remove(TagFilterUrlView.TAG_FILTER_QUERY_KEYS[TagFilterType.lastInboundTurn]);
+    uri = uri.replace(queryParameters: queryParameters);
+    window.history.pushState('', '', uri.toString());
   }
 
   String get conversationList {
