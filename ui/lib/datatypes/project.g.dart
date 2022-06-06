@@ -40,8 +40,8 @@ class Project {
   }
 
   static StreamSubscription listen(DocStorage docStorage, ProjectCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<Project>(_log, docStorage, listener, collectionRoot, Project.fromSnapshot, onError: onError ?? onErrorListener);
+          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
+      listenForUpdates<Project>(_log, docStorage, listener, collectionRoot, Project.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
 
   Map<String, dynamic> toData() {
     return {
