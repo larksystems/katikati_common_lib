@@ -41,6 +41,7 @@ class AuthMainView {
 
     this.brands = [brand];
     this.title = title;
+    this.description = description;
     this.domainsInfo = domainsInfo;
   }
 
