@@ -23,6 +23,23 @@
   padding-right: var(--spacer-small);
 }
 
+.nav__project_title select {
+  padding: 6px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.nav__project_title select:hover {
+  background-color: var(--lighter-gray);
+}
+
+.nav__project_title select:active,
+.nav__project_title select:focus {
+  background-color: var(--lighter-gray);
+  outline: none;
+}
+
 .nav__project_subtitle {
   padding-right: var(--spacer-small);
   color: var(--extra-dark-gray);
