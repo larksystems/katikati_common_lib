@@ -38,8 +38,8 @@ class ConversationListShard {
   }
 
   static StreamSubscription listen(DocStorage docStorage, ConversationListShardCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<ConversationListShard>(_log, docStorage, listener, collectionRoot, ConversationListShard.fromSnapshot, onError: onError ?? onErrorListener);
+          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
+      listenForUpdates<ConversationListShard>(_log, docStorage, listener, collectionRoot, ConversationListShard.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {
