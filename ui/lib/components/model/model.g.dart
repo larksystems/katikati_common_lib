@@ -55,8 +55,8 @@ class Conversation {
   }
 
   static StreamSubscription listen(DocStorage docStorage, ConversationCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onErrorListener}) =>
-      listenForUpdates<Conversation>(docStorage, listener, collectionRoot, Conversation.fromSnapshot, onErrorListener);
+          {String collectionRoot = '/$collectionName', OnErrorListener onError, OnErrorListener onErrorListener}) =>
+      listenForUpdates<Conversation>(docStorage, listener, collectionRoot, Conversation.fromSnapshot, onError ?? onErrorListener);
 
   Map<String, dynamic> toData() {
     return {
@@ -441,8 +441,8 @@ class SystemMessage {
   }
 
   static StreamSubscription listen(DocStorage docStorage, SystemMessageCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onErrorListener}) =>
-      listenForUpdates<SystemMessage>(docStorage, listener, collectionRoot, SystemMessage.fromSnapshot, onErrorListener);
+          {String collectionRoot = '/$collectionName', OnErrorListener onError, OnErrorListener onErrorListener}) =>
+      listenForUpdates<SystemMessage>(docStorage, listener, collectionRoot, SystemMessage.fromSnapshot, onError ?? onErrorListener);
 
   Map<String, dynamic> toData() {
     return {
