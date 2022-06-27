@@ -683,8 +683,9 @@ StreamSubscription<List<DocSnapshot>> listenForUpdates<T>(
     String collectionRoot,
     T Function(DocSnapshot doc) createModel,
     [OnErrorListener onErrorListener,
-    List<DocQuery> queryList = const <DocQuery>[]]
+    List<DocQuery> queryList]
     ) {
+  queryList ??= const <DocQuery>[];
   log.verbose('Loading from $collectionRoot');
   log.verbose('Query root: $collectionRoot');
   return docStorage.onChange(collectionRoot, queryList).listen((List<DocSnapshot> snapshots) {
