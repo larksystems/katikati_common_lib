@@ -55,8 +55,8 @@ class Conversation {
   }
 
   static StreamSubscription listen(DocStorage docStorage, ConversationCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onErrorListener}) =>
-      listenForUpdates<Conversation>(docStorage, listener, collectionRoot, Conversation.fromSnapshot, onErrorListener);
+          {String collectionRoot = '/$collectionName', OnErrorListener onError, OnErrorListener onErrorListener}) =>
+      listenForUpdates<Conversation>(docStorage, listener, collectionRoot, Conversation.fromSnapshot, onError ?? onErrorListener);
 
   Map<String, dynamic> toData() {
     return {
@@ -441,8 +441,8 @@ class SystemMessage {
   }
 
   static StreamSubscription listen(DocStorage docStorage, SystemMessageCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onErrorListener}) =>
-      listenForUpdates<SystemMessage>(docStorage, listener, collectionRoot, SystemMessage.fromSnapshot, onErrorListener);
+          {String collectionRoot = '/$collectionName', OnErrorListener onError, OnErrorListener onErrorListener}) =>
+      listenForUpdates<SystemMessage>(docStorage, listener, collectionRoot, SystemMessage.fromSnapshot, onError ?? onErrorListener);
 
   Map<String, dynamic> toData() {
     return {
@@ -683,8 +683,9 @@ StreamSubscription<List<DocSnapshot>> listenForUpdates<T>(
     String collectionRoot,
     T Function(DocSnapshot doc) createModel,
     [OnErrorListener onErrorListener,
-    List<DocQuery> queryList = const <DocQuery>[]]
+    List<DocQuery> queryList]
     ) {
+  queryList ??= const <DocQuery>[];
   log.verbose('Loading from $collectionRoot');
   log.verbose('Query root: $collectionRoot');
   return docStorage.onChange(collectionRoot, queryList).listen((List<DocSnapshot> snapshots) {

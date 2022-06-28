@@ -54,8 +54,8 @@ class Tag {
   }
 
   static StreamSubscription listen(DocStorage docStorage, TagCollectionListener listener,
-          {String collectionRoot, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<Tag>(_log, docStorage, listener, collectionRoot, Tag.fromSnapshot, onError: onError ?? onErrorListener);
+          {String collectionRoot, List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
+      listenForUpdates<Tag>(_log, docStorage, listener, collectionRoot, Tag.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {

@@ -72,8 +72,8 @@ class SuggestedReply {
   }
 
   static StreamSubscription listen(DocStorage docStorage, SuggestedReplyCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<SuggestedReply>(_log, docStorage, listener, collectionRoot, SuggestedReply.fromSnapshot, onError: onError ?? onErrorListener);
+          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
+      listenForUpdates<SuggestedReply>(_log, docStorage, listener, collectionRoot, SuggestedReply.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {
