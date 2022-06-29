@@ -1,9 +1,10 @@
-LogLevel logLevel = LogLevel.VERBOSE;
-
 enum LogLevel { ERROR, WARNING, DEBUG, VERBOSE }
 
 class Logger {
   String name;
+
+  static LogLevel logLevel = LogLevel.VERBOSE;
+  static dynamic platform;
 
   Logger(this.name);
 
@@ -38,6 +39,15 @@ class Logger {
         return;
       default:
         _log(s);
+    }
+  }
+
+  void serverLog(String s) {
+    debug(s);
+    if (platform != null) {
+      platform.serverLog(s, (error) => warning('Unable to log to server, error was $error'));
+    } else {
+      warning('Platform hasn\'t been initialised, unable to log to server');
     }
   }
 

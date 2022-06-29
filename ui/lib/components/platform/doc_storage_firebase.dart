@@ -23,6 +23,7 @@ class FirebaseDocStorage implements DocStorage {
       filteredCollection = filteredCollection.where(query.field, query.op, query.value);
     }
 
+    log.serverLog('Registering snapshot listener against ${collection.path}');
     return filteredCollection.onSnapshot.transform<List<DocSnapshot>>(StreamTransformer.fromHandlers(
       handleData: (firestore.QuerySnapshot querySnapshot, EventSink<List<DocSnapshot>> sink) {
         // No need to process local writes to Firebase
@@ -40,7 +41,14 @@ class FirebaseDocStorage implements DocStorage {
                   : DocChangeType.modified;
           event.add(DocSnapshot(doc.id, doc.data(), changeType));
         }
+        log.serverLog('Received snapshop listener data from ${collection.path}: ${event.length} changes');
         sink.add(event);
+      },
+      handleDone: (sink) {
+        log.serverLog('Finished shapshot listener against ${collection.path}');
+      },
+      handleError: (error, stacktrace, sink) {
+        log.serverLog('Error for shapshot listener against ${collection.path}: $error\n$stacktrace');
       },
     ));
   }
