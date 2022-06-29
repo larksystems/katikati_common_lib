@@ -41,7 +41,7 @@ class FirebaseDocStorage implements DocStorage {
                   : DocChangeType.modified;
           event.add(DocSnapshot(doc.id, doc.data(), changeType));
         }
-        log.serverLog('Received snapshop listener data from ${collection.path}: ${event.length} changes');
+        log.serverLog('Received snapshot listener data from ${collection.path}: ${event.length} changes');
         sink.add(event);
       },
       handleDone: (sink) {
