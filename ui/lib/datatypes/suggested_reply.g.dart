@@ -9,9 +9,21 @@
 // Adjust the imports as necessary as they are preserved when the code is regenerated.
 
 import 'dart:async';
-
+import 'package:uuid/uuid.dart' as uuid;
+import 'package:crypto/crypto.dart' as crypto;
 import 'package:katikati_ui_lib/datatypes/doc_storage_util.dart';
 import 'package:katikati_ui_lib/components/logger.dart';
+
+final uuid.Uuid uuidGenerator = new uuid.Uuid();
+final crypto.Sha256 shaGenerator = crypto.sha256;
+
+String generateRandomId() => uuidGenerator.v4().substring(0, 8);
+String generateIdFromText(String text) => shaGenerator.convert(text.codeUnits).toString().substring(0, 8);
+
+String generateStandardMessageId() => 'standard-message-${generateRandomId()}';
+String generateStandardMessageGroupId(String name) => 'standard-message-group-${generateIdFromText(name)}';
+String generateStandardMessageCategoryId(String name) => 'standard-message-category-${generateIdFromText(name)}';
+
 
 class SuggestedReply {
   static const collectionName = 'suggestedReplies';
@@ -60,10 +72,10 @@ class SuggestedReply {
       ..translation = data['translation']?.toString()
       ..shortcut = data['shortcut']?.toString()
       ..seq_no = int_fromData(_log, 'seq_no', data)
-      ..category_id = data['category_id']?.toString()
+      ..category_id = data['category_id'] ?? generateStandardMessageCategoryId(data['category'])
       ..category = data['category']?.toString()
       ..category_index = int_fromData(_log, 'category_index', data)
-      ..group_id = data['group_id']?.toString()
+      ..group_id = data['group_id'] ?? generateStandardMessageGroupId(data['group_description'])
       ..group_description = data['group_description']?.toString()
       ..group_index_in_category = int_fromData(_log, 'group_index_in_category', data)
       ..index_in_group = int_fromData(_log, 'index_in_group', data)
