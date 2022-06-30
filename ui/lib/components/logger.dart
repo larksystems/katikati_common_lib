@@ -44,10 +44,16 @@ class Logger {
 
   void serverLog(String s) {
     debug(s);
-    if (platform != null) {
+    if (platform == null) {
+      warning("Platform hasn't been initialised, unable to log to server");
+      return;
+    }
+    try {
       platform.serverLog(s, (error) => warning('Unable to log to server, error was $error'));
-    } else {
-      warning('Platform hasn\'t been initialised, unable to log to server');
+    } on NoSuchMethodError catch (_) {
+      warning("Unable to log to server, platform doesn't support server logging");
+    } catch (e) {
+      warning('Unable to log to server, error was $e');
     }
   }
 
