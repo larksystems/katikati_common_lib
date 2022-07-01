@@ -26,8 +26,6 @@ class Project {
 
   String get projectId => docId;
 
-  Map<String, dynamic> otherData;
-
   static Project fromSnapshot(DocSnapshot doc, [Project modelObj]) => fromData(doc.data, modelObj)..docId = doc.id;
 
   static Project fromData(data, [Project modelObj]) {
@@ -38,18 +36,13 @@ class Project {
       ..secondLanguage = data['secondLanguage']?.toString()
       ..messageCharacterLimit = int_fromData(_log, 'messageCharacterLimit', data)
       ..allowedEmailDomainsMap = Map_fromData<String>(_log, 'allowedEmailDomainsMap', data)
-      ..users = List_fromData<String>(_log, 'users', data)
-      ..otherData ??= {};
-    for (var key in data.keys) {
-      if ({'docId', 'projectName', 'firstLanguage', 'secondLanguage', 'messageCharacterLimit', 'allowedEmailDomainsMap', 'users',}.contains(key)) continue;
-      modelObj.otherData[key] = data[key];
-    }
+      ..users = List_fromData<String>(_log, 'users', data);
     return modelObj;
   }
 
   static StreamSubscription listen(DocStorage docStorage, ProjectCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<Project>(_log, docStorage, listener, collectionRoot, Project.fromSnapshot, onError: onError ?? onErrorListener);
+          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
+      listenForUpdates<Project>(_log, docStorage, listener, collectionRoot, Project.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {
@@ -59,7 +52,6 @@ class Project {
       if (messageCharacterLimit != null) 'messageCharacterLimit': messageCharacterLimit,
       if (allowedEmailDomainsMap != null) 'allowedEmailDomainsMap': allowedEmailDomainsMap,
       if (users != null) 'users': users,
-      if (otherData != null) ...otherData,
     };
   }
 
