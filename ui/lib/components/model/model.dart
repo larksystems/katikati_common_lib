@@ -3,13 +3,15 @@ import 'package:uuid/uuid.dart' as uuid;
 import 'model.g.dart' as g;
 import 'package:katikati_ui_lib/datatypes/conversation_list_shard.dart' as g;
 
-export 'package:katikati_ui_lib/datatypes/conversation_list_shard.dart';
 export 'package:katikati_ui_lib/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
-export 'package:katikati_ui_lib/datatypes/suggested_reply.dart';
+
+export 'package:katikati_ui_lib/datatypes/conversation_list_shard.dart';
 export 'package:katikati_ui_lib/datatypes/project.dart';
+export 'package:katikati_ui_lib/datatypes/suggested_reply.dart';
 export 'package:katikati_ui_lib/datatypes/tag.dart';
 export 'package:katikati_ui_lib/datatypes/turnline.dart';
 export 'package:katikati_ui_lib/datatypes/user.dart';
+export 'package:katikati_ui_lib/datatypes/visualisation_component.dart';
 
 export 'model.g.dart';
 
