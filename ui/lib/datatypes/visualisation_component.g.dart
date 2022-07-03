@@ -33,7 +33,7 @@ class ExplorerVisualisationComponent {
       ..indexInDashboard = int_fromData(_log, 'indexInDashboard', data)
       ..componentType = VisualisationComponentType.fromData(_log, 'componentType', data)
       ..configurationInfo = Map_fromData<dynamic>(_log, 'configurationInfo', data)
-      ..otherData ??= {};
+      ..otherData = {};
     for (var key in data.keys) {
       if ({'docId', 'indexInDashboard', 'componentType', 'configurationInfo',}.contains(key)) continue;
       modelObj.otherData[key] = data[key];
@@ -42,8 +42,8 @@ class ExplorerVisualisationComponent {
   }
 
   static StreamSubscription listen(DocStorage docStorage, ExplorerVisualisationComponentCollectionListener listener,
-          {String collectionRoot = '/$collectionName', OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<ExplorerVisualisationComponent>(_log, docStorage, listener, collectionRoot, ExplorerVisualisationComponent.fromSnapshot, onError: onError ?? onErrorListener);
+          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
+      listenForUpdates<ExplorerVisualisationComponent>(_log, docStorage, listener, collectionRoot, ExplorerVisualisationComponent.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {

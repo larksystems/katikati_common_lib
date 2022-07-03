@@ -26,6 +26,8 @@ class Project {
 
   String get projectId => docId;
 
+  Map<String, dynamic> otherData;
+
   static Project fromSnapshot(DocSnapshot doc, [Project modelObj]) => fromData(doc.data, modelObj)..docId = doc.id;
 
   static Project fromData(data, [Project modelObj]) {
@@ -36,7 +38,12 @@ class Project {
       ..secondLanguage = data['secondLanguage']?.toString()
       ..messageCharacterLimit = int_fromData(_log, 'messageCharacterLimit', data)
       ..allowedEmailDomainsMap = Map_fromData<String>(_log, 'allowedEmailDomainsMap', data)
-      ..users = List_fromData<String>(_log, 'users', data);
+      ..users = List_fromData<String>(_log, 'users', data)
+      ..otherData = {};
+    for (var key in data.keys) {
+      if ({'docId', 'projectName', 'firstLanguage', 'secondLanguage', 'messageCharacterLimit', 'allowedEmailDomainsMap', 'users',}.contains(key)) continue;
+      modelObj.otherData[key] = data[key];
+    }
     return modelObj;
   }
 
@@ -52,6 +59,7 @@ class Project {
       if (messageCharacterLimit != null) 'messageCharacterLimit': messageCharacterLimit,
       if (allowedEmailDomainsMap != null) 'allowedEmailDomainsMap': allowedEmailDomainsMap,
       if (users != null) 'users': users,
+      if (otherData != null) ...otherData,
     };
   }
 

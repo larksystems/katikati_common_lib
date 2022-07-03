@@ -86,6 +86,8 @@ class UserConfiguration {
 
   String get userConfigurationId => docId;
 
+  Map<String, dynamic> otherData;
+
   static UserConfiguration fromSnapshot(DocSnapshot doc, [UserConfiguration modelObj]) => fromData(doc.data, modelObj)..docId = doc.id;
 
   static UserConfiguration fromData(data, [UserConfiguration modelObj]) {
@@ -112,7 +114,12 @@ class UserConfiguration {
       ..sample_messages_enabled = bool_fromData(_log, 'sample_messages_enabled', data)
       ..console_logging_level = data['console_logging_level']?.toString()
       ..mandatory_include_tag_ids = Set_fromData<String>(_log, 'mandatory_include_tag_ids', data)
-      ..mandatory_exclude_tag_ids = Set_fromData<String>(_log, 'mandatory_exclude_tag_ids', data);
+      ..mandatory_exclude_tag_ids = Set_fromData<String>(_log, 'mandatory_exclude_tag_ids', data)
+      ..otherData = {};
+    for (var key in data.keys) {
+      if ({'docId', 'role', 'status', 'tags_keyboard_shortcuts_enabled', 'replies_keyboard_shortcuts_enabled', 'send_messages_enabled', 'send_custom_messages_enabled', 'send_multi_message_enabled', 'tag_messages_enabled', 'tag_conversations_enabled', 'edit_translations_enabled', 'edit_notes_enabled', 'edit_tags_enabled', 'edit_standard_messages_enabled', 'conversational_turns_enabled', 'tags_panel_visibility', 'replies_panel_visibility', 'turnline_panel_visibility', 'suggested_replies_groups_enabled', 'sample_messages_enabled', 'console_logging_level', 'mandatory_include_tag_ids', 'mandatory_exclude_tag_ids',}.contains(key)) continue;
+      modelObj.otherData[key] = data[key];
+    }
     return modelObj;
   }
 
@@ -144,6 +151,7 @@ class UserConfiguration {
       if (console_logging_level != null) 'console_logging_level': console_logging_level,
       if (mandatory_include_tag_ids != null) 'mandatory_include_tag_ids': mandatory_include_tag_ids.toList(),
       if (mandatory_exclude_tag_ids != null) 'mandatory_exclude_tag_ids': mandatory_exclude_tag_ids.toList(),
+      if (otherData != null) ...otherData,
     };
   }
 
@@ -172,13 +180,20 @@ class UserPresence {
 
   String get userPresenceId => docId;
 
+  Map<String, dynamic> otherData;
+
   static UserPresence fromSnapshot(DocSnapshot doc, [UserPresence modelObj]) => fromData(doc.data, modelObj)..docId = doc.id;
 
   static UserPresence fromData(data, [UserPresence modelObj]) {
     if (data == null) return null;
     (modelObj ??= UserPresence())
       ..timestamp = data['timestamp']?.toString()
-      ..conversation_id = data['conversation_id']?.toString();
+      ..conversation_id = data['conversation_id']?.toString()
+      ..otherData = {};
+    for (var key in data.keys) {
+      if ({'docId', 'timestamp', 'conversation_id',}.contains(key)) continue;
+      modelObj.otherData[key] = data[key];
+    }
     return modelObj;
   }
 
@@ -190,6 +205,7 @@ class UserPresence {
     return {
       if (timestamp != null) 'timestamp': timestamp,
       if (conversation_id != null) 'conversation_id': conversation_id,
+      if (otherData != null) ...otherData,
     };
   }
 
