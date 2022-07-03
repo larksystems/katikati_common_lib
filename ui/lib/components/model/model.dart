@@ -11,7 +11,6 @@ export 'package:katikati_ui_lib/datatypes/suggested_reply.dart';
 export 'package:katikati_ui_lib/datatypes/tag.dart';
 export 'package:katikati_ui_lib/datatypes/turnline.dart';
 export 'package:katikati_ui_lib/datatypes/user.dart';
-export 'package:katikati_ui_lib/datatypes/visualisation_component.dart';
 
 export 'model.g.dart';
 
