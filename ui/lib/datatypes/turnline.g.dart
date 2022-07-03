@@ -14,6 +14,7 @@ import 'package:katikati_ui_lib/components/logger.dart';
 class Turnline {
   String title;
   List<TurnlineStep> steps;
+
   Map<String, dynamic> otherData;
 
   static Turnline fromData(data, [Turnline modelObj]) {
@@ -21,7 +22,7 @@ class Turnline {
     (modelObj ??= Turnline())
       ..title = data['title']?.toString()
       ..steps = List_fromData<TurnlineStep>(_log, 'steps', data, TurnlineStep.fromData)
-      ..otherData ??= {};
+      ..otherData = {};
     for (var key in data.keys) {
       if ({'title', 'steps',}.contains(key)) continue;
       modelObj.otherData[key] = data[key];
@@ -48,6 +49,8 @@ class TurnlineStep {
   String standardMessagesGroupId;
   bool done;
   bool verified;
+  Map<String, dynamic> additionalInfo;
+
   Map<String, dynamic> otherData;
 
   static TurnlineStep fromData(data, [TurnlineStep modelObj]) {
@@ -59,7 +62,8 @@ class TurnlineStep {
       ..standardMessagesGroupId = data['standardMessagesGroupId']?.toString()
       ..done = bool_fromData(_log, 'done', data)
       ..verified = bool_fromData(_log, 'verified', data)
-      ..otherData ??= {};
+      ..additionalInfo = Map_fromData<dynamic>(_log, 'additionalInfo', data)
+      ..otherData = {};
     for (var key in data.keys) {
       if ({'title', 'description', 'tagGroupName', 'standardMessagesGroupId', 'done', 'verified', 'additionalInfo',}.contains(key)) continue;
       modelObj.otherData[key] = data[key];
@@ -75,6 +79,7 @@ class TurnlineStep {
       if (standardMessagesGroupId != null) 'standardMessagesGroupId': standardMessagesGroupId,
       if (done != null) 'done': done,
       if (verified != null) 'verified': verified,
+      if (additionalInfo != null) 'additionalInfo': additionalInfo,
       if (otherData != null) ...otherData,
     };
   }
