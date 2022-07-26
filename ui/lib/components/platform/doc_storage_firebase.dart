@@ -5,7 +5,7 @@ import 'package:katikati_ui_lib/components/logger.dart';
 
 import 'package:katikati_ui_lib/datatypes/doc_storage_util.dart';
 
-Logger log = Logger('doc_storage_firebase.dart');
+final _log = Logger('doc_storage_firebase.dart');
 
 /// Firebase specific document storage.
 class FirebaseDocStorage implements DocStorage {
@@ -16,19 +16,23 @@ class FirebaseDocStorage implements DocStorage {
       : collectionPathPrefix = collectionPathPrefix ?? '';
 
   @override
-  Stream<List<DocSnapshot>> onChange(String collectionRoot, List<DocQuery> queryList) {
-    var collection = fs.collection('$collectionPathPrefix$collectionRoot');
+  Stream<List<DocSnapshot>> onChange(String collectionRoot, List<DocQuery> queryList, {int limit}) {
+    var collectionPath = collectionPathPrefix.endsWith('/') || collectionRoot.startsWith('/') //
+        ? '$collectionPathPrefix$collectionRoot'
+        : '$collectionPathPrefix/$collectionRoot';
+    var collection = fs.collection(collectionPath);
     firestore.Query filteredCollection = collection;
     for (var query in queryList) {
       filteredCollection = filteredCollection.where(query.field, query.op, query.value);
     }
+    if (limit != null) filteredCollection = filteredCollection.limit(limit);
 
-    log.serverLog('Registering snapshot listener against ${collection.path}');
+    _log.serverLog('Registering snapshot listener against ${collection.path}');
     return filteredCollection.onSnapshot.transform<List<DocSnapshot>>(StreamTransformer.fromHandlers(
       handleData: (firestore.QuerySnapshot querySnapshot, EventSink<List<DocSnapshot>> sink) {
         // No need to process local writes to Firebase
         if (querySnapshot.metadata.hasPendingWrites) {
-          log.verbose('Skipping processing of local changes');
+          _log.verbose('Skipping processing of local changes');
           return;
         }
         var event = <DocSnapshot>[];
@@ -41,14 +45,14 @@ class FirebaseDocStorage implements DocStorage {
                   : DocChangeType.modified;
           event.add(DocSnapshot(doc.id, doc.data(), changeType));
         }
-        log.serverLog('Received snapshot listener data from ${collection.path}: ${event.length} changes');
+        _log.serverLog('Received snapshot listener data from ${collection.path}: ${event.length} changes');
         sink.add(event);
       },
       handleDone: (sink) {
-        log.serverLog('Finished shapshot listener against ${collection.path}');
+        _log.serverLog('Finished shapshot listener against ${collection.path}');
       },
       handleError: (error, stacktrace, sink) {
-        log.serverLog('Error for shapshot listener against ${collection.path}: $error\n$stacktrace');
+        _log.serverLog('Error for shapshot listener against ${collection.path}: $error\n$stacktrace');
       },
     ));
   }
