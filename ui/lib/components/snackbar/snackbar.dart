@@ -8,7 +8,9 @@ class SnackbarView {
   DivElement _contents;
   int secondsOnScreen;
 
-  static const SECONDS_ON_SCREEN = 5;
+  Timer _timer;
+
+  static const SECONDS_ON_SCREEN = 10;
 
   /// The length of the animation in milliseconds.
   /// This must match the animation length set in snackbar.css
@@ -26,10 +28,15 @@ class SnackbarView {
   }
 
   showSnackbar(String message, SnackbarNotificationType type) {
-    _contents.text = message;
+    var validator = NodeValidatorBuilder()
+        ..allowHtml5()
+        ..allowNavigation(new KatikatiUrlPolicy())
+        ..allowTextElements();
+    _contents.setInnerHtml(message, validator: validator);
     snackbarElement.classes.remove('hidden');
     snackbarElement.setAttribute('type', type.toString().replaceAll('SnackbarNotificationType.', ''));
-    new Timer(new Duration(seconds: SECONDS_ON_SCREEN), () => hideSnackbar());
+    _timer?.cancel();
+    _timer = new Timer(new Duration(seconds: SECONDS_ON_SCREEN), () => hideSnackbar());
   }
 
   hideSnackbar() {
@@ -37,5 +44,15 @@ class SnackbarView {
     snackbarElement.attributes.remove('type');
     // Remove the contents after the animation ends
     new Timer(new Duration(milliseconds: ANIMATION_LENGTH_MS), () => _contents.text = '');
+  }
+}
+
+class KatikatiUrlPolicy implements UriPolicy {
+  KatikatiUrlPolicy();
+
+  RegExp regex = new RegExp(r'(?:http://|https://|//)?katikati.world/.*');
+
+  bool allowsUri(String uri) {
+    return regex.hasMatch(uri);
   }
 }
