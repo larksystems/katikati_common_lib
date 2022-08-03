@@ -71,7 +71,7 @@ class AccordionItem {
       ..append(_sortIcon)
       ..append(indicatorElement)
       ..append(titleElement);
-    
+
     indicatorElement.onClick.listen((e) {
       e.stopPropagation();
       toggle();
@@ -122,15 +122,14 @@ class Accordion {
   String _sortableId;
   void Function(String, int) onSort;
 
-  Draggable _draggable;
-  Dropzone _dropzone;
+  Map<String, Draggable> _draggables = {};
+  Map<String, Dropzone> _dropzones = {};
 
   List<AccordionItem> get items => _accordionItems;
 
   Accordion(this._accordionItems, {collapseAtStart: true, expandAtStart: false, onlyOneOpen: false, String sortableId}) {
-    _sortableId = sortableId;
     _accordionItems.forEach((accordionItem) => accordionItem.sortableId = _sortableId);
-    
+
     _onlyOneOpen = onlyOneOpen;
     var expandButton = Button(ButtonType.expand, hoverText: "Expand all", onClick: (_) => expandAllItems());
     var collapseButton = Button(ButtonType.collapse, hoverText: "Collapse all", onClick: (_) => collapseAllItems());
@@ -155,6 +154,9 @@ class Accordion {
         item.expand();
       }
     }
+
+    _sortableId = sortableId;
+    _makeSortable();
   }
 
   AccordionItem queryItem(String id) {
@@ -165,17 +167,23 @@ class Accordion {
     if (_sortableId == null) return;
 
     _accordionItems.forEach((accordionItem) => accordionItem.sortableId = _sortableId);
-    var accordionItemRenderElements = _accordionItems.map((accordionItem) => accordionItem.renderElement).toList();
 
-    _draggable?.destroy();
-    _dropzone?.destroy();
-    
-    _draggable = Draggable(accordionItemRenderElements, avatarHandler: AvatarHandler.clone(), verticalOnly: true, handle: '.$ACCORDION_ITEM_HANDLE_CSS_CLASSNAME');
+    for (var accordionItem in _accordionItems) {
+      _makeDraggable(accordionItem);
+      _makeDropzone(accordionItem);
+    }
+  }
+
+  void _makeDraggable(AccordionItem accordionItem) {
+    var _draggable = Draggable(accordionItem.renderElement, avatarHandler: AvatarHandler.clone(), verticalOnly: true, handle: '.$ACCORDION_ITEM_HANDLE_CSS_CLASSNAME');
     _draggable.onDragStart.listen((DraggableEvent event) {
       collapseAllItems();
     });
+    _draggables[accordionItem.id] = _draggable;
+  }
 
-    _dropzone = Dropzone(accordionItemRenderElements);
+  void _makeDropzone(AccordionItem accordionItem) {
+    var _dropzone = Dropzone(accordionItem.renderElement);
     _dropzone.onDragOver.listen((DropzoneEvent event) {
       event.avatarHandler.avatar?.classes?.toggle('drag-element', true);
     });
@@ -207,6 +215,7 @@ class Accordion {
         onSort(moveId, moveToIndex);
       }
     });
+    _dropzones[accordionItem.id] =_dropzone;
   }
 
   bool _dragAllowed(DropzoneEvent event) {
@@ -216,18 +225,24 @@ class Accordion {
   void appendItem(AccordionItem item) {
     _accordionItems.add(item);
     _accordionsWrapper.append(item.renderElement);
-    _makeSortable();
+    item.sortableId = _sortableId;
+    _makeDraggable(item);
+    _makeDropzone(item);
   }
 
   void insertItem(AccordionItem item, int index) {
     _accordionItems.insert(index, item);
     _accordionsWrapper.insertBefore(item.renderElement, _accordionsWrapper.children[index]);
-    _makeSortable();
+    item.sortableId = _sortableId;
+    _makeDraggable(item);
+    _makeDropzone(item);
   }
 
   void removeItem(String id) {
     _accordionItems.removeWhere((item) => item._id == id);
     _accordionsWrapper.children.removeWhere((item) => item.dataset['id'] == 'accordion-item-${id}');
+    _draggables[id].destroy();
+    _dropzones[id].destroy();
   }
 
   void updateItem(String id, AccordionItem item) {
@@ -235,17 +250,17 @@ class Accordion {
     if (_accordionItems[index].isOpen) {
       item.expand();
     }
-    
+
     _accordionItems[index] = item;
     var childIndex = _accordionsWrapper.children.indexWhere((item) => item.dataset['id'] == 'accordion-item-${id}');
     _accordionsWrapper.children[childIndex] = item.renderElement;
-    _makeSortable();
   }
 
   void reorderItem(AccordionItem item, int newIndex) {
-    var accordionToAdd = AccordionItem(item.id, item.headerElement, item.bodyElement, item.isOpen);
-    removeItem(item.id);
-    insertItem(accordionToAdd, newIndex);
+    _accordionItems.remove(item);
+    _accordionItems.insert(newIndex, item);
+    item.renderElement.remove();
+    _accordionsWrapper.insertBefore(item.renderElement, _accordionsWrapper.children[newIndex]);
   }
 
   void collapseAllItems() {
