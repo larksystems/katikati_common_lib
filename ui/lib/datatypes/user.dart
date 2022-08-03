@@ -11,6 +11,8 @@ extension UserConfigurationUtil on g.UserConfiguration {
   g.UserConfiguration applyDefaults(g.UserConfiguration defaults) =>
     new g.UserConfiguration()
       ..docId = null
+      ..role = this.role ?? g.UserRole.user
+      ..status = this.status ?? g.UserStatus.deactivated
       ..tagsKeyboardShortcutsEnabled = this.tagsKeyboardShortcutsEnabled ?? defaults.tagsKeyboardShortcutsEnabled
       ..repliesKeyboardShortcutsEnabled = this.repliesKeyboardShortcutsEnabled ?? defaults.repliesKeyboardShortcutsEnabled
       ..sendMessagesEnabled = this.sendMessagesEnabled ?? defaults.sendMessagesEnabled
@@ -30,9 +32,12 @@ extension UserConfigurationUtil on g.UserConfiguration {
       ..sampleMessagesEnabled = this.sampleMessagesEnabled ?? defaults.sampleMessagesEnabled
       ..mandatoryIncludeTagIds = this.mandatoryIncludeTagIds ?? defaults.mandatoryIncludeTagIds
       ..mandatoryExcludeTagIds = this.mandatoryExcludeTagIds ?? defaults.mandatoryExcludeTagIds
+      ..multiSelectExcludeTagIds = this.multiSelectExcludeTagIds ?? defaults.multiSelectExcludeTagIds
       ..consoleLoggingLevel = this.consoleLoggingLevel ?? defaults.consoleLoggingLevel;
 
   static g.UserConfiguration get baseUserConfiguration => new g.UserConfiguration()
+      ..role = g.UserRole.user
+      ..status = g.UserStatus.deactivated
       ..repliesKeyboardShortcutsEnabled = false
       ..tagsKeyboardShortcutsEnabled = false
       ..sendMessagesEnabled = false
@@ -52,6 +57,7 @@ extension UserConfigurationUtil on g.UserConfiguration {
       ..sampleMessagesEnabled = false
       ..mandatoryIncludeTagIds = {}
       ..mandatoryExcludeTagIds = {}
+      ..multiSelectExcludeTagIds = {}
       ..consoleLoggingLevel = 'verbose';
 
   static g.UserConfiguration get emptyUserConfiguration => new g.UserConfiguration();
