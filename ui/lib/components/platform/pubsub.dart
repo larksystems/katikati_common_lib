@@ -6,23 +6,24 @@ import 'package:http/browser_client.dart';
 import 'package:http/http.dart';
 
 import 'package:katikati_ui_lib/components/logger.dart';
-import 'package:katikati_ui_lib/components/platform/platform_constants.dart' as platform_constants;
 import 'package:katikati_ui_lib/components/model/model.dart' show DocPubSubUpdate;
 
 Logger log = new Logger('pubsub.dart');
 
 class PubSubClient extends DocPubSubUpdate {
   final String publishUrl;
+  final String publishTopic;
   static int _publishCount = 0;
 
   // The firebase user from which the user JWT auth token is obtained.
   final firebase.User user;
 
-  PubSubClient(this.publishUrl, this.user);
+  PubSubClient(this.publishUrl, this.publishTopic, this.user);
 
   /// Publish the specified [payload] to the [topic].
   /// Callers should catch and handle HTTP exceptions (e.g. PubSubException, ClientException).
-  Future<void> publish(String topic, Map payload) async {
+  Future<void> publish(Map payload, [String topic]) async {
+    topic = topic ?? publishTopic;
     // a simplistic way to correlate publish log entries
     int publishId = _publishCount++;
 
@@ -52,9 +53,8 @@ class PubSubClient extends DocPubSubUpdate {
   }
 
   @override
-  Future<void> publishAddOpinion(String namespace,
-      Map<String, dynamic> opinion) {
-    return publish(platform_constants.smsTopic, {
+  Future<void> publishAddOpinion(String namespace, Map<String, dynamic> opinion) {
+    return publish({
       "source": "nook",
       "action": "add_opinion",
       "namespace": namespace,
