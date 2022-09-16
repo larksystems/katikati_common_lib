@@ -19,9 +19,5 @@ String get databaseURL => _constants['databaseURL'];
 String get projectId => _constants['projectId'];
 String get storageBucket => _constants['storageBucket'];
 String get messagingSenderId => _constants['messagingSenderId'];
-String get logUrl => _constants['logUrl'];
-String get publishUrl => _constants['publishUrl'];
-String get statuszUrl => _constants['statuszUrl'];
-String get logTopic => projectId + '-logs-topic';
-String get smsTopic => projectId + '-sms-channel-topic';
-String get statuszTopic => projectId + '-statusz-topic';
+
+String get cloudFunctionsUrlDomain => _constants['cloudFunctionsUrlDomain'];
