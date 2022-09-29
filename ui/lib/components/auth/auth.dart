@@ -65,7 +65,7 @@ class AuthMainView {
 
     for (var domain in values) {
       var signInButton = new ButtonElement()
-        ..text = "Sign in with ${domain.displayName}"
+        ..text = domain.displayName == null ? "Sign in" : "Sign in with ${domain.displayName}"
         ..onClick.listen((_) => _onSigninClick(domain));
       authElement.append(signInButton);
     }
