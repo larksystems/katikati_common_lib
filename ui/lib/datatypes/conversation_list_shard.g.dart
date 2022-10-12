@@ -19,6 +19,7 @@ class ConversationListShard {
   String docId;
   String name;
   int num_shards;
+  Map<String, dynamic> otherData;
 
   // Alias
   int get numShards => num_shards;
@@ -27,26 +28,26 @@ class ConversationListShard {
 
   String get conversationListShardId => docId;
 
-  Map<String, dynamic> otherData;
-
   static ConversationListShard fromSnapshot(DocSnapshot doc, [ConversationListShard modelObj]) => fromData(doc.data, modelObj)..docId = doc.id;
 
   static ConversationListShard fromData(data, [ConversationListShard modelObj]) {
     if (data == null) return null;
+    Map<String, dynamic> otherData;
+    data.forEach((key, value) {
+      if (!_fieldNames.contains(key) && value != null) {
+        (otherData ??= {})[key] = value;
+      }
+    });
     (modelObj ??= ConversationListShard())
       ..name = data['name']?.toString()
       ..num_shards = int_fromData(_log, 'num_shards', data)
-      ..otherData = {};
-    for (var key in data.keys) {
-      if ({'docId', 'name', 'num_shards',}.contains(key)) continue;
-      modelObj.otherData[key] = data[key];
-    }
+      ..otherData = otherData;
     return modelObj;
   }
 
   static StreamSubscription listen(DocStorage docStorage, ConversationListShardCollectionListener listener,
-          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<ConversationListShard>(_log, docStorage, listener, collectionRoot, ConversationListShard.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
+          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, int limit, OnErrorListener onError}) =>
+      listenForUpdates<ConversationListShard>(_log, docStorage, listener, collectionRoot, ConversationListShard.fromSnapshot, queryList: queryList, limit: limit, onError: onError);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {
@@ -58,6 +59,8 @@ class ConversationListShard {
 
   @override
   String toString() => 'ConversationListShard($docId, ${toData(validate: false)})';
+
+  static const _fieldNames = {'docId', 'name', 'num_shards'};
 }
 
 typedef ConversationListShardCollectionListener = void Function(

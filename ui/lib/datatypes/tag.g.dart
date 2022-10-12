@@ -26,6 +26,7 @@ class Tag {
   bool isUnifier;
   String unifierTagId;
   List<String> unifiesTagIds;
+  Map<String, dynamic> otherData;
 
   // Alias
   List<String> get groupNames => groups;
@@ -34,12 +35,16 @@ class Tag {
 
   String get tagId => docId;
 
-  Map<String, dynamic> otherData;
-
   static Tag fromSnapshot(DocSnapshot doc, [Tag modelObj]) => fromData(doc.data, modelObj)..docId = doc.id;
 
   static Tag fromData(data, [Tag modelObj]) {
     if (data == null) return null;
+    Map<String, dynamic> otherData;
+    data.forEach((key, value) {
+      if (!_fieldNames.contains(key) && value != null) {
+        (otherData ??= {})[key] = value;
+      }
+    });
     (modelObj ??= Tag())
       ..text = data['text']?.toString()
       ..type = TagType.fromData(_log, 'type', data)
@@ -52,17 +57,13 @@ class Tag {
       ..isUnifier = bool_fromData(_log, 'isUnifier', data)
       ..unifierTagId = data['unifierTagId']?.toString()
       ..unifiesTagIds = List_fromData<String>(_log, 'unifiesTagIds', data)
-      ..otherData = {};
-    for (var key in data.keys) {
-      if ({'docId', 'text', 'type', 'shortcut', 'filterable', 'groups', 'groupIds', 'groupIndices', 'visible', 'isUnifier', 'unifierTagId', 'unifiesTagIds',}.contains(key)) continue;
-      modelObj.otherData[key] = data[key];
-    }
+      ..otherData = otherData;
     return modelObj;
   }
 
   static StreamSubscription listen(DocStorage docStorage, TagCollectionListener listener,
-          {String collectionRoot, List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<Tag>(_log, docStorage, listener, collectionRoot, Tag.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
+          {String collectionRoot, List<DocQuery> queryList, int limit, OnErrorListener onError}) =>
+      listenForUpdates<Tag>(_log, docStorage, listener, collectionRoot, Tag.fromSnapshot, queryList: queryList, limit: limit, onError: onError);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {
@@ -83,6 +84,8 @@ class Tag {
 
   @override
   String toString() => 'Tag($docId, ${toData(validate: false)})';
+
+  static const _fieldNames = {'docId', 'text', 'type', 'shortcut', 'filterable', 'groups', 'groupIds', 'groupIndices', 'visible', 'isUnifier', 'unifierTagId', 'unifiesTagIds'};
 }
 
 typedef TagCollectionListener = void Function(

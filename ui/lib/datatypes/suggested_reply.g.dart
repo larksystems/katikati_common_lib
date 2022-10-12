@@ -28,6 +28,7 @@ class SuggestedReply {
   String group_description;
   int group_index_in_category;
   int index_in_group;
+  Map<String, dynamic> otherData;
 
   // Alias
   int get seqNumber => seq_no;
@@ -50,12 +51,16 @@ class SuggestedReply {
 
   String get suggestedReplyId => docId;
 
-  Map<String, dynamic> otherData;
-
   static SuggestedReply fromSnapshot(DocSnapshot doc, [SuggestedReply modelObj]) => fromData(doc.data, modelObj)..docId = doc.id;
 
   static SuggestedReply fromData(data, [SuggestedReply modelObj]) {
     if (data == null) return null;
+    Map<String, dynamic> otherData;
+    data.forEach((key, value) {
+      if (!_fieldNames.contains(key) && value != null) {
+        (otherData ??= {})[key] = value;
+      }
+    });
     (modelObj ??= SuggestedReply())
       ..text = data['text']?.toString()
       ..translation = data['translation']?.toString()
@@ -68,17 +73,13 @@ class SuggestedReply {
       ..group_description = data['group_description']?.toString()
       ..group_index_in_category = int_fromData(_log, 'group_index_in_category', data)
       ..index_in_group = int_fromData(_log, 'index_in_group', data)
-      ..otherData = {};
-    for (var key in data.keys) {
-      if ({'docId', 'text', 'translation', 'shortcut', 'seq_no', 'category_id', 'category', 'category_index', 'group_id', 'group_description', 'group_index_in_category', 'index_in_group',}.contains(key)) continue;
-      modelObj.otherData[key] = data[key];
-    }
+      ..otherData = otherData;
     return modelObj;
   }
 
   static StreamSubscription listen(DocStorage docStorage, SuggestedReplyCollectionListener listener,
-          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<SuggestedReply>(_log, docStorage, listener, collectionRoot, SuggestedReply.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
+          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, int limit, OnErrorListener onError}) =>
+      listenForUpdates<SuggestedReply>(_log, docStorage, listener, collectionRoot, SuggestedReply.fromSnapshot, queryList: queryList, limit: limit, onError: onError);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {
@@ -99,6 +100,8 @@ class SuggestedReply {
 
   @override
   String toString() => 'SuggestedReply($docId, ${toData(validate: false)})';
+
+  static const _fieldNames = {'docId', 'text', 'translation', 'shortcut', 'seq_no', 'category_id', 'category', 'category_index', 'group_id', 'group_description', 'group_index_in_category', 'index_in_group'};
 }
 
 typedef SuggestedReplyCollectionListener = void Function(

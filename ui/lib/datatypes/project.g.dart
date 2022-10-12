@@ -23,15 +23,20 @@ class Project {
   int messageCharacterLimit;
   Map<String, String> allowedEmailDomainsMap;
   List<String> users;
+  Map<String, dynamic> otherData;
 
   String get projectId => docId;
-
-  Map<String, dynamic> otherData;
 
   static Project fromSnapshot(DocSnapshot doc, [Project modelObj]) => fromData(doc.data, modelObj)..docId = doc.id;
 
   static Project fromData(data, [Project modelObj]) {
     if (data == null) return null;
+    Map<String, dynamic> otherData;
+    data.forEach((key, value) {
+      if (!_fieldNames.contains(key) && value != null) {
+        (otherData ??= {})[key] = value;
+      }
+    });
     (modelObj ??= Project())
       ..projectName = data['projectName']?.toString()
       ..firstLanguage = data['firstLanguage']?.toString()
@@ -39,17 +44,13 @@ class Project {
       ..messageCharacterLimit = int_fromData(_log, 'messageCharacterLimit', data)
       ..allowedEmailDomainsMap = Map_fromData<String>(_log, 'allowedEmailDomainsMap', data)
       ..users = List_fromData<String>(_log, 'users', data)
-      ..otherData = {};
-    for (var key in data.keys) {
-      if ({'docId', 'projectName', 'firstLanguage', 'secondLanguage', 'messageCharacterLimit', 'allowedEmailDomainsMap', 'users',}.contains(key)) continue;
-      modelObj.otherData[key] = data[key];
-    }
+      ..otherData = otherData;
     return modelObj;
   }
 
   static StreamSubscription listen(DocStorage docStorage, ProjectCollectionListener listener,
-          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<Project>(_log, docStorage, listener, collectionRoot, Project.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
+          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, int limit, OnErrorListener onError}) =>
+      listenForUpdates<Project>(_log, docStorage, listener, collectionRoot, Project.fromSnapshot, queryList: queryList, limit: limit, onError: onError);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {
@@ -65,6 +66,8 @@ class Project {
 
   @override
   String toString() => 'Project($docId, ${toData(validate: false)})';
+
+  static const _fieldNames = {'docId', 'projectName', 'firstLanguage', 'secondLanguage', 'messageCharacterLimit', 'allowedEmailDomainsMap', 'users'};
 }
 
 typedef ProjectCollectionListener = void Function(

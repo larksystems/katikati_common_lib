@@ -129,8 +129,8 @@ class UserConfiguration {
   }
 
   static StreamSubscription listen(DocStorage docStorage, UserConfigurationCollectionListener listener,
-          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<UserConfiguration>(_log, docStorage, listener, collectionRoot, UserConfiguration.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
+          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, int limit, OnErrorListener onError}) =>
+      listenForUpdates<UserConfiguration>(_log, docStorage, listener, collectionRoot, UserConfiguration.fromSnapshot, queryList: queryList, limit: limit, onError: onError);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {
@@ -207,8 +207,8 @@ class UserPresence {
   }
 
   static StreamSubscription listen(DocStorage docStorage, UserPresenceCollectionListener listener,
-          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, OnErrorListener onError, @Deprecated('use onError instead') OnErrorListener onErrorListener}) =>
-      listenForUpdates<UserPresence>(_log, docStorage, listener, collectionRoot, UserPresence.fromSnapshot, queryList: queryList, onError: onError ?? onErrorListener);
+          {String collectionRoot = '/$collectionName', List<DocQuery> queryList, int limit, OnErrorListener onError}) =>
+      listenForUpdates<UserPresence>(_log, docStorage, listener, collectionRoot, UserPresence.fromSnapshot, queryList: queryList, limit: limit, onError: onError);
 
   Map<String, dynamic> toData({bool validate: true}) {
     return {
