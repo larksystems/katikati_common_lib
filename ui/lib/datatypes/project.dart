@@ -55,6 +55,6 @@ For example: {"Katikati": "katikati.world", "Gmail": "gmail.com"}""",
           ? ""
           : json.encode(project.allowedEmailDomainsMap),
       (Project project, value) => value == null || value.isEmpty
-          ? null
+          ? project.allowedEmailDomainsMap = <String, String>{}
           : project.allowedEmailDomainsMap = Map<String, String>.from(json.decode(value))),
 ];
