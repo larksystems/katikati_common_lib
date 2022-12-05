@@ -108,6 +108,21 @@ class UrlManager {
     uri = uri.replace(queryParameters: queryParameters);
     window.history.pushState('', '', uri.toString());
   }
+
+  String linkToFilteredConversationView({String messageId, String tagId, String conversationListId}) {
+    Map<String, String> queryParams = {
+      _PROJECT_QUERY_KEY: project,
+      _CONVERSATION_LIST_QUERY_KEY: conversationListId ?? conversationList ?? "shard-0",
+    };
+    if (messageId != null) {
+      queryParams[_CONVERSATION_ID_QUERY_KEY] = messageId.replaceAll('nook-message-', '').substring(0, 52);
+    }
+    if (tagId != null) {
+      queryParams[TagFilterUrlView.TAG_FILTER_QUERY_KEYS[TagFilterType.include]] = tagId;
+    }
+    String queryString = Uri(queryParameters: queryParams).query;
+    return "/converse/index.html?${queryString}";
+  }
 }
 
 // NOTE: Must be kept in sync with the TagFilterUrlView.TAG_FILTER_QUERY_KEYS map.
