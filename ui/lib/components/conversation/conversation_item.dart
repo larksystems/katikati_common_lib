@@ -26,7 +26,6 @@ class ConversationItemView {
   bool _checked;
   bool _checkEnabled;
 
-
   DivElement _conversationWrapper;
   DivElement _contentWrapper;
   DivElement _dateSeparator;
