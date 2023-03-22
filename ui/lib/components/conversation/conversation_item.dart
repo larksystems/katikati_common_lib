@@ -31,6 +31,7 @@ class ConversationItemView {
   DivElement _dateSeparator;
   CheckboxInputElement _checkboxElement;
   DivElement _messageTextElement;
+  ImageElement _messageImageElement;
   DivElement _messageStatusElement;
   SpanElement _dateTimeElement;
   DivElement _checkboxWrapper;
@@ -137,8 +138,12 @@ class ConversationItemView {
       ..className = "conversation-item__message";
     _messageTextElement = DivElement()
       ..dataset['conversation-id'] = conversationId
-      ..className = "conversation-item__message__text"
-      ..innerText = _message;
+      ..className = "conversation-item__message__text";
+    _messageImageElement = ImageElement()
+      ..style.maxHeight = '25px'
+      ..style.verticalAlign = 'middle'
+      ..style.padding = '0 8px';
+    updateMessage(_message);
     _messageStatusElement = DivElement()..className = "conversation-item__status";
     _updateStatus(_status);
 
@@ -280,7 +285,15 @@ class ConversationItemView {
 
   void updateMessage(String text) {
     _message = text;
-    _messageTextElement.innerText = text;
+    _messageTextElement.children.clear();
+    if (isImagePath(_message)) {
+      _messageImageElement.src = _message;
+      _messageTextElement
+        ..innerText = 'image'
+        ..append(_messageImageElement);
+    } else {
+      _messageTextElement.innerText = _message;
+    }
   }
 
   void updateDateTime(DateTime dateTime) {
@@ -288,4 +301,12 @@ class ConversationItemView {
     _dateTimeElement.innerText = _dateTime == null ? '' : dateFormatter.format(_dateTime.toLocal());
     _dateSeparator.innerText = dateStringForSeparator(dateTime);
   }
+}
+
+// TODO(mariana) replace this check with a field on the message
+bool isImagePath(String text) {
+  var uri = Uri.tryParse(text);
+  if (uri == null) return false;
+  if (uri.path.endsWith('.jpg') || uri.path.endsWith('.png')) return true;
+  return false;
 }
