@@ -29,6 +29,7 @@ extension UserConfigurationUtil on g.UserConfiguration {
       ..repliesPanelVisibility = this.repliesPanelVisibility ?? defaults.repliesPanelVisibility
       ..turnlinePanelVisibility = this.turnlinePanelVisibility ?? defaults.turnlinePanelVisibility
       ..suggestedRepliesGroupsEnabled = this.suggestedRepliesGroupsEnabled ?? defaults.suggestedRepliesGroupsEnabled
+      ..deanonymisedConversationsEnabled = this.deanonymisedConversationsEnabled ?? defaults.deanonymisedConversationsEnabled
       ..sampleMessagesEnabled = this.sampleMessagesEnabled ?? defaults.sampleMessagesEnabled
       ..mandatoryIncludeTagIds = this.mandatoryIncludeTagIds ?? defaults.mandatoryIncludeTagIds
       ..mandatoryExcludeTagIds = this.mandatoryExcludeTagIds ?? defaults.mandatoryExcludeTagIds
@@ -54,6 +55,7 @@ extension UserConfigurationUtil on g.UserConfiguration {
       ..repliesPanelVisibility = false
       ..turnlinePanelVisibility = false
       ..suggestedRepliesGroupsEnabled = false
+      ..deanonymisedConversationsEnabled = false
       ..sampleMessagesEnabled = false
       ..mandatoryIncludeTagIds = {}
       ..mandatoryExcludeTagIds = {}
