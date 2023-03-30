@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:uuid/uuid.dart' as uuid;
 
 import 'model.g.dart' as g;
 import 'package:katikati_ui_lib/datatypes/conversation_list_shard.dart' as g;
+import 'package:katikati_ui_lib/datatypes/doc_storage_util.dart';
 
 export 'package:katikati_ui_lib/datatypes/doc_storage_util.dart' show DocBatchUpdate, DocChangeType, DocSnapshot, DocStorage;
 
@@ -169,6 +172,50 @@ class User {
   String userName;
   String userEmail;
 }
+
+class DataMap {
+  String docId;
+  Map data;
+
+  static DataMap fromSnapshot(DocSnapshot doc, [DataMap modelObj]) =>
+      fromData(doc.data, modelObj)..docId = doc.id;
+
+  static DataMap fromData(data, [DataMap modelObj]) {
+    if (data == null) return null;
+    return (modelObj ?? DataMap())
+      ..data = data;
+  }
+
+  static DataMap required(Map data, String fieldName, String className) {
+    var value = fromData(data[fieldName]);
+    if (value == null && !data.containsKey(fieldName))
+      throw g.ValueException("$className.$fieldName is missing");
+    return value;
+  }
+
+  static DataMap notNull(Map data, String fieldName, String className) {
+    var value = required(data, fieldName, className);
+    if (value == null)
+      throw g.ValueException("$className.$fieldName must not be null");
+    return value;
+  }
+
+  static StreamSubscription listen(DocStorage docStorage, DataMapListener listener, String collectionRoot, {g.OnErrorListener onError}) =>
+      g.listenForUpdates<DataMap>(docStorage, listener, collectionRoot, DataMap.fromSnapshot, onError);
+
+  Map<String, dynamic> toData() {
+    return data;
+  }
+
+  @override
+  String toString() => '[$docId]: ${toData().toString()}';
+}
+
+typedef DataMapListener = void Function(
+  List<DataMap> added,
+  List<DataMap> modified,
+  List<DataMap> removed,
+);
 
 
 final uuid.Uuid uuidGenerator = new uuid.Uuid();
