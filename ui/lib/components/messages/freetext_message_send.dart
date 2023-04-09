@@ -106,4 +106,13 @@ class FreetextMessageSendView {
     _enableOrDisableButtons();
     _showOrClearMaxLengthError();
   }
+
+  void set text(String value) {
+    _text = value;
+    _textArea.value = value;
+    _enableOrDisableButtons();
+    _showOrClearMaxLengthError();
+  }
+
+  void toggleVisibility(bool show) => renderElement.classes.toggle('hidden', !show);
 }
