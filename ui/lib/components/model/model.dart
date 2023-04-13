@@ -228,3 +228,5 @@ String generateStandardMessageId() => 'standard-message-${generateRandomId()}';
 String generateStandardMessageGroupId() => 'standard-message-group-${generateRandomId()}';
 String generateStandardMessageCategoryId() => 'standard-message-category-${generateRandomId()}';
 String generatePendingMessageId(g.Conversation conversation) => 'pending-nook-message-${conversation.docId}-${conversation.messages.length}';
+
+String conversationIdFromMessageId(String messageId) => messageId.replaceAll('nook-message-', '').substring(0, 52);
