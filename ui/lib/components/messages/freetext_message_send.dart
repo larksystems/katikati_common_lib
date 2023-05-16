@@ -114,5 +114,10 @@ class FreetextMessageSendView {
     _showOrClearMaxLengthError();
   }
 
+  void set maxLength(int length) {
+    _maxLength = min(length, MAX_LENGTH);
+    _showOrClearMaxLengthError();
+  }
+
   void toggleVisibility(bool show) => renderElement.classes.toggle('hidden', !show);
 }
