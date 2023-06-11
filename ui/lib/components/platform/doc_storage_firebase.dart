@@ -23,7 +23,11 @@ class FirebaseDocStorage implements DocStorage {
     var collection = fs.collection(collectionPath);
     firestore.Query filteredCollection = collection;
     for (var query in queryList) {
-      filteredCollection = filteredCollection.where(query.field, query.op, query.value);
+      var queryValue = query.op == FirebaseQuery.ARRAY_CONTAINS_ANY ?
+          query.value.split(', ') :
+          query.value;
+
+      filteredCollection = filteredCollection.where(query.field, query.op, queryValue);
     }
     if (limit != null) filteredCollection = filteredCollection.limit(limit);
 
