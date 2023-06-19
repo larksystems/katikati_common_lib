@@ -35,17 +35,17 @@
   color: var(--light-red);
 }
 
-.button--outline {
+.button--outlined {
   padding: 8px;
   border: 1px solid var(--primary-variant-accent-color);
   color: var(--primary-variant-accent-color);
 }
 
-.button--outline:hover {
+.button--outlined:hover {
   border: 1px solid var(--primary-variant-accent-color);
 }
 
-.button--outline:active {
+.button--outlined:active {
   border: 1px solid var(--primary-variant-accent-color);
 }
 
